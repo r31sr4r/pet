@@ -1,0 +1,20 @@
+{
+  "name": "pet-care-club-api",
+  "version": "1.0.0",
+  "description": "api do projeto pet care club",
+  "main": "index.js",
+  "scripts": {
+    "ts-node": "ts-node",
+    "tsc": "tsc",
+    "clean:tst": "rm tsconfig.tsbuildinfo",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  }
+}

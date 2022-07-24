@@ -1,3 +1,5 @@
+import UniqueEntityId from '../../../@seedwork/domain/unique-entity-id.vo';
+import { v4 as uuid } from 'uuid';
 
 export type PetProperties = {
     name: string,
@@ -9,7 +11,11 @@ export type PetProperties = {
 }
 
 export class Pet{
-    constructor(public readonly props: PetProperties){
+
+    public readonly id: UniqueEntityId;
+
+    constructor(public readonly props: PetProperties, id?: UniqueEntityId){
+        this.id = id || new UniqueEntityId();
         this.breed = this.props.breed;
         this.birth_date = this.props.birth_date;
         this.is_active = this.props.is_active;

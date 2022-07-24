@@ -1,4 +1,4 @@
-import UniqueEntityId from '../../../@seedwork/domain/unique-entity-id.vo';
+import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
 import { v4 as uuid } from 'uuid';
 
 export type PetProperties = {

@@ -1,5 +1,5 @@
+import Entity from '../../../@seedwork/domain/entity/entity';
 import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
-import { v4 as uuid } from 'uuid';
 
 export type PetProperties = {
     name: string,
@@ -10,12 +10,10 @@ export type PetProperties = {
     created_at?: Date,    
 }
 
-export class Pet{
-
-    public readonly id: UniqueEntityId;
+export class Pet extends Entity<PetProperties> {    
 
     constructor(public readonly props: PetProperties, id?: UniqueEntityId){
-        this.id = id || new UniqueEntityId();
+        super(props, id);
         this.breed = this.props.breed;
         this.birth_date = this.props.birth_date;
         this.is_active = this.props.is_active;

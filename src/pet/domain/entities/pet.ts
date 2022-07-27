@@ -34,6 +34,7 @@ export class Pet extends Entity<PetProperties> {
 		ValidatorRules.values(props.type, 'type').required().string();
 		ValidatorRules.values(props.breed, 'name').string();
 		ValidatorRules.values(props.is_active, 'name').boolean();
+        ValidatorRules.values(props.birth_date, 'name').date();
 	}
 
 	activate() {

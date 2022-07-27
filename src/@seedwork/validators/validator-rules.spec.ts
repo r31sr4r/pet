@@ -186,6 +186,43 @@ describe('ValidatorRules Unit Tests', () => {
 		});
 	});
 
+	test('date validation rule', () => {
+		let arrange: Values[] = [
+			{ value: 'some value', property: 'field' },
+			{ value: 5, property: 'field' },
+			{ value: 0, property: 'field' },
+			{ value: {}, property: 'field' },
+			{ value: 'true', property: 'field' },
+		];
+		const error = new ValidationError('field must be a date');
+
+		arrange.forEach((item) => {
+			assertIsInvalid({
+				value: item.value,
+				property: item.property,
+				rule: 'date',
+				error,
+			});
+		});
+
+		arrange = [
+			{ value: new Date(), property: 'field' },
+			{ value: new Date('2020-02-04'), property: 'field' },
+			{ value: null, property: 'field' },
+			{ value: undefined, property: 'field' },
+		];
+
+		arrange.forEach((item) => {
+			assertIsValid({
+				value: item.value,
+				property: item.property,
+				rule: 'date',
+				error,
+			});
+		});
+
+	});
+
 	it('should throw a validation error when combine two or more validation rules', () => {
 		let validator = ValidatorRules.values(null, 'field');
 		expect(() => {
@@ -210,7 +247,12 @@ describe('ValidatorRules Unit Tests', () => {
         validator = ValidatorRules.values("some value", 'field');
 		expect(() => {
 			validator.required().boolean();
-		}).toThrow(new ValidationError('field must be a boolean'));             
+		}).toThrow(new ValidationError('field must be a boolean'));      
+		
+		validator = ValidatorRules.values('2020-04-06', 'field');
+		expect(() => {
+			validator.required().date();
+		}).toThrow(new ValidationError('field must be a date'));
 
 	});
 
@@ -225,6 +267,9 @@ describe('ValidatorRules Unit Tests', () => {
 
         ValidatorRules.values(true, 'field').required().boolean();
         ValidatorRules.values(false, 'field').required().boolean();
+
+		ValidatorRules.values(new Date(), 'field').required().date();
+		ValidatorRules.values(new Date('2020-02-04'), 'field').required().date();
 
     });
 });

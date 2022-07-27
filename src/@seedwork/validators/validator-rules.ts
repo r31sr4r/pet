@@ -35,6 +35,13 @@ export default class ValidatorRules {
         }
         return this;
     }
+
+    date(): Omit<this, 'date'> {
+        if(!isEmpty(this.value) && !(this.value instanceof Date)) {
+            throw new ValidationError(`${this.property} must be a date`);
+        }
+        return this;
+    }
 }
 
 export function isEmpty(value: any) {

@@ -30,18 +30,20 @@ export class Pet extends Entity<PetProperties> {
 	}
 
 	static validate(props: Omit<PetProperties, 'created_at'>): void {
-		ValidatorRules.values(props.name, 'name').required().string();
+		ValidatorRules.values(props.name, 'name').required().string().maxlength(100);
 		ValidatorRules.values(props.type, 'type').required().string();
-		ValidatorRules.values(props.breed, 'name').string();
-		ValidatorRules.values(props.is_active, 'name').boolean();
-        ValidatorRules.values(props.birth_date, 'name').date();
+		ValidatorRules.values(props.breed, 'breed').string();
+		ValidatorRules.values(props.is_active, 'is_active').boolean();
+        ValidatorRules.values(props.birth_date, 'birth_date').date();
 	}
 
 	activate() {
+		ValidatorRules.values(this.props.is_active, 'is_active').boolean();
 		this.is_active = true;
 	}
 
 	deactivate() {
+		ValidatorRules.values(this.props.is_active, 'is_active').boolean();
 		this.is_active = false;
 	}
 

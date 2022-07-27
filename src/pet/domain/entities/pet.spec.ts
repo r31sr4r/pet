@@ -4,9 +4,15 @@ import { validate as uuidValidate } from 'uuid'
 import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
 
 describe('Pet Unit Tests', () => {
+
+    beforeEach(() => {
+        Pet.validate = jest.fn();
+    });
+
     test('constructor of Pet', () => {
         let pet = new Pet({ name: 'Tom', type: 'Cat' });
         let props = omit(pet.props, ['created_at', 'birth_date']);
+        expect(Pet.validate).toHaveBeenCalled();
         expect(props).toStrictEqual({
             name: 'Tom',
             type: 'Cat',
@@ -172,7 +178,8 @@ describe('Pet Unit Tests', () => {
     it('should update a pet', () => {
         let pet = new Pet({ name: 'Tom', type: 'Cat' });
         expect(pet.is_active).toBeTruthy();
-        pet.update('Maul', 'Dog', 'Boxer', pet.birth_date);        
+        pet.update('Maul', 'Dog', 'Boxer', pet.birth_date);     
+        expect(Pet.validate).toHaveBeenCalledTimes(2);   
         expect(pet).toMatchObject({
             name: 'Maul',
             type: 'Dog',
@@ -184,7 +191,8 @@ describe('Pet Unit Tests', () => {
         let pet = new Pet({ name: 'Tom', type: 'Cat' });
         expect(pet.is_active).toBeTruthy();
         let birth_date = new Date('2020-01-01');
-        pet.update('Maul', 'Dog', 'Boxer', birth_date);        
+        pet.update('Maul', 'Dog', 'Boxer', birth_date);  
+        expect(Pet.validate).toHaveBeenCalledTimes(2);   
         expect(pet).toMatchObject({
             name: 'Maul',
             type: 'Dog',

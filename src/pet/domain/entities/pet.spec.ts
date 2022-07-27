@@ -68,14 +68,20 @@ describe('Pet Unit Tests', () => {
         });
     });
 
-    test('getter of name prop', () => { 
+    test('getter and setter of name prop', () => { 
         let pet = new Pet({ name: 'Tom', type: 'Cat' });
         expect(pet.name).toBe('Tom');
+
+        pet['name'] = 'Maul';
+        expect(pet.name).toBe('Maul');
     });
 
-    test('getter of type prop', () => {
+    test('getter and setter of type prop', () => {
         let pet = new Pet({ name: 'Tom', type: 'Cat' });
         expect(pet.type).toBe('Cat');
+
+        pet['type'] = 'Dog';
+        expect(pet.type).toBe('Dog');
     });
 
     test('getter and setter of breed prop', () => {
@@ -139,5 +145,52 @@ describe('Pet Unit Tests', () => {
 
     });
 
+    it('should deactivate a pet', () => {
+        let pet = new Pet({ name: 'Tom', type: 'Cat' });
+        expect(pet.is_active).toBeTruthy();
+        pet.deactivate();
+        expect(pet.is_active).toBeFalsy();
+        expect(pet).toMatchObject({
+            name: 'Tom',
+            type: 'Cat',
+            is_active: false,
+        });
+    });
 
+    it('should activate a pet', () => {
+        let pet = new Pet({ name: 'Tom', type: 'Cat', is_active: false });
+        expect(pet.is_active).toBeFalsy();
+        pet.activate();
+        expect(pet.is_active).toBeTruthy();
+        expect(pet).toMatchObject({
+            name: 'Tom',
+            type: 'Cat',
+            is_active: true,
+        });
+    });
+
+    it('should update a pet', () => {
+        let pet = new Pet({ name: 'Tom', type: 'Cat' });
+        expect(pet.is_active).toBeTruthy();
+        pet.update('Maul', 'Dog', 'Boxer', pet.birth_date);        
+        expect(pet).toMatchObject({
+            name: 'Maul',
+            type: 'Dog',
+            is_active: true,
+        });
+    });
+
+    it('should update a pet with new birth_date', () => {
+        let pet = new Pet({ name: 'Tom', type: 'Cat' });
+        expect(pet.is_active).toBeTruthy();
+        let birth_date = new Date('2020-01-01');
+        pet.update('Maul', 'Dog', 'Boxer', birth_date);        
+        expect(pet).toMatchObject({
+            name: 'Maul',
+            type: 'Dog',
+            is_active: true,
+            birth_date,
+        });
+        expect(pet.birth_date).toBe(birth_date);
+    });
 });

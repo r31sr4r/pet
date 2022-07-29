@@ -1,6 +1,7 @@
 import ValidatorRules from '../../../@seedwork/validators/validator-rules';
 import Entity from '../../../@seedwork/domain/entity/entity';
 import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
+import PetValidatorFactory from '../validators/pet.validator';
 
 export type PetProperties = {
 	name: string;
@@ -29,13 +30,19 @@ export class Pet extends Entity<PetProperties> {
 		this.birth_date = birth_date;
 	}
 
-	static validate(props: Omit<PetProperties, 'created_at'>): void {
-		ValidatorRules.values(props.name, 'name').required().string().maxlength(100);
-		ValidatorRules.values(props.type, 'type').required().string();
-		ValidatorRules.values(props.breed, 'breed').string();
-		ValidatorRules.values(props.is_active, 'is_active').boolean();
-        ValidatorRules.values(props.birth_date, 'birth_date').date();
+	// static validate(props: Omit<PetProperties, 'created_at'>): void {
+	// 	ValidatorRules.values(props.name, 'name').required().string().maxlength(100);
+	// 	ValidatorRules.values(props.type, 'type').required().string();
+	// 	ValidatorRules.values(props.breed, 'breed').string();
+	// 	ValidatorRules.values(props.is_active, 'is_active').boolean();
+    //     ValidatorRules.values(props.birth_date, 'birth_date').date();
+	// }
+
+	static validate(props: PetProperties): void {
+		const validator = PetValidatorFactory.create();
+		validator.validate(props);
 	}
+
 
 	activate() {
 		ValidatorRules.values(this.props.is_active, 'is_active').boolean();

@@ -6,36 +6,45 @@ describe('Pet Validator Tests', () => {
     beforeEach(() => (validator = PetValidatorFactory.create()));
 
     test('invalidation cases for name field', () => {
-        let isValid = validator.validate(null);
+        //@ts-ignore
+        expect({validator, data: null}).containsErrorMessages({
+            name: [
+                'name should not be empty',
+                'name must be a string',
+                'name must be shorter than or equal to 100 characters',
+            ]
+        })
 
-        expect(isValid).toBe(false);
-		expect(validator.errors['name']).toStrictEqual([
-			'name should not be empty',
-			'name must be a string',
-			'name must be shorter than or equal to 100 characters',
-		]);
+        // let isValid = validator.validate(null);
 
-        isValid = validator.validate({ name: '', type: '' });
+        // expect(isValid).toBe(false);
+		// expect(validator.errors['name']).toStrictEqual([
+		// 	'name should not be empty',
+		// 	'name must be a string',
+		// 	'name must be shorter than or equal to 100 characters',
+		// ]);
 
-        expect(isValid).toBe(false);
-        expect(validator.errors['name']).toStrictEqual([
-            'name should not be empty',
-        ]);
+        // isValid = validator.validate({ name: '', type: '' });
 
-        isValid = validator.validate({ name: 'a'.repeat(101), type: '' });
+        // expect(isValid).toBe(false);
+        // expect(validator.errors['name']).toStrictEqual([
+        //     'name should not be empty',
+        // ]);
+
+        // isValid = validator.validate({ name: 'a'.repeat(101), type: '' });
         
-        expect(isValid).toBe(false);
-        expect(validator.errors['name']).toStrictEqual([
-            'name must be shorter than or equal to 100 characters',
-        ]);
+        // expect(isValid).toBe(false);
+        // expect(validator.errors['name']).toStrictEqual([
+        //     'name must be shorter than or equal to 100 characters',
+        // ]);
 
-        isValid = validator.validate({ name: 5 as any, type: 'dog' });
+        // isValid = validator.validate({ name: 5 as any, type: 'dog' });
 
-        expect(isValid).toBe(false);
-        expect(validator.errors['name']).toStrictEqual([
-            'name must be a string',
-            'name must be shorter than or equal to 100 characters',
-        ]);
+        // expect(isValid).toBe(false);
+        // expect(validator.errors['name']).toStrictEqual([
+        //     'name must be a string',
+        //     'name must be shorter than or equal to 100 characters',
+        // ]);
 
 
     });

@@ -2,6 +2,7 @@ import ValidatorRules from '../../../@seedwork/domain/validators/validator-rules
 import Entity from '../../../@seedwork/domain/entity/entity';
 import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
 import PetValidatorFactory from '../validators/pet.validator';
+import { EntityValidationError } from '../../../@seedwork/domain/errors/validation-error';
 
 export type PetProperties = {
 	name: string;
@@ -50,6 +51,10 @@ export class Pet extends Entity<PetProperties> {
 	static validate(props: PetProperties): void {
 		const validator = PetValidatorFactory.create();
 		validator.validate(props);
+		const isValid = validator.validate(props);
+		if (!isValid) {
+			throw new EntityValidationError(validator.errors);
+		}		
 	}
 
 	activate() {

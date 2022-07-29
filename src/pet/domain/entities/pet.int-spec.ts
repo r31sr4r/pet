@@ -1,4 +1,4 @@
-import ValidationError from '../../../@seedwork/errors/validation-error';
+import ValidationError from '../../../@seedwork/domain/errors/validation-error';
 import { Pet } from './pet';
 
 describe('Pet Integration Tests', () => {

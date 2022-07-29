@@ -23,6 +23,10 @@ export class PetRules {
 	@IsOptional()
 	breed: string;
 
+	@IsString()
+	@IsOptional()
+	gender: string;
+
 	@IsBoolean()
 	@IsOptional()
 	is_active: boolean;
@@ -39,6 +43,7 @@ export class PetRules {
 		name,
 		type,
         breed,
+		gender,
 		is_active,
         birth_date,
 		created_at,
@@ -47,6 +52,7 @@ export class PetRules {
 			name,
             type,
             breed,
+			gender,
 			is_active,
             birth_date,
 			created_at,

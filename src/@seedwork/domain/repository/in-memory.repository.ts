@@ -1,5 +1,5 @@
 import Entity from '../entity/entity';
-import NotFoundError from '../errors/not-found.error';
+import NotFoundError from '../errors/not-found-error';
 import UniqueEntityId from '../value-objects/unique-entity-id.vo';
 import { RepositoryInterface } from './repository-contracts';
 

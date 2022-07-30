@@ -35,7 +35,7 @@ export class SearchParams {
 	}
 
 	get page() {
-		return this.page;
+		return this._page;
 	}
 
 	private set page(value: number) {
@@ -47,14 +47,15 @@ export class SearchParams {
 		) {
 			_page = 1;
 		}
+		this._page = _page;
 	}
 
 	get per_page() {
-		return this.per_page;
+		return this._per_page;
 	}
 
 	private set per_page(value: number) {
-		let _per_page = +value;
+		let _per_page = value === (true as any) ? this._per_page : +value;
 		if (
 			Number.isNaN(_per_page) ||
 			_per_page <= 0 ||
@@ -67,7 +68,7 @@ export class SearchParams {
 	}
 
 	get sort() {
-		return this.sort;
+		return this._sort;
 	}
 
 	private set sort(value: string | null) {
@@ -78,11 +79,11 @@ export class SearchParams {
 	}
 
 	get sort_dir() {
-		return this.sort_dir;
+		return this._sort_dir;
 	}
 
 	private set sort_dir(value: SortDirection | null) {
-		if(!value){
+		if (!this.sort) {
 			this._sort_dir = null;
 			return;
 		}
@@ -91,7 +92,7 @@ export class SearchParams {
 	}
 
 	get filter() {
-		return this.filter;
+		return this._filter;
 	}
 
 	private set filter(value: string | null) {
@@ -102,10 +103,56 @@ export class SearchParams {
 	}
 }
 
+type SearchResultProps<T extends Entity, Filter> = {
+	items: T[];
+	total: number;
+	current_page: number;
+	per_page: number;
+	sort: string | null;
+	sort_dir: string | null;
+	filter: Filter;
+};
+
+export class SearchResult<T extends Entity, Filter = string> {
+	readonly items: T[];
+	readonly total: number;
+	readonly current_page: number;
+	readonly per_page: number;
+	readonly last_page: number;
+	readonly sort: string | null;
+	readonly sort_dir: string | null;
+	readonly filter: Filter | null;
+
+	constructor(props: SearchResultProps<T, Filter>) {
+		this.items = props.items;
+		this.total = props.total;
+		this.current_page = props.current_page;
+		this.per_page = props.per_page;
+		this.last_page = Math.ceil(this.total / this.per_page);
+		this.sort = props.sort;
+		this.sort_dir = props.sort_dir;
+		this.filter = props.filter;
+	}
+
+	toJSON() {
+		return {
+			items: this.items,
+			total: this.total,
+			current_page: this.current_page,
+			per_page: this.per_page,
+			last_page: this.last_page,
+			sort: this.sort,
+			sort_dir: this.sort_dir,
+			filter: this.filter,
+		};
+	}
+}
+
 export interface SearchableRepositoryInterface<
 	T extends Entity,
-	SearchOutput,
-	SearchInput = SearchParams
+	Filter = string,
+	SearchInput = SearchParams,
+	SearchOutput = SearchResult<T, Filter>
 > extends RepositoryInterface<T> {
 	search(props: SearchInput): Promise<SearchOutput>;
 }

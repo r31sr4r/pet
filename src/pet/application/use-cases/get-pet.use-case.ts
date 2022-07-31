@@ -1,4 +1,3 @@
-import { Pet } from '../../domain/entities/pet';
 import PetRepository from '../../domain/repository/pet.repository';
 import { PetOutput } from '../dto/pet-output.dto';
 
@@ -6,8 +5,7 @@ export default class CreatePetUseCase {
 	constructor(private petRepository: PetRepository.Repository) {}
 
 	async execute(input: Input): Promise<Output> {
-		const entity = new Pet(input);
-		await this.petRepository.insert(entity);
+		const entity = await this.petRepository.findById(input.id);
 		return {
 			id: entity.id,
 			name: entity.name,
@@ -22,12 +20,7 @@ export default class CreatePetUseCase {
 }
 
 export type Input = {
-	name: string;
-    type: string;
-    breed?: string;
-    gender?: string;
-    birth_date?: Date;
-	is_active?: boolean;
+    id: string;
 };
 
 export type Output = PetOutput;

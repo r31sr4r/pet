@@ -1,7 +1,8 @@
+import UseCase from '../../../@seedwork/application/use-case';
 import PetRepository from '../../domain/repository/pet.repository';
 import { PetOutput } from '../dto/pet-output.dto';
 
-export default class CreatePetUseCase {
+export default class CreatePetUseCase implements UseCase<Input, Output> {
 	constructor(private petRepository: PetRepository.Repository) {}
 
 	async execute(input: Input): Promise<Output> {

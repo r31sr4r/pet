@@ -1,3 +1,5 @@
+import { Pet } from "pet/domain/entities/pet";
+
 export type PetOutput = {
 	id: string;
 	name: string;
@@ -8,3 +10,9 @@ export type PetOutput = {
 	is_active: boolean;
 	created_at: Date;
 };
+
+export class PetOutputMapper {
+	static toOutput(entity: Pet): PetOutput {
+		return entity.toJSON();
+	}
+}

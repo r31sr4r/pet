@@ -1,7 +1,7 @@
 import UseCase from '../../../@seedwork/application/use-case';
 import { Pet } from '../../domain/entities/pet';
 import PetRepository from '../../domain/repository/pet.repository';
-import { PetOutput } from '../dto/pet-output.dto';
+import { PetOutput, PetOutputMapper } from '../dto/pet-output';
 
 
 export default class CreatePetUseCase implements UseCase<Input, Output> {
@@ -10,16 +10,8 @@ export default class CreatePetUseCase implements UseCase<Input, Output> {
 	async execute(input: Input): Promise<Output> {
 		const entity = new Pet(input);
 		await this.petRepository.insert(entity);
-		return {
-			id: entity.id,
-			name: entity.name,
-			type: entity.type,
-            breed: entity.breed,
-            gender: entity.gender,
-            birth_date: entity.birth_date,
-			is_active: entity.is_active,
-			created_at: entity.created_at,
-		};
+		return PetOutputMapper.toOutput(entity);
+
 	}
 }
 

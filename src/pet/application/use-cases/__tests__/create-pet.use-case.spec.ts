@@ -3,15 +3,15 @@ import CreatePetUseCase from '../create-pet.use-case';
 
 describe('CreatePetUseCase Unit Tests', () => {
 	let useCase: CreatePetUseCase;
-	let petRepository: PetInMemoryRepository;
+	let repository: PetInMemoryRepository;
 
 	beforeEach(() => {
-		petRepository = new PetInMemoryRepository();
-		useCase = new CreatePetUseCase(petRepository);
+		repository = new PetInMemoryRepository();
+		useCase = new CreatePetUseCase(repository);
 	});
 
 	it('should create a new pet', async () => {
-		const spyInsert = jest.spyOn(petRepository, 'insert');
+		const spyInsert = jest.spyOn(repository, 'insert');
 		let output = await useCase.execute({
 			name: 'Test',
 			type: 'Dog',
@@ -20,14 +20,14 @@ describe('CreatePetUseCase Unit Tests', () => {
 
 		expect(spyInsert).toHaveBeenCalledTimes(1);
 		expect(output).toStrictEqual({
-			id: petRepository.items[0].id,
+			id: repository.items[0].id,
 			name: 'Test',
 			type: 'Dog',
 			breed: 'Test',
 			gender: null,
 			is_active: true,
 			birth_date: null,
-			created_at: petRepository.items[0].created_at,
+			created_at: repository.items[0].created_at,
 		});
 
 		output = await useCase.execute({
@@ -40,14 +40,14 @@ describe('CreatePetUseCase Unit Tests', () => {
 
 		expect(spyInsert).toHaveBeenCalledTimes(2);
 		expect(output).toStrictEqual({
-			id: petRepository.items[1].id,
+			id: repository.items[1].id,
 			name: 'Tom',
 			type: 'Cat',
 			breed: null,
 			gender: 'Male',
 			is_active: false,
 			birth_date: new Date('2021-04-06'),
-			created_at: petRepository.items[1].created_at,
+			created_at: repository.items[1].created_at,
 		});
 
 	});

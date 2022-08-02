@@ -1,6 +1,6 @@
 import { Pet, PetProperties } from './pet';
 import { omit } from 'lodash';
-import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entity-id.vo';
+import UniqueEntityId from '#seedwork/domain/value-objects/unique-entity-id.vo';
 
 describe('Pet Unit Tests', () => {
 	beforeEach(() => {

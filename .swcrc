@@ -1,8 +1,13 @@
 {
     "jsc": {
-        "parser": {
-            "syntax": "typescript",
-            "decorators": true
-        }
+      "parser": {
+        "syntax": "typescript",
+        "decorators": true
+      },
+      "baseUrl": "./src",
+      "paths": {
+        "#seedwork/*": ["./@seedwork/*"],
+        "#pet/*": ["./pet/*"]
+      }
     }
-}
+  }

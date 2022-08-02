@@ -1,4 +1,4 @@
-import { Pet } from "../../domain/entities/pet";
+import { Pet } from "#pet/domain/entities/pet";
 import PetInMemoryRepository from "./pet-in-memory.repository";
 
 describe('PetInMemoryRepository Unit Tests', () => {

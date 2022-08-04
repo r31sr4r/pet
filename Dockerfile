@@ -13,7 +13,8 @@ RUN mkdir -p /usr/share/man/man1 && \
     gpg \     
     gnupg2 \
     gpg-agent \
-    socat
+    socat \
+    procps
 
 RUN npm install -g @nestjs/cli@8.2.5 npm@8.5.5
     

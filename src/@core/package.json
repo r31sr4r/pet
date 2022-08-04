@@ -14,6 +14,28 @@
 		"./pet/domain": "./dist/pet/domain/index.js",
 		"./pet/infra": "./dist/pet/infra/index.js"
 	},
+	"typesVersions": {
+		">=4.0": {
+			"@seedwork/application": [
+				"./dist/@seedwork/application/index.d.ts"
+			],
+			"@seedwork/domain": [
+				"./dist/@seedwork/domain/index.d.ts"
+			],
+			"@seedwork/infra": [
+				"./dist/@seedwork/infra/index.d.ts"
+			],
+			"pet/application": [
+				"./dist/pet/application/index.d.ts"
+			],
+			"pet/domain": [
+				"./dist/pet/domain/index.d.ts"
+			],
+			"pet/infra": [
+				"./dist/pet/infra/index.d.ts"
+			]
+		}
+	},
 	"scripts": {
 		"ts-node": "ts-node",
 		"tsc": "tsc",

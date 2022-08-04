@@ -1,15 +1,15 @@
 import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
-import UpdatePetUseCase from '../update-pet.use-case';
+import {UpdatePetUseCase} from '../update-pet.use-case';
 import NotFoundError from '../../../../@seedwork/domain/errors/not-found.error';
 import { Pet } from '../../../domain/entities/pet';
 
 describe('UpdatePetUseCase Unit Tests', () => {
-	let useCase: UpdatePetUseCase;
+	let useCase: UpdatePetUseCase.UseCase;
 	let repository: PetInMemoryRepository;
 
 	beforeEach(() => {
 		repository = new PetInMemoryRepository();
-		useCase = new UpdatePetUseCase(repository);
+		useCase = new UpdatePetUseCase.UseCase(repository);
 	});
 
 	it('should throw an error when pet not found', async () => {

@@ -1,13 +1,13 @@
 import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
-import CreatePetUseCase from '../create-pet.use-case';
+import {CreatePetUseCase} from '../create-pet.use-case';
 
 describe('CreatePetUseCase Unit Tests', () => {
-	let useCase: CreatePetUseCase;
+	let useCase: CreatePetUseCase.UseCase;
 	let repository: PetInMemoryRepository;
 
 	beforeEach(() => {
 		repository = new PetInMemoryRepository();
-		useCase = new CreatePetUseCase(repository);
+		useCase = new CreatePetUseCase.UseCase(repository);
 	});
 
 	it('should create a new pet', async () => {

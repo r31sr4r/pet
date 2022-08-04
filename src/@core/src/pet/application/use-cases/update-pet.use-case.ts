@@ -1,8 +1,9 @@
-import UseCase from '../../../@seedwork/application/use-case';
+import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import { PetRepository } from '../../domain/repository/pet.repository';
 import { PetOutput, PetOutputMapper } from '../dto/pet-output';
 
-export default class UpdatePetUseCase implements UseCase<Input, Output> {
+export namespace UpdatePetUseCase {
+export class UseCase implements DefaultUseCase<Input, Output> {
 	constructor(private petRepository: PetRepository.Repository) {}
 
 	async execute(input: Input): Promise<Output> {
@@ -39,3 +40,7 @@ export type Input = {
 };
 
 export type Output = PetOutput;
+
+}
+
+export default UpdatePetUseCase;

@@ -66,8 +66,10 @@ export class PetValidator extends ClassValidatorFields<PetRules> {
 	}
 }
 
-export default class PetValidatorFactory{
+export class PetValidatorFactory{
     static create() {
         return new PetValidator();
     }
 }
+
+export default PetValidatorFactory;

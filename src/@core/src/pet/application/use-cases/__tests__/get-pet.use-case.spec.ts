@@ -1,15 +1,15 @@
 import { Pet } from '../../../domain/entities/pet';
 import NotFoundError from '../../../../@seedwork/domain/errors/not-found.error';
 import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
-import GetPetUseCase from '../get-pet.use-case';
+import {GetPetUseCase} from '../get-pet.use-case';
 
 describe('GetPetUseCase Unit Tests', () => {
-	let useCase: GetPetUseCase;
+	let useCase: GetPetUseCase.UseCase;
 	let repository: PetInMemoryRepository;
 
 	beforeEach(() => {
 		repository = new PetInMemoryRepository();
-		useCase = new GetPetUseCase(repository);
+		useCase = new GetPetUseCase.UseCase(repository);
 	});
 
 	it('should throw an error when pet not found', async () => {

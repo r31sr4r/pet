@@ -3,7 +3,7 @@ import { InMemorySearchableRepository } from '../../../@seedwork/domain/reposito
 import { Pet } from '../../domain/entities/pet';
 import PetRepository from '../../domain/repository/pet.repository';
 
-export default class PetInMemoryRepository
+export class PetInMemoryRepository
 	extends InMemorySearchableRepository<Pet>
 	implements PetRepository.Repository
 {
@@ -32,3 +32,5 @@ export default class PetInMemoryRepository
 		: super.applySort(items, sort, sort_dir);
 	}
 }
+
+export default PetInMemoryRepository;

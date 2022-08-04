@@ -4,6 +4,7 @@ services:
   api:
     build: .
     container_name: pet-care-clube-typescript-app
+    command: .docker/start.sh
     volumes:
       - .:/home/node/app
     ports:

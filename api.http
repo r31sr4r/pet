@@ -1,4 +1,29 @@
-GET http://localhost:3000/pets
+GET http://localhost:3001/pets
 
 ###
-POST http://localhost:3000/pets
+
+GET http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+
+
+###
+
+POST http://localhost:3001/pets
+Content-Type: application/json
+
+{
+    "name": "Movie"
+}
+
+###
+
+PUT http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+Content-Type: application/json
+
+{
+    "name": "Movie1111"
+}
+
+###
+
+DELETE http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+Content-Type: application/json

@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePetDto } from './dto/create-pet.dto';
+import {
+  CreatePetUseCase,
+  ListPetsUseCase,
+} from 'pet-core/pet/application';
+
+import { Inject, Injectable } from '@nestjs/common';
 import { UpdatePetDto } from './dto/update-pet.dto';
 
 @Injectable()
 export class PetsService {
-  create(createPetDto: CreatePetDto) {
-    return 'This action adds a new pet';
+  @Inject(CreatePetUseCase.UseCase)
+  private createUseCase: CreatePetUseCase.UseCase;
+
+  @Inject(ListPetsUseCase.UseCase)
+  private listUseCase: ListPetsUseCase.UseCase;
+
+  create(createPetDto: CreatePetUseCase.Input) {
+      return this.createUseCase.execute(createPetDto);
   }
 
-  findAll() {
-    return `This action returns all pets`;
+  search(input: ListPetsUseCase.Input) {
+      return this.listUseCase.execute(input);
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} pet`;
+      return `This action returns a #${id} pet`;
   }
 
   update(id: number, updatePetDto: UpdatePetDto) {
-    return `This action updates a #${id} pet`;
+      return `This action updates a #${id} pet`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} pet`;
+      return `This action removes a #${id} pet`;
   }
 }

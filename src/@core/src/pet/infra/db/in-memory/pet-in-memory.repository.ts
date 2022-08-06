@@ -1,7 +1,7 @@
 import { SortDirection } from '#seedwork/domain/repository/repository-contracts';
-import { InMemorySearchableRepository } from '../../../@seedwork/domain/repository/in-memory.repository';
-import { Pet } from '../../domain/entities/pet';
-import PetRepository from '../../domain/repository/pet.repository';
+import { InMemorySearchableRepository } from '../../../../@seedwork/domain/repository/in-memory.repository';
+import { Pet } from '../../../domain/entities/pet';
+import PetRepository from '../../../domain/repository/pet.repository';
 
 export class PetInMemoryRepository
 	extends InMemorySearchableRepository<Pet>

@@ -1,4 +1,4 @@
-import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
+import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
 import {CreatePetUseCase} from '../create-pet.use-case';
 
 describe('CreatePetUseCase Unit Tests', () => {

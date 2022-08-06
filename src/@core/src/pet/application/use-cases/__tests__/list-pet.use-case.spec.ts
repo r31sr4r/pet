@@ -1,5 +1,5 @@
 import { ListPetsUseCase } from '../list-pets.use-case';
-import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
+import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
 import { PetRepository } from '../../../domain/repository/pet.repository';
 import { Pet } from '../../../domain/entities/pet';
 

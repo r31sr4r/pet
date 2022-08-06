@@ -1,6 +1,6 @@
 import { Pet } from '../../../domain/entities/pet';
 import NotFoundError from '../../../../@seedwork/domain/errors/not-found.error';
-import PetInMemoryRepository from '../../../infra/repository/pet-in-memory.repository';
+import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
 import { DeletePetUseCase } from '../delete-pet.use-case';
 
 describe('DeletePetUseCase Unit Tests', () => {

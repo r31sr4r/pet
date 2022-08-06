@@ -1,4 +1,4 @@
-import { ListPetsUseCase } from 'pet-core/category/application';
+import { ListPetsUseCase } from 'pet-core/pet/application';
 import { SortDirection } from 'pet-core/dist/@seedwork/domain/repository/repository-contracts';
 
 export class SearchPetDto implements ListPetsUseCase.Input {

@@ -2,7 +2,7 @@ GET http://localhost:3000/pets
 
 ###
 
-GET http://localhost:3000/pets/764ed855-bb09-4d81-a1b6-fe840c0224af
+GET http://localhost:3000/pets/b41afae6-16dc-4aa9-8072-a7bdded043b3
 
 
 ###
@@ -11,19 +11,19 @@ POST http://localhost:3000/pets
 Content-Type: application/json
 
 {
-    "name": "Toto",
-    "type": "cat"
+    "name": "Luke",
+    "type": "dog"
 }
 
 ###
 
-PUT http://localhost:3000/pets/764ed855-bb09-4d81-a1b6-fe840c0224af
+PUT http://localhost:3000/pets/14069bb1-f62d-4747-a224-3badfb469876
 Content-Type: application/json
 
 {
-    "name": "Garfield",
-    "type": "cat",
-    "breed": "Persian",
+    "name": "Luke",
+    "type": "dog",
+    "breed": "Boxer",
     "gender": "Male"
 }
 

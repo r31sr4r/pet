@@ -18,7 +18,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
-// import { SearchPetDto } from './dto/search-pet.dto';
+import { SearchPetDto } from './dto/search-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 
 @Controller('pets')
@@ -35,8 +35,8 @@ export class PetsController {
     @Inject(GetPetUseCase.UseCase)
     private getUseCase: GetPetUseCase.UseCase;
 
-    // @Inject(ListPetsUseCase.UseCase)
-    // private listUseCase: ListPetsUseCase.UseCase;
+    @Inject(ListPetsUseCase.UseCase)
+    private listUseCase: ListPetsUseCase.UseCase;
 
     @Post()
     create(@Body() createPetDto: CreatePetDto) {
@@ -62,8 +62,8 @@ export class PetsController {
         return this.getUseCase.execute({ id });
     }
 
-    // @Get()
-    // search(@Query() searchParams: SearchPetDto) {
-    //     return this.listUseCase.execute(searchParams);
-    // }
+    @Get()
+    search(@Query() searchParams: SearchPetDto) {
+        return this.listUseCase.execute(searchParams);
+    }
 }

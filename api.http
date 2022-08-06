@@ -1,29 +1,33 @@
-GET http://localhost:3001/pets
+GET http://localhost:3000/pets
 
 ###
 
-GET http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+GET http://localhost:3000/pets/764ed855-bb09-4d81-a1b6-fe840c0224af
 
 
 ###
 
-POST http://localhost:3001/pets
+POST http://localhost:3000/pets
 Content-Type: application/json
 
 {
-    "name": "Movie"
+    "name": "Toto",
+    "type": "cat"
 }
 
 ###
 
-PUT http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+PUT http://localhost:3000/pets/764ed855-bb09-4d81-a1b6-fe840c0224af
 Content-Type: application/json
 
 {
-    "name": "Movie1111"
+    "name": "Garfield",
+    "type": "cat",
+    "breed": "Persian",
+    "gender": "Male"
 }
 
 ###
 
-DELETE http://localhost:3001/pets/a96ecc93-51f1-40c6-ad54-23be94a8c694
+DELETE http://localhost:3000/pets/764ed855-bb09-4d81-a1b6-fe840c0224af
 Content-Type: application/json

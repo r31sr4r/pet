@@ -3,6 +3,7 @@ import { PetsService } from './pets.service';
 import { PetsController } from './pets.controller';
 import {
     CreatePetUseCase,
+    DeletePetUseCase,
     GetPetUseCase,
     ListPetsUseCase,
     UpdatePetUseCase,
@@ -46,6 +47,14 @@ import PetRepository from 'pet-core/dist/pet/domain/repository/pet.repository';
             },
             inject: ['PetInMemoryRepository'],
         },
+        {
+            provide: DeletePetUseCase.UseCase,
+            useFactory: (petRepo: PetRepository.Repository) => {
+                return new DeletePetUseCase.UseCase(petRepo);
+            },
+            inject: ['PetInMemoryRepository'],
+        },        
+        
     ],
 })
 export class PetsModule {}

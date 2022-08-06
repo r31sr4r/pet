@@ -13,7 +13,7 @@ export default {
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   moduleNameMapper: {
-    'pet-core/(.*)$':
+    'pet\\-core/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/$1',
     '#seedwork/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/@seedwork/$1',

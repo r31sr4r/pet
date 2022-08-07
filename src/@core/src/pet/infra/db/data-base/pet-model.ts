@@ -1,8 +1,7 @@
-import { Model } from "sequelize";
-import {Column, DataType, PrimaryKey, Table} from 'sequelize-typescript';
+import {Column, DataType, PrimaryKey, Table, Model} from 'sequelize-typescript';
 
 type PetModelProperties = {
-    id: number;
+    id: string;
     name: string;
     type: string;
     breed: string;
@@ -16,26 +15,26 @@ type PetModelProperties = {
 export class PetModel extends Model<PetModelProperties> {
     @PrimaryKey
     @Column({type: DataType.UUID})
-    id: string;
+    declare id: string;
 
     @Column({ allowNull: false, type: DataType.STRING(100) })
-    name: string;
+    declare name: string;
 
     @Column({ allowNull: false, type: DataType.STRING(50) })
-    type: string;
+    declare type: string;
 
-    @Column({ type: DataType.STRING(50) })
-    breed: string | null;
+    @Column({ allowNull: true, type: DataType.STRING(50) })
+    declare breed: string | null;
 
-    @Column({ type: DataType.STRING(50) })
-    gender: string | null;
+    @Column({ allowNull: true, type: DataType.STRING(50) })
+    declare gender: string | null;
 
-    @Column({ type: DataType.DATE })
-    birth_date: Date | null;
+    @Column({ allowNull: true, type: DataType.DATE })
+    declare birth_date: Date | null;
 
-    @Column({ allowNull: false })
-    is_active: boolean;
+    @Column({ allowNull: false, type: DataType.BOOLEAN })
+    declare is_active: boolean;
 
-    @Column({ allowNull: false })
-    created_at: Date;
+    @Column({ allowNull: false, type: DataType.DATE })
+    declare created_at: Date;
 }

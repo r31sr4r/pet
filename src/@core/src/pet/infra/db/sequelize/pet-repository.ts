@@ -23,8 +23,10 @@ export class PetSequelizeRepository implements PetRepository.Repository {
 		const model = await this._get(_id);
 		return PetModelMapper.toEntity(model);
 	}
-	findAll(): Promise<Pet[]> {
-		throw new Error('Method not implemented.');
+	
+	async findAll(): Promise<Pet[]> {
+		const models = await this.petModel.findAll();
+		return models.map(PetModelMapper.toEntity);	
 	}
 	update(entity: Pet): Promise<void> {
 		throw new Error('Method not implemented.');

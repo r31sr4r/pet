@@ -81,5 +81,20 @@ describe('PetRepository Unit Tests', () => {
 		entityFound = await repository.findById(entity.uniqueEntityId);
 		expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
 	});
+
+	it('should find all entities', async () => {
+		const entity1 = new Pet({ name: 'Toto', type: 'dog' });
+		const entity2 = new Pet({ name: 'Garfield', type: 'cat' });
+		const entity3 = new Pet({ name: 'some name', type: 'dog' });
+		await repository.insert(entity1);
+		await repository.insert(entity2);
+		await repository.insert(entity3);
+
+		const entities = await repository.findAll();
+		expect(entities.length).toBe(3);
+		expect(entities[0].toJSON()).toStrictEqual(entity1.toJSON());
+		expect(entities[1].toJSON()).toStrictEqual(entity2.toJSON());
+		expect(entities[2].toJSON()).toStrictEqual(entity3.toJSON());
+	});
     
 });

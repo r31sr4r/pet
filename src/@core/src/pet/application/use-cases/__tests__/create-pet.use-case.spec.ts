@@ -51,4 +51,45 @@ describe('CreatePetUseCase Unit Tests', () => {
 		});
 
 	});
+
+	it('should throw an error if props is not provided', async () => {
+		await expect(useCase.execute(null as any)).rejects.toThrow(
+			'Entity validation error'
+		);
+	});
+
+	it('should throw an error if name is not provided', async () => {
+		await expect(useCase.execute(null as any)).rejects.toMatchObject({
+			error: {
+				name: [
+					'name should not be empty',
+					'name must be a string',
+					'name must be shorter than or equal to 100 characters',
+				],
+			},
+		});
+
+		await expect(useCase.execute({ name: '' } as any)).rejects.toMatchObject({
+			error: {
+				name: [
+					'name should not be empty',
+				],
+			},				
+		});
+	});
+
+	it('should throw an error if type is not provided', async () => {
+		await expect(useCase.execute({ 
+			name: 'Test',
+			type: null as any,
+		})).rejects.toMatchObject({
+			error: {
+				type: [
+					'type should not be empty',
+					'type must be a string',
+				],
+			},
+		});
+
+	});
 });

@@ -1,28 +1,12 @@
 import { Pet } from '#pet/domain';
 import { LoadEntityError, UniqueEntityId } from '#seedwork/domain';
+import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import { Sequelize } from 'sequelize-typescript';
 import PetModelMapper from './pet-mapper';
 import { PetModel } from './pet-model';
 
 describe('PetMapper Unit Tests', () => {
-	let sequelize: Sequelize;
-
-	beforeAll(async () => {
-		sequelize = new Sequelize({
-			dialect: 'sqlite',
-			host: ':memory:',
-			logging: false,
-			models: [PetModel],
-		});
-	});
-
-	beforeEach(async () => {
-		await sequelize.sync({ force: true });
-	});
-
-	afterAll(async () => {
-		await sequelize.close();
-	});
+	setupSequelize({models: [PetModel]});
 
 	it('should throw an error when entity is invalid', async () => {
 		const model = PetModel.build({

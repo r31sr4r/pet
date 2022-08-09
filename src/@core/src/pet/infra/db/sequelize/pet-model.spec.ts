@@ -1,27 +1,11 @@
 
-import { DataType, Sequelize } from 'sequelize-typescript';
+import { DataType } from 'sequelize-typescript';
 import { PetModel } from './pet-model';
+import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
+
 
 describe('PetModel Unit Tests', () => {
-	let sequelize: Sequelize;
-
-	beforeAll(async () => {
-		sequelize = new Sequelize({
-			dialect: 'sqlite',
-			host: ':memory:',
-			logging: false,
-			models: [PetModel],
-		});
-	});
-
-
-	beforeEach(async () => {
-		await sequelize.sync({ force: true });
-	});
-
-	afterAll(async () => {
-		await sequelize.close();
-	});
+	setupSequelize({models: [PetModel]});
 
     test('mapping props to columns', async () => {
         const attributesMap = PetModel.getAttributes();
@@ -126,7 +110,6 @@ describe('PetModel Unit Tests', () => {
 
 	it('search pet', async () => {
 		await PetModel.factory().create();
-		console.log(await PetModel.findAll());
 
 	});
 

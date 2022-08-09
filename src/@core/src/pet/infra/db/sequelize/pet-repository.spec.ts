@@ -1,29 +1,16 @@
 import { Pet } from '#pet/domain';
 import { NotFoundError } from '#seedwork/domain';
+import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import { Sequelize } from 'sequelize-typescript';
 import { PetModel } from './pet-model';
 import { PetSequelizeRepository } from './pet-repository';
 
 describe('PetRepository Unit Tests', () => {
-	let sequelize: Sequelize;
+	setupSequelize({models: [PetModel]});
 	let repository: PetSequelizeRepository;
-
-	beforeAll(async () => {
-		sequelize = new Sequelize({
-			dialect: 'sqlite',
-			host: ':memory:',
-			logging: false,
-			models: [PetModel],
-		});
-	});
 
 	beforeEach(async () => {
 		repository = new PetSequelizeRepository(PetModel);
-		await sequelize.sync({ force: true });
-	});
-
-	afterAll(async () => {
-		await sequelize.close();
 	});
 
 	it('should insert a pet', async () => {

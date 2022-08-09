@@ -124,5 +124,11 @@ describe('PetModel Unit Tests', () => {
 		expect(pet.toJSON()).toStrictEqual(arrange);
     });
 
+	it('search pet', async () => {
+		await PetModel.factory().create();
+		console.log(await PetModel.findAll());
+
+	});
+
 
 });

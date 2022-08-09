@@ -57,4 +57,21 @@ describe('SequelizeModelFactory Unit Tests', () => {
 		modelFound = await StubModel.findByPk(model.id);
 		expect(model.id).toBe(modelFound.id);
 	});
+
+	test('make method', () => {
+		let model = StubModel.factory().make();
+		expect(uuidValidate(model.id)).toBeTruthy();
+		expect(model.name).not.toBeNull();
+		expect(model.id).not.toBeNull();
+		expect(StubModel.mockFactory).toHaveBeenCalled();
+
+		model = StubModel.factory().make({
+			id: '02b090cf-5658-4073-b242-9bf64915b3ad',
+			name: 'test',
+		});
+
+		expect(model.id).toBe('02b090cf-5658-4073-b242-9bf64915b3ad');
+		expect(model.name).toBe('test');
+		expect(StubModel.mockFactory).toHaveBeenCalledTimes(1);
+	});
 });

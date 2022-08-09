@@ -2,7 +2,7 @@ import {Column, DataType, PrimaryKey, Table, Model} from 'sequelize-typescript';
 import { SequelizeModelFactory } from '#seedwork/infra'
 import Chance from 'chance'; 
 
-type PetModelProperties = {
+type PetModelProps = {
     id: string;
     name: string;
     type: string;
@@ -14,7 +14,7 @@ type PetModelProperties = {
 }
 
 @Table({ tableName: 'pets', timestamps: false })
-export class PetModel extends Model<PetModelProperties> {
+export class PetModel extends Model<PetModelProps> {
     @PrimaryKey
     @Column({type: DataType.UUID})
     declare id: string;
@@ -42,7 +42,7 @@ export class PetModel extends Model<PetModelProperties> {
 
     static factory(){
         const chance: Chance.Chance = require('chance')();
-        return new SequelizeModelFactory(PetModel, () => ({
+        return new SequelizeModelFactory<PetModel, PetModelProps>(PetModel,  () => ({
             id: chance.guid({ version: 4 }),
             name: chance.name(),
             type: chance.animal({ type: 'pet' }),

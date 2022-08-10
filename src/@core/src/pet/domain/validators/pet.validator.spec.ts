@@ -110,7 +110,7 @@ describe('Pet Validator Tests', () => {
     });    
 
 
-	test('valid cases for fields', () => {
+	describe('valid cases for fields', () => {
 		const arrange = [
 			{ name: 'a'.repeat(100), type: 'dog' },
 			{ name: 'Elvis', type: 'cat' },
@@ -134,12 +134,17 @@ describe('Pet Validator Tests', () => {
 			},            
 		];
 
-		arrange.forEach((data) => {
-			const isValid = validator.validate(data);
+		test.each(arrange)(
+			'validates %p',
+			(item) => {
+				const isValid = validator.validate(item);
+				expect(isValid).toBe(true);
+				expect(validator.errors).toBeNull();
+				expect(validator.validatedData).toStrictEqual(
+					new PetRules(item)
+				);
 
-			expect(isValid).toBe(true);
-			expect(validator.errors).toBeNull();
-			expect(validator.validatedData).toStrictEqual(new PetRules(data));
-		});
+			}
+		);
 	});
 });

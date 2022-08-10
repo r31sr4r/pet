@@ -165,7 +165,7 @@ describe('PetRepository Unit Tests', () => {
 				created_at: new Date(),
 			};
 
-			const categoriesProp = [
+			const petsProp = [
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'test',
@@ -183,8 +183,8 @@ describe('PetRepository Unit Tests', () => {
 					...defaultProps,
 				},
 			];
-			const pets = await PetModel.bulkCreate(categoriesProp);
-			
+			const pets = await PetModel.bulkCreate(petsProp);
+
 			let searchOutput = await repository.search(
 				new PetRepository.SearchParams({
 					page: 1,
@@ -226,6 +226,255 @@ describe('PetRepository Unit Tests', () => {
 					filter: 'TEST',
 				}).toJSON(true)
 			);
+		});
+
+		it('should apply paginate and sort', async () => {
+			expect(repository.sortableFields).toStrictEqual([
+				'name',
+				'type',
+				'breed',
+			]);
+			const defaultProps = {
+				breed: null,
+				gender: null,
+				birth_date: null,
+				is_active: true,
+				created_at: new Date(),
+			};
+
+			const petsProp = [
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'b',
+					type: 'dog',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'a',
+					type: 'cat',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'd',
+					type: 'dog',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'e',
+					type: 'cat',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'c',
+					type: 'dog',
+					...defaultProps,
+				},
+			];
+			const pets = await PetModel.bulkCreate(petsProp);
+
+			const arrange = [
+				{
+					params: new PetRepository.SearchParams({
+						page: 1,
+						per_page: 2,
+						sort: 'name',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[1]),
+							PetModelMapper.toEntity(pets[0]),
+						],
+						total: 5,
+						current_page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'asc',
+						filter: null,
+					}),
+				},
+				{
+					params: new PetRepository.SearchParams({
+						page: 2,
+						per_page: 2,
+						sort: 'name',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[4]),
+							PetModelMapper.toEntity(pets[2]),
+						],
+						total: 5,
+						current_page: 2,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'asc',
+						filter: null,
+					}),
+				},
+				{
+					params: new PetRepository.SearchParams({
+						page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[3]),
+							PetModelMapper.toEntity(pets[2]),
+						],
+						total: 5,
+						current_page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+						filter: null,
+					}),
+				},
+				{
+					params: new PetRepository.SearchParams({
+						page: 2,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[4]),
+							PetModelMapper.toEntity(pets[0]),
+						],
+						total: 5,
+						current_page: 2,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+						filter: null,
+					}),
+				},
+			];
+
+			for (const i of arrange) {
+				let result = await repository.search(i.params);
+				expect(result.toJSON(true)).toMatchObject(
+					i.result.toJSON(true)
+				);
+			}
+		});
+
+		it('should apply paginate, sort and filter', async () => {
+			const defaultProps = {
+				breed: null,
+				gender: null,
+				birth_date: null,
+				is_active: true,
+				created_at: new Date(),
+			};
+
+			const petsProp = [
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'some name',
+					type: 'dog',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'other name',
+					type: 'cat',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'some other name',
+					type: 'dog',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'name',
+					type: 'cat',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'some test',
+					type: 'dog',
+					...defaultProps,
+				},
+			];
+			const pets = await PetModel.bulkCreate(petsProp);
+
+			const arrange = [
+				{
+					params: new PetRepository.SearchParams({
+						page: 1,
+						per_page: 2,
+						sort: 'name',
+						filter: 'some',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[0]),
+							PetModelMapper.toEntity(pets[2]),
+						],
+						total: 3,
+						current_page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'asc',
+						filter: 'some',
+					}),
+				},
+				{
+					params: new PetRepository.SearchParams({
+						page: 2,
+						per_page: 2,
+						sort: 'name',
+						filter: 'some',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [PetModelMapper.toEntity(pets[4])],
+						total: 3,
+						current_page: 2,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'asc',
+						filter: 'some',
+					}),
+				},
+				{
+					params: new PetRepository.SearchParams({
+						page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+						filter: 'some',
+					}),
+					result: new PetRepository.SearchResult({
+						items: [
+							PetModelMapper.toEntity(pets[4]),
+							PetModelMapper.toEntity(pets[2]),
+						],
+						total: 3,
+						current_page: 1,
+						per_page: 2,
+						sort: 'name',
+						sort_dir: 'desc',
+						filter: 'some',
+					}),
+				},
+			];
+
+			for (const i of arrange) {
+				let result = await repository.search(i.params);
+				expect(result.toJSON(true)).toMatchObject(
+					i.result.toJSON(true)
+				);
+			}
 		});
 	});
 });

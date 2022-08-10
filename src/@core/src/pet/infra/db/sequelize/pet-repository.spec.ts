@@ -1,13 +1,19 @@
-import { Pet } from '#pet/domain';
+import { Pet, PetRepository } from '#pet/domain';
 import { NotFoundError } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
-import { Sequelize } from 'sequelize-typescript';
 import { PetModel } from './pet-model';
 import { PetSequelizeRepository } from './pet-repository';
+import _chance from 'chance';
 
 describe('PetRepository Unit Tests', () => {
 	setupSequelize({models: [PetModel]});
+	let chance: Chance.Chance;
 	let repository: PetSequelizeRepository;
+
+	beforeAll(() => {
+		chance = _chance();
+	});
+
 
 	beforeEach(async () => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -82,6 +88,45 @@ describe('PetRepository Unit Tests', () => {
 		expect(entities[0].toJSON()).toStrictEqual(entity1.toJSON());
 		expect(entities[1].toJSON()).toStrictEqual(entity2.toJSON());
 		expect(entities[2].toJSON()).toStrictEqual(entity3.toJSON());
+	});
+
+	describe('search method tests', () => {
+		it('should apply only paginate when other params are not provided', async () => {
+			await PetModel.factory()
+				.count(16)
+				.bulkCreate(() => ({
+					id: chance.guid({ version: 4 }),
+					name: chance.word(),
+					type: chance.animal({ type: 'pet' }),
+					breed: null,
+					gender: null,
+					birth_date: null,
+					is_active: chance.bool(),
+					created_at: chance.date(),
+				}));
+
+			const searchOutput = await repository.search(
+				new PetRepository.SearchParams()
+			);
+
+			expect(searchOutput).toBeInstanceOf(
+				PetRepository.SearchResult
+			);
+			expect(searchOutput.toJSON()).toMatchObject({
+				total: 16,
+				current_page: 1,
+				last_page: 2,
+				per_page: 15,
+				sort: null,
+				sort_dir: null,
+				filter: null,
+			});
+
+			searchOutput.items.forEach((item) => {
+				expect(item).toBeInstanceOf(Pet);
+				expect(item.id).toBeDefined();
+			});
+		});
 	});
     
 });

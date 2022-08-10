@@ -4,16 +4,16 @@ import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import { PetModel } from './pet-model';
 import { PetSequelizeRepository } from './pet-repository';
 import _chance from 'chance';
+import PetModelMapper from './pet-mapper';
 
 describe('PetRepository Unit Tests', () => {
-	setupSequelize({models: [PetModel]});
+	setupSequelize({ models: [PetModel] });
 	let chance: Chance.Chance;
 	let repository: PetSequelizeRepository;
 
 	beforeAll(() => {
 		chance = _chance();
 	});
-
 
 	beforeEach(async () => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -43,7 +43,7 @@ describe('PetRepository Unit Tests', () => {
 			type: 'dog',
 			breed: 'labrador',
 			gender: 'Male',
-			birth_date: new Date('2021-04-06')
+			birth_date: new Date('2021-04-06'),
 		});
 
 		await repository.insert(pet);
@@ -51,7 +51,7 @@ describe('PetRepository Unit Tests', () => {
 		expect(model.toJSON()).toStrictEqual(pet.toJSON());
 	});
 
-    it('should throw an error when entity has not been found', async () => {
+	it('should throw an error when entity has not been found', async () => {
 		await expect(repository.findById('fake id')).rejects.toThrow(
 			new NotFoundError('Entity not found using ID fake id')
 		);
@@ -64,7 +64,7 @@ describe('PetRepository Unit Tests', () => {
 		);
 	});
 
-    it('should find an entity by Id', async () => {
+	it('should find an entity by Id', async () => {
 		const entity = new Pet({ name: 'some name', type: 'dog' });
 		await repository.insert(entity);
 
@@ -105,13 +105,15 @@ describe('PetRepository Unit Tests', () => {
 					created_at: chance.date(),
 				}));
 
+			const spyToEntity = jest.spyOn(PetModelMapper, 'toEntity');
+
 			const searchOutput = await repository.search(
 				new PetRepository.SearchParams()
 			);
 
-			expect(searchOutput).toBeInstanceOf(
-				PetRepository.SearchResult
-			);
+			expect(searchOutput).toBeInstanceOf(PetRepository.SearchResult);
+			expect(spyToEntity).toHaveBeenCalledTimes(15);
+
 			expect(searchOutput.toJSON()).toMatchObject({
 				total: 16,
 				current_page: 1,
@@ -127,6 +129,30 @@ describe('PetRepository Unit Tests', () => {
 				expect(item.id).toBeDefined();
 			});
 		});
+
+		it('should order by name ASC when search params are not provided', async () => {
+			await PetModel.factory()
+				.count(16)
+				.bulkCreate((index) => ({
+					id: chance.guid({ version: 4 }),
+					name: `name ${('0000' + (16 - index)).slice(-4)} `,
+					type: chance.animal({ type: 'pet' }),
+					breed: null,
+					gender: null,
+					birth_date: null,
+					is_active: chance.bool(),
+					created_at: chance.date(),
+				}));
+
+			const searchOutput = await repository.search(
+				new PetRepository.SearchParams()
+			);
+
+			searchOutput.items.forEach((item, index) => {
+				expect(item.name).toBe(
+					`name ${('0000' + (index + 1)).slice(-4)} `
+				);
+			});
+		});
 	});
-    
 });

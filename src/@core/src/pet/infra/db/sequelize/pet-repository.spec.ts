@@ -154,5 +154,78 @@ describe('PetRepository Unit Tests', () => {
 				);
 			});
 		});
+
+		it('should apply paginate and filter', async () => {
+			const defaultProps = {
+				type: 'dog',
+				breed: null,
+				gender: null,
+				birth_date: null,
+				is_active: true,
+				created_at: new Date(),
+			};
+
+			const categoriesProp = [
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'test',
+					...defaultProps,
+				},
+				{ id: chance.guid({ version: 4 }), name: 'a', ...defaultProps },
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'TEST',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'TeSt',
+					...defaultProps,
+				},
+			];
+			const pets = await PetModel.bulkCreate(categoriesProp);
+			
+			let searchOutput = await repository.search(
+				new PetRepository.SearchParams({
+					page: 1,
+					per_page: 2,
+					filter: 'TEST',
+				})
+			);
+
+			expect(searchOutput.toJSON(true)).toMatchObject(
+				new PetRepository.SearchResult({
+					items: [
+						PetModelMapper.toEntity(pets[2]),
+						PetModelMapper.toEntity(pets[3]),
+					],
+					total: 3,
+					current_page: 1,
+					per_page: 2,
+					sort: null,
+					sort_dir: null,
+					filter: 'TEST',
+				}).toJSON(true)
+			);
+
+			searchOutput = await repository.search(
+				new PetRepository.SearchParams({
+					page: 2,
+					per_page: 2,
+					filter: 'TEST',
+				})
+			);
+			expect(searchOutput.toJSON(true)).toMatchObject(
+				new PetRepository.SearchResult({
+					items: [PetModelMapper.toEntity(pets[0])],
+					total: 3,
+					current_page: 2,
+					per_page: 2,
+					sort: null,
+					sort_dir: null,
+					filter: 'TEST',
+				}).toJSON(true)
+			);
+		});
 	});
 });

@@ -91,11 +91,18 @@ export namespace PetSequelize {
 			const models = await this.petModel.findAll();
 			return models.map(PetModelMapper.toEntity);
 		}
-		update(entity: Pet): Promise<void> {
-			throw new Error('Method not implemented.');
+
+		async update(entity: Pet): Promise<void> {
+			await this._get(entity.id);
+			await this.petModel.update(entity.toJSON(), {
+				where: { id: entity.id },
+			});
 		}
-		delete(id: string | UniqueEntityId): Promise<void> {
-			throw new Error('Method not implemented.');
+
+		async delete(id: string | UniqueEntityId): Promise<void> {
+			const _id = `${id}`;
+			await this._get(_id);
+			await this.petModel.destroy({ where: { id: _id } });
 		}
 
 		private async _get(id: string): Promise<PetModel> {

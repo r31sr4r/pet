@@ -1,5 +1,5 @@
 import { Pet, PetRepository } from '#pet/domain';
-import { NotFoundError } from '#seedwork/domain';
+import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import _chance from 'chance';
 import { PetSequelize } from '../pet-sequelize';
@@ -477,5 +477,51 @@ describe('PetRepository Unit Tests', () => {
 				);
 			}
 		});
+	});
+
+	it('should throw error on update when pet not found', async () => {
+		const pet = new Pet({ name: 'some name', type: 'dog' });
+		await expect(repository.update(pet)).rejects.toThrow(
+			new NotFoundError(`Entity not found using ID ${pet.id}`)
+		);
+	});
+
+	it('should update a pet', async () => {
+		const pet = new Pet({ name: 'some name', type: 'dog' });
+		await repository.insert(pet);
+
+		pet.update('some name updated', pet.type);
+		await repository.update(pet);
+		let entityFound = await repository.findById(pet.id);
+
+		expect(entityFound.toJSON()).toStrictEqual(pet.toJSON());
+	});
+
+	it('should throw error on delete when pet not found', async () => {
+		await expect(repository.delete('fake ID')).rejects.toThrow(
+			new NotFoundError(`Entity not found using ID fake ID`)
+		);
+
+		await expect(
+			repository.delete(
+				new UniqueEntityId('2658cf7c-1b88-49cf-93be-fcced08b6b0b')
+			)
+		).rejects.toThrow(
+			new NotFoundError(
+				`Entity not found using ID 2658cf7c-1b88-49cf-93be-fcced08b6b0b`
+			)
+		);
+	});
+
+	it('should delete a pet', async () => {
+		const pet = new Pet({ name: 'some name', type: 'dog' });
+		await repository.insert(pet);
+
+		await repository.delete(pet.id);
+		let entityFound = await PetModel.findByPk(
+			pet.id
+		);
+
+		expect(entityFound).toBeNull();
 	});
 });

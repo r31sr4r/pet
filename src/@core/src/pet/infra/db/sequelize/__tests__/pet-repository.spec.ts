@@ -1,15 +1,16 @@
 import { Pet, PetRepository } from '#pet/domain';
 import { NotFoundError } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
-import { PetModel } from './pet-model';
-import { PetSequelizeRepository } from './pet-repository';
 import _chance from 'chance';
-import PetModelMapper from './pet-mapper';
+import { PetSequelize } from '../pet-sequelize';
+
+const { PetModel, PetSequelizeRepository, PetModelMapper} = PetSequelize;
+
 
 describe('PetRepository Unit Tests', () => {
 	setupSequelize({ models: [PetModel] });
 	let chance: Chance.Chance;
-	let repository: PetSequelizeRepository;
+	let repository: PetSequelize.PetSequelizeRepository;
 
 	beforeAll(() => {
 		chance = _chance();

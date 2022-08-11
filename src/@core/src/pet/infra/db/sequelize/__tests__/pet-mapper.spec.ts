@@ -1,9 +1,10 @@
 import { Pet } from '#pet/domain';
 import { LoadEntityError, UniqueEntityId } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
-import { Sequelize } from 'sequelize-typescript';
-import PetModelMapper from './pet-mapper';
-import { PetModel } from './pet-model';
+import { PetSequelize } from '../pet-sequelize';
+
+const { PetModel, PetModelMapper} = PetSequelize;
+
 
 describe('PetMapper Unit Tests', () => {
 	setupSequelize({models: [PetModel]});

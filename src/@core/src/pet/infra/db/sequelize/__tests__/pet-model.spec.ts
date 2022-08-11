@@ -1,8 +1,9 @@
 
 import { DataType } from 'sequelize-typescript';
-import { PetModel } from './pet-model';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
+import { PetSequelize } from '../pet-sequelize';
 
+const { PetModel } = PetSequelize;
 
 describe('PetModel Unit Tests', () => {
 	setupSequelize({models: [PetModel]});

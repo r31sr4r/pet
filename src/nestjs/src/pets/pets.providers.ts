@@ -1,6 +1,12 @@
-import {PetRepository} from "pet-core/pet/domain";
-import { CreatePetUseCase, DeletePetUseCase, GetPetUseCase, ListPetsUseCase, UpdatePetUseCase } from "pet-core/pet/application";
-import { PetInMemoryRepository } from "pet-core/pet/infra";
+import { PetRepository } from 'pet-core/pet/domain';
+import {
+    CreatePetUseCase,
+    DeletePetUseCase,
+    GetPetUseCase,
+    ListPetsUseCase,
+    UpdatePetUseCase,
+} from 'pet-core/pet/application';
+import { PetInMemoryRepository } from 'pet-core/pet/infra';
 
 export namespace PET_PROVIDERS {
     export namespace REPOSITORIES {

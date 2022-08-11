@@ -1,35 +1,37 @@
-import ClassValidatorFields from '../../../@seedwork/domain/validators/class-validator-fields';
-import { FieldsError } from '../../../@seedwork/domain/validators/validator-fields-interface';
+import ClassValidatorFields from '../validators/class-validator-fields';
+import { FieldsError } from '../validators/validator-fields-interface';
 import { objectContaining } from 'expect';
 import { EntityValidationError } from '../errors/validation-error';
 
-type Received =
+type Expected =
 	| { validator: ClassValidatorFields<any>; data: any }
 	| (() => any);
 
 expect.extend({
-	containsErrorMessages(received: Received, expected: FieldsError) {
-		if (typeof received === 'function') {
+	containsErrorMessages(expected: Expected, received: FieldsError) {
+		if (typeof expected === 'function') {
 			try {
-				received();
+				expected();
 				return isValid();
 			} catch (e) {
 				const error = e as EntityValidationError;
-				return assertContainsErrorsMessages(error.error, expected);
+				return assertContainsErrorsMessages(error.error, received);
 			}
 		} else {
-			const { validator, data } = received;
+			const { validator, data } = expected;
 			const validated = validator.validate(data);
+
 			if (validated) {
 				return isValid();
 			}
-			return assertContainsErrorsMessages(validator.errors, expected);
+
+			return assertContainsErrorsMessages(validator.errors, received);
 		}
 	},
 });
 
 function isValid() {
-	return { pass: false, message: () => 'The data is valid' };
+	return { pass: true, message: () => '' };
 }
 
 function assertContainsErrorsMessages(
@@ -43,8 +45,8 @@ function assertContainsErrorsMessages(
 		: {
 				pass: false,
 				message: () =>
-					`The validation errors do not contain ${JSON.stringify(
-						expected
-					)}. Current: ${JSON.stringify(received)}`,
+					`The validation errors not contains ${JSON.stringify(
+						received
+					)}. Current: ${JSON.stringify(expected)}`,
 		  };
 }

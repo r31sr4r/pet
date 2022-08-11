@@ -5,14 +5,14 @@ import {
 	Table,
 	Model,
 } from 'sequelize-typescript';
-import { SequelizeModelFactory } from '#seedwork/infra';
-import { Pet, PetRepository } from '#pet/domain';
+import { SequelizeModelFactory } from '#seedwork/infra/sequelize/index';
+import { Pet, PetRepository } from '#pet/domain/index';
 import {
 	NotFoundError,
 	UniqueEntityId,
 	EntityValidationError,
 	LoadEntityError,
-} from '#seedwork/domain';
+} from '#seedwork/domain/index';
 import { Op } from 'sequelize';
 
 export namespace PetSequelize {

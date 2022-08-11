@@ -1,7 +1,7 @@
-import { Pet } from '../../../domain/entities/pet';
-import NotFoundError from '../../../../@seedwork/domain/errors/not-found.error';
-import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
-import {GetPetUseCase} from '../get-pet.use-case';
+import { Pet } from '../../../../domain/entities/pet';
+import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.error';
+import PetInMemoryRepository from '../../../../infra/db/in-memory/pet-in-memory.repository';
+import {GetPetUseCase} from '../../get-pet.use-case';
 
 describe('GetPetUseCase Unit Tests', () => {
 	let useCase: GetPetUseCase.UseCase;

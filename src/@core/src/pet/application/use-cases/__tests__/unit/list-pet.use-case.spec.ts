@@ -1,7 +1,7 @@
-import { ListPetsUseCase } from '../list-pets.use-case';
-import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
-import { PetRepository } from '../../../domain/repository/pet.repository';
-import { Pet } from '../../../domain/entities/pet';
+import { ListPetsUseCase } from '../../list-pets.use-case';
+import PetInMemoryRepository from '../../../../infra/db/in-memory/pet-in-memory.repository';
+import { PetRepository } from '../../../../domain/repository/pet.repository';
+import { Pet } from '../../../../domain/entities/pet';
 
 let repository: PetInMemoryRepository;
 let useCase: ListPetsUseCase.UseCase;

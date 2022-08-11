@@ -1,5 +1,5 @@
-import PetInMemoryRepository from '../../../infra/db/in-memory/pet-in-memory.repository';
-import {CreatePetUseCase} from '../create-pet.use-case';
+import PetInMemoryRepository from '../../../../infra/db/in-memory/pet-in-memory.repository';
+import {CreatePetUseCase} from '../../create-pet.use-case';
 
 describe('CreatePetUseCase Unit Tests', () => {
 	let useCase: CreatePetUseCase.UseCase;

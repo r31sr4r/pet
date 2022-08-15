@@ -1,5 +1,5 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import { config } from '../../config';
+import { configTest as config } from '../../config';
 
 const sequelizeOptions: SequelizeOptions = {
 	dialect: config.db.vendor,
@@ -7,7 +7,7 @@ const sequelizeOptions: SequelizeOptions = {
 	logging: config.db.logging,
 };
 
-export function setupSequelize(options: SequelizeOptions = {}) {
+export function setupSequelize(options: SequelizeOptions = {} ) {
 	let _sequelize: Sequelize;
 
 	beforeAll(

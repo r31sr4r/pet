@@ -20,4 +20,7 @@ export default {
     '#category/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/pet/$1',
   },
+  setupFilesAfterEnv: [
+		'../../@core/src/@seedwork/domain/tests/jest.ts',
+	],
 };

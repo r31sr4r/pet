@@ -17,7 +17,7 @@ export default {
       '<rootDir>/../../../node_modules/pet-core/dist/$1',
     '#seedwork/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/@seedwork/$1',
-    '#category/(.*)$':
+    '#pet/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/pet/$1',
   },
   setupFilesAfterEnv: [

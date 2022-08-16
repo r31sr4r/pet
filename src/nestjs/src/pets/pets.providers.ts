@@ -7,6 +7,8 @@ import {
     UpdatePetUseCase,
 } from 'pet-core/pet/application';
 import { PetInMemoryRepository, PetSequelize } from 'pet-core/pet/infra';
+import { getModelToken } from '@nestjs/sequelize'
+
 
 export namespace PET_PROVIDERS {
     export namespace REPOSITORIES {
@@ -17,7 +19,11 @@ export namespace PET_PROVIDERS {
 
         export const PET_SEQUELIZE_REPOSITORY = {
             provide: 'PetSequelizeRepository',
-            useClass: PetSequelize.PetSequelizeRepository,
+            useFactory: (categoryModel: typeof PetSequelize.PetModel) => {
+                return new PetSequelize.PetSequelizeRepository(categoryModel);
+
+            },
+            inject: [getModelToken(PetSequelize.PetModel)],
         };
 
         export const PET_REPOSITORY = {

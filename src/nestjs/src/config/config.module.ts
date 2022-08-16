@@ -46,6 +46,7 @@ export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
 export class ConfigModule extends NestConfigModule {
     static forRoot(options: ConfigModuleOptions = {}): DynamicModule {
         return super.forRoot({
+            isGlobal: true,
             envFilePath: [
                 ...(Array.isArray(options.envFilePath)
                     ? options.envFilePath

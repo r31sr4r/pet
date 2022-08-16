@@ -6,7 +6,7 @@ import {
     ListPetsUseCase,
     UpdatePetUseCase,
 } from 'pet-core/pet/application';
-import { PetInMemoryRepository } from 'pet-core/pet/infra';
+import { PetInMemoryRepository, PetSequelize } from 'pet-core/pet/infra';
 
 export namespace PET_PROVIDERS {
     export namespace REPOSITORIES {
@@ -14,23 +14,33 @@ export namespace PET_PROVIDERS {
             provide: 'PetInMemoryRepository',
             useClass: PetInMemoryRepository,
         };
+
+        export const PET_SEQUELIZE_REPOSITORY = {
+            provide: 'PetSequelizeRepository',
+            useClass: PetSequelize.PetSequelizeRepository,
+        };
+
+        export const PET_REPOSITORY = {
+            provide: 'PetRepository',
+            useExisting: 'PetSequelizeRepository',
+        };
     }
 
     export namespace USE_CASES {
         export const CREATE_PET = {
-            provide: 'CreatePetUseCase',
+            provide: CreatePetUseCase.UseCase,
             useFactory: (categoryRepo: PetRepository.Repository) => {
                 return new CreatePetUseCase.UseCase(categoryRepo);
             },
-            inject: [REPOSITORIES.PET_IN_MEMORY_REPOSITORY.provide],
+            inject: [REPOSITORIES.PET_REPOSITORY.provide],
         };
 
         export const UPDATE_PET = {
-            provide: 'UpdatePetUseCase',
+            provide: UpdatePetUseCase.UseCase,
             useFactory: (categoryRepo: PetRepository.Repository) => {
                 return new UpdatePetUseCase.UseCase(categoryRepo);
             },
-            inject: [REPOSITORIES.PET_IN_MEMORY_REPOSITORY.provide],
+            inject: [REPOSITORIES.PET_REPOSITORY.provide],
         };
 
         export const GET_PET = {
@@ -38,15 +48,15 @@ export namespace PET_PROVIDERS {
             useFactory: (categoryRepo: PetRepository.Repository) => {
                 return new GetPetUseCase.UseCase(categoryRepo);
             },
-            inject: [REPOSITORIES.PET_IN_MEMORY_REPOSITORY.provide],
+            inject: [REPOSITORIES.PET_REPOSITORY.provide],
         };
 
         export const LIST_CATEGORIES = {
-            provide: 'ListPetsUseCase',
+            provide: ListPetsUseCase.UseCase,
             useFactory: (categoryRepo: PetRepository.Repository) => {
                 return new ListPetsUseCase.UseCase(categoryRepo);
             },
-            inject: [REPOSITORIES.PET_IN_MEMORY_REPOSITORY.provide],
+            inject: [REPOSITORIES.PET_REPOSITORY.provide],
         };
 
         export const DELETE_PET = {
@@ -54,7 +64,7 @@ export namespace PET_PROVIDERS {
             useFactory: (categoryRepo: PetRepository.Repository) => {
                 return new DeletePetUseCase.UseCase(categoryRepo);
             },
-            inject: [REPOSITORIES.PET_IN_MEMORY_REPOSITORY.provide],
+            inject: [REPOSITORIES.PET_REPOSITORY.provide],
         };
     }
 }

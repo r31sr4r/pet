@@ -7,7 +7,7 @@ import { PET_PROVIDERS } from './pets.providers';
     controllers: [PetsController],
     providers: [
         PetsService,
-        ...Object.values(PET_PROVIDERS.USE_CASES),
+        ...Object.values(PET_PROVIDERS.REPOSITORIES),
         ...Object.values(PET_PROVIDERS.USE_CASES)       
         
     ],

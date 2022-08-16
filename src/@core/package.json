@@ -4,7 +4,10 @@
 	"description": "api do projeto pet care club",
 	"main": "index.js",
 	"imports": {
+		"#seedwork/domain": "./dist/@seedwork/domain/index.js",		
 		"#seedwork/*": "./dist/@seedwork/*.js",
+		"#pet/application": "./dist/pet/application/index.js",
+		"#pet/domain*": "./dist/pet/domain/index.js",		
 		"#pet/*": "./dist/pet/*.js"
 	},
 	"exports": {

@@ -1,6 +1,6 @@
-import { CreatePetUseCase, ListPetsUseCase } from 'pet-core/pet/application';
 
 import { Inject, Injectable } from '@nestjs/common';
+import { CreatePetUseCase, ListPetsUseCase } from 'pet-core/pet/application';
 import { UpdatePetDto } from './dto/update-pet.dto';
 
 @Injectable()

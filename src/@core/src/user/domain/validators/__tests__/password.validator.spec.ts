@@ -1,7 +1,7 @@
 import PasswordValidatorFactory, {
 	PasswordRules,
 	PasswordValidator,
-} from './password.validator';
+} from '../password.validator';
 
 describe('Password Validator Tests', () => {
 	let validator: PasswordValidator;

@@ -1,51 +1,99 @@
-import { EntityValidationError, UniqueEntityId } from "#seedwork/domain";
-import Entity from "#seedwork/domain/entity/entity";
-import UserValidatorFactory from "../validators/user.validator";
+import {
+	EntityValidationError,
+	UniqueEntityId,
+	ValidatorRules,
+} from '#seedwork/domain';
+import Entity from '#seedwork/domain/entity/entity';
+import PasswordValidatorFactory from '../validators/password.validator';
+import UserValidatorFactory from '../validators/user.validator';
 
 export type UserProperties = {
-    name: string;
-    email: string;
-    password: string;
-    is_active?: boolean;
-	created_at?: Date;    
+	name: string;
+	email: string;
+	password?: string;
+	is_active?: boolean;
+	created_at?: Date;
 };
 
 export class User extends Entity<UserProperties> {
-    constructor(public readonly props: UserProperties, id?: UniqueEntityId) {
-        User.validate(props);
-        super(props, id);
-        this.is_active = this.props.is_active;
-        this.props.created_at = this.props.created_at ?? new Date();
-    }
+	constructor(public readonly props: UserProperties, id?: UniqueEntityId) {
+		User.validate(props);
+		User.validatePassword(props.password);
+		super(props, id);
+		this.is_active = this.props.is_active;
+		this.props.created_at = this.props.created_at ?? new Date();
+	}
 
-    updatePassword(password: string) {
-        User.validatePassword(password );
-        this.password = password;
-    }
+	updatePassword(password: string) {
+		User.validatePassword(password);
+		this.password = password;
+	}
 
-    static validate(props: UserProperties): void {
+	update(name: string, email: string) {
+		User.validate({ name, email });
+		this.name = name;
+		this.email = email;
+	}
+
+	activate() {
+		ValidatorRules.values(this.props.is_active, 'is_active').boolean();
+		this.is_active = true;
+	}
+
+	deactivate() {
+		ValidatorRules.values(this.props.is_active, 'is_active').boolean();
+		this.is_active = false;
+	}
+
+	static validate(props: UserProperties): void {
 		const validator = UserValidatorFactory.create();
-		validator.validate(props);
 		const isValid = validator.validate(props);
 		if (!isValid) {
 			throw new EntityValidationError(validator.errors);
-		}		
+		}
 	}
 
-    static validatePassword(password: string): void {
-        const validator = UserValidatorFactory.createPasswordValidator();
-        const isValid = validator.validate(password);
-        if (!isValid) {
-            throw new EntityValidationError(validator.errors);
-        }
-    }
+	static validatePassword(password: string): void {
+		const validator = PasswordValidatorFactory.create();
+		const isValid = validator.validate(password);
+		if (!isValid) {
+			throw new EntityValidationError(validator.errors);
+		}
+	}
+
+	get name(): string {
+		return this.props.name;
+	}
+
+	private set name(value) {
+		this.props.name = value;
+	}
+
+	get email(): string {
+		return this.props.email;
+	}
+
+	private set email(value) {
+		this.props.email = value;
+	}
+
+	get password(): string {
+		return this.props.password;
+	}
+
+	private set password(value) {
+		this.props.password = value;
+	}
+
+	get is_active(): boolean {
+		return this.props.is_active;
+	}
 
 	private set is_active(value) {
 		this.props.is_active = value ?? true;
 	}
 
-    private set password(value) {
-        this.props.password = value;
-    }
+	get created_at(): Date {
+		return this.props.created_at;
+	}
 }
-

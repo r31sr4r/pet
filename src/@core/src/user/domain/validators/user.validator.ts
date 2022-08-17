@@ -33,14 +33,12 @@ export class UserRules {
 	constructor({
 		name,
 		email,
-        password,
 		is_active,
 		created_at,
 	}: UserProperties) {
 		Object.assign(this, {
 			name,
 			email,
-            password,
 			is_active,
 			created_at,
 		});

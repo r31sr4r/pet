@@ -1,7 +1,7 @@
 import UserValidatorFactory, {
 	UserRules,
 	UserValidator,
-} from './user.validator';
+} from '../user.validator';
 
 describe('User Validator Tests', () => {
 	let validator: UserValidator;

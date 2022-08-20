@@ -5,6 +5,7 @@ import {
 	ValidatorRules,
 } from '#seedwork/domain';
 import Entity from '#seedwork/domain/entity/entity';
+import { Crypt } from '#seedwork/infra/utils/crypt/crypt';
 import PasswordValidatorFactory from '../validators/password.validator';
 import UserValidatorFactory from '../validators/user.validator';
 
@@ -21,13 +22,14 @@ export class User extends Entity<UserProperties> {
 		User.validate(props);
 		User.validatePassword(props.password);
 		super(props, id);
+		this.password = this.props.password;
 		this.is_active = this.props.is_active;
 		this.props.created_at = this.props.created_at ?? new Date();
 	}
 
 	updatePassword(currentPassword: string, changedPassword: string) {
-		if (this.password !== currentPassword) {
-			throw new ValidationError(`Current password is not valid`);
+		if (!Crypt.compareSync(currentPassword, this.password)) {
+			throw new ValidationError('Current password is not valid');		
 		}
 		User.validatePassword(changedPassword);
 		this.password = changedPassword;
@@ -85,8 +87,8 @@ export class User extends Entity<UserProperties> {
 		return this.props.password;
 	}
 
-	private set password(value) {
-		this.props.password = value;
+	private set password(value) {		
+		this.props.password = Crypt.hashSync(value);
 	}
 
 	get is_active(): boolean {

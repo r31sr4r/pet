@@ -4,10 +4,10 @@
 	"description": "api do projeto pet care club",
 	"main": "index.js",
 	"imports": {
-		"#seedwork/domain": "./dist/@seedwork/domain/index.js",		
+		"#seedwork/domain": "./dist/@seedwork/domain/index.js",
 		"#seedwork/*": "./dist/@seedwork/*.js",
 		"#pet/application": "./dist/pet/application/index.js",
-		"#pet/domain*": "./dist/pet/domain/index.js",		
+		"#pet/domain*": "./dist/pet/domain/index.js",
 		"#pet/*": "./dist/pet/*.js",
 		"#access/application": "./dist/access/application/index.js",
 		"#access/domain*": "./dist/access/domain/index.js",
@@ -98,6 +98,7 @@
 		"uuid": "^8.3.2"
 	},
 	"dependencies": {
+		"bcrypt": "^5.0.1",
 		"chance": "^1.1.8",
 		"class-validator": "^0.13.2",
 		"dotenv": "^16.0.1",

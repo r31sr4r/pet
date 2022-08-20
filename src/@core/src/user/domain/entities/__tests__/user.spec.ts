@@ -13,13 +13,12 @@ describe('User Unit Tests', () => {
 			email: 'somemail@some.com',
 			password: 'Somepassword#',
 		});
-		let props = omit(user.props, ['created_at']);
+		let props = omit(user.props, ['created_at'], ['password']);
 
 		expect(User.validate).toHaveBeenCalled();
 		expect(props).toStrictEqual({
 			name: 'Tom Brady',
 			email: 'somemail@some.com',
-			password: 'Somepassword#',
 			is_active: true,
 		});
 
@@ -29,27 +28,28 @@ describe('User Unit Tests', () => {
 			password: 'Somepassword#',
 			is_active: false,
 		});
-		props = omit(user.props, ['created_at']);
+		props = omit(user.props, ['created_at'], ['password']);
 
 		expect(props).toStrictEqual({
 			name: 'Tom Brady',
 			email: 'somemail@some.com',
-			password: 'Somepassword#',
 			is_active: false,
 		});
 
 		let created_at = new Date();
+	
 		user = new User({
-			name: 'Tom Brady',
+			name: 'Vito Corleone',
 			email: 'somemail@some.com',
 			password: 'Somepassword#',
 			is_active: false,
 			created_at,
 		});
-		expect(user.props).toStrictEqual({
-			name: 'Tom Brady',
+
+		props = omit(user.props, ['password']);
+		expect(props).toStrictEqual({
+			name: 'Vito Corleone',
 			email: 'somemail@some.com',
-			password: 'Somepassword#',
 			is_active: false,
 			created_at,
 		});
@@ -114,16 +114,18 @@ describe('User Unit Tests', () => {
 		expect(user.email).toBe('othermail@some.com');
 	});
 
-	test('getter and setter of password prop', () => {
+	test('getter and setter of password prop', async () => {
 		let user = new User({
 			name: 'Paul Mcartney',
 			email: 'somemail@some.com',
 			password: 'Somepass1',
 		});
-		expect(user.password).toBe('Somepass1');
+
+		const oldPassword = user.password;
 
 		user['password'] = 'Otherpass1';
-		expect(user.password).toBe('Otherpass1');
+
+		expect(user.password).not.toBe(oldPassword);
 	});
 
 	test('getter and setter of is_active prop', () => {
@@ -170,7 +172,6 @@ describe('User Unit Tests', () => {
 		expect(user).toMatchObject({
 			name: 'Paul Mcartney',
 			email: 'somemail@mail.com',
-			password: 'Somepass1',
 			is_active: false,
 		});
 	});
@@ -190,7 +191,6 @@ describe('User Unit Tests', () => {
 		expect(user).toMatchObject({
 			name: 'Paul Mcartney',
 			email: 'somemail@mail.com',
-			password: 'Somepass1',
 			is_active: true,
 		});
 	});
@@ -228,25 +228,26 @@ describe('User Unit Tests', () => {
 		expect(user.is_active).toBe(true);
 
 		expect(() => {
-			user.updatePassword('somepass2', 'Otherpass1');
+			user.updatePassword('SomeInvalidCurrent', 'Otherpass1');
 		}).toThrow(ValidationError);
 	});
 
-    it('should update a user with a new password', () => {
-        let user = new User({
-            name: 'Paul Mcartney',
-            email: 'somemail@mail.com',
-            password: 'Somepass1',
-        });
-        expect(user.is_active).toBe(true);
+	it('should update a user with a new password', () => {
+		let user = new User({
+			name: 'Paul Mcartney',
+			email: 'somemail@mail.com',
+			password: 'Somepass1',
+		});
 
-        user.updatePassword('Somepass1','Otherpass1' );
-        expect(user.password).toBe('Otherpass1');
+		const oldPassword = user.password;
+		user.updatePassword('Somepass1', 'Otherpass1');
+		expect(user.password).not.toBe(oldPassword);
+		
 
-        expect(user).toMatchObject({
-            name: 'Paul Mcartney',
-            email: 'somemail@mail.com',
-            password: 'Otherpass1',
-        });
-    });
+		expect(user).toMatchObject({
+			name: 'Paul Mcartney',
+			email: 'somemail@mail.com',
+			password: user.password,
+		});
+	});
 });

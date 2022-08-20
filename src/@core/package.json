@@ -8,14 +8,20 @@
 		"#seedwork/*": "./dist/@seedwork/*.js",
 		"#pet/application": "./dist/pet/application/index.js",
 		"#pet/domain*": "./dist/pet/domain/index.js",		
-		"#pet/*": "./dist/pet/*.js"
+		"#pet/*": "./dist/pet/*.js",
+		"#access/application": "./dist/access/application/index.js",
+		"#access/domain*": "./dist/access/domain/index.js",
+		"#access/*": "./dist/access/*.js"
 	},
 	"exports": {
 		"./@seedwork/application": "./dist/@seedwork/application/index.js",
 		"./@seedwork/domain": "./dist/@seedwork/domain/index.js",
 		"./pet/application": "./dist/pet/application/index.js",
 		"./pet/domain": "./dist/pet/domain/index.js",
-		"./pet/infra": "./dist/pet/infra/index.js"
+		"./pet/infra": "./dist/pet/infra/index.js",
+		"./access/application": "./dist/access/application/index.js",
+		"./access/domain": "./dist/access/domain/index.js",
+		"./access/infra": "./dist/access/infra/index.js"
 	},
 	"typesVersions": {
 		">=4.0": {

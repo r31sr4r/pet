@@ -5,7 +5,8 @@
     "baseUrl": "./src",                                  
     "paths": {
       "#seedwork/*": ["./@seedwork/*"],
-      "#pet/*": ["./pet/*"]
+      "#pet/*": ["./pet/*"],
+      "#access/*": ["./access/*"]
     },
     "outDir": "./dist",
   },

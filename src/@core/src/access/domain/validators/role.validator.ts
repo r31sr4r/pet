@@ -1,8 +1,8 @@
 import { ClassValidatorFields } from "#seedwork/domain";
-import { GroupProperties } from "access/entities/group";
+import { RoleProperties } from "access/domain/entities/role";
 import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class GroupRules {
+export class RoleRules {
     @MaxLength(255)
     @MinLength(3)
     @IsString()
@@ -26,7 +26,7 @@ export class GroupRules {
         description,
         is_active,
         created_at,
-    }: GroupProperties) {
+    }: RoleProperties) {
         Object.assign(this, {
             name,
             description,
@@ -36,16 +36,16 @@ export class GroupRules {
     }    
 }
 
-export class GroupValidator extends ClassValidatorFields<GroupRules> {
-    validate(data: GroupProperties): boolean {
-        return super.validate(new GroupRules(data ?? {} as any));
+export class RoleValidator extends ClassValidatorFields<RoleRules> {
+    validate(data: RoleProperties): boolean {
+        return super.validate(new RoleRules(data ?? {} as any));
     }
 }
 
-export class GroupValidatorFactory{
+export class RoleValidatorFactory{
     static create() {
-        return new GroupValidator();
+        return new RoleValidator();
     }
 }
 
-export default GroupValidatorFactory;
+export default RoleValidatorFactory;

@@ -65,7 +65,10 @@ export namespace GroupSequelize {
 		constructor(private groupModel: typeof GroupModel) {}
 
 		async exists(_name: string): Promise<boolean> {
-			throw new Error('Method not implemented.');
+			const count = await this.groupModel.count({
+				where: { name: _name },
+			});
+			return count > 0;
 		}
 
 		async insert(entity: Group): Promise<void> {

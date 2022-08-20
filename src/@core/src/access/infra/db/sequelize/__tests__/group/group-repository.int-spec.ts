@@ -235,11 +235,31 @@ describe('GroupRepository Unit Tests', () => {
 			};
 
 			const groupsProp = [
-				{ id: chance.guid({ version: 4 }), name: 'bbb', ...defaultProps },
-				{ id: chance.guid({ version: 4 }), name: 'aaa', ...defaultProps },
-				{ id: chance.guid({ version: 4 }), name: 'ddd', ...defaultProps },
-				{ id: chance.guid({ version: 4 }), name: 'eee', ...defaultProps },
-				{ id: chance.guid({ version: 4 }), name: 'ccc', ...defaultProps },
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'bbb',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'aaa',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'ddd',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'eee',
+					...defaultProps,
+				},
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'ccc',
+					...defaultProps,
+				},
 			];
 			const groups = await GroupModel.bulkCreate(groupsProp);
 
@@ -500,4 +520,30 @@ describe('GroupRepository Unit Tests', () => {
 
 		expect(entityFound).toBeNull();
 	});
+
+	it('shold return false when group not found', async () => {
+		const group = new Group({
+			name: 'some name',
+			description: 'some description',
+		});
+		await repository.insert(group);
+
+		let result = await repository.exists('fake name');
+		expect(result).toBe(false);
+
+		result = await repository.exists(null);
+		expect(result).toBe(false);
+	});
+
+	it('should return true when group found', async () => {
+		const group = new Group({
+			name: 'some name',
+			description: 'some description',
+		});
+		await repository.insert(group);
+
+		let result = await repository.exists(group.name);
+		expect(result).toBe(true);
+	});
+
 });

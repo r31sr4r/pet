@@ -6,7 +6,7 @@ import {
 	Model,
 } from 'sequelize-typescript';
 import { SequelizeModelFactory } from '../../../../@seedwork/infra/sequelize/sequelize-model-factory';
-import { Group, GroupRepository } from '#access/domain/index';
+import { Role, RoleRepository } from '#access/domain/index';
 import { Op } from 'sequelize';
 import {
 	NotFoundError,
@@ -15,8 +15,8 @@ import {
 	LoadEntityError,
 } from '#seedwork/domain';
 
-export namespace GroupSequelize {
-	type GroupModelProps = {
+export namespace RoleSequelize {
+	type RoleModelProps = {
 		id: string;
 		name: string;
 		description: string;
@@ -24,8 +24,8 @@ export namespace GroupSequelize {
 		created_at: Date;
 	};
 
-	@Table({ tableName: 'groups', timestamps: false })
-	export class GroupModel extends Model<GroupModelProps> {
+	@Table({ tableName: 'roles', timestamps: false })
+	export class RoleModel extends Model<RoleModelProps> {
 		@PrimaryKey
 		@Column({ type: DataType.UUID })
 		declare id: string;
@@ -44,8 +44,8 @@ export namespace GroupSequelize {
 
 		static factory() {
 			const chance: Chance.Chance = require('chance')();
-			return new SequelizeModelFactory<GroupModel, GroupModelProps>(
-				GroupModel,
+			return new SequelizeModelFactory<RoleModel, RoleModelProps>(
+				RoleModel,
 				() => ({
 					id: chance.guid({ version: 4 }),
 					name: chance.word({ length: 10 }),
@@ -57,35 +57,35 @@ export namespace GroupSequelize {
 		}
 	}
 
-	export class GroupSequelizeRepository
-		implements GroupRepository.Repository
+	export class RoleSequelizeRepository
+		implements RoleRepository.Repository
 	{
 		sortableFields: string[] = ['name', 'created_at'];
 
-		constructor(private groupModel: typeof GroupModel) {}
+		constructor(private roleModel: typeof RoleModel) {}
 
 		async exists(_name: string): Promise<boolean> {
 			throw new Error('Method not implemented.');
 		}
 
-		async insert(entity: Group): Promise<void> {
-			await this.groupModel.create(entity.toJSON());
+		async insert(entity: Role): Promise<void> {
+			await this.roleModel.create(entity.toJSON());
 		}
 
-		async findById(id: string | UniqueEntityId): Promise<Group> {
+		async findById(id: string | UniqueEntityId): Promise<Role> {
 			const _id = `${id}`;
 			const model = await this._get(_id);
-			return GroupModelMapper.toEntity(model);
+			return RoleModelMapper.toEntity(model);
 		}
 
-		async findAll(): Promise<Group[]> {
-			const models = await this.groupModel.findAll();
-			return models.map((m) => GroupModelMapper.toEntity(m));
+		async findAll(): Promise<Role[]> {
+			const models = await this.roleModel.findAll();
+			return models.map((m) => RoleModelMapper.toEntity(m));
 		}
 
-		async update(entity: Group): Promise<void> {
+		async update(entity: Role): Promise<void> {
 			await this._get(entity.id);
-			await this.groupModel.update(entity.toJSON(), {
+			await this.roleModel.update(entity.toJSON(), {
 				where: { id: entity.id },
 			});
 		}
@@ -93,11 +93,11 @@ export namespace GroupSequelize {
 		async delete(id: string | UniqueEntityId): Promise<void> {
 			const _id = `${id}`;
 			await this._get(_id);
-			await this.groupModel.destroy({ where: { id: _id } });
+			await this.roleModel.destroy({ where: { id: _id } });
 		}
 
-		private async _get(id: string): Promise<GroupModel> {
-			return this.groupModel.findByPk(id, {
+		private async _get(id: string): Promise<RoleModel> {
+			return this.roleModel.findByPk(id, {
 				rejectOnEmpty: new NotFoundError(
 					`Entity not found using ID ${id}`
 				),
@@ -105,12 +105,12 @@ export namespace GroupSequelize {
 		}
 
 		async search(
-			props: GroupRepository.SearchParams
-		): Promise<GroupRepository.SearchResult> {
+			props: RoleRepository.SearchParams
+		): Promise<RoleRepository.SearchResult> {
 			const offset = (props.page - 1) * props.per_page;
 			const limit = props.per_page;
 			const { rows: models, count } =
-				await this.groupModel.findAndCountAll({
+				await this.roleModel.findAndCountAll({
 					...(props.filter && {
 						where: { name: { [Op.like]: `%${props.filter}%` } },
 					}),
@@ -120,8 +120,8 @@ export namespace GroupSequelize {
 					offset,
 					limit,
 				});
-			return new GroupRepository.SearchResult({
-				items: models.map((m) => GroupModelMapper.toEntity(m)),
+			return new RoleRepository.SearchResult({
+				items: models.map((m) => RoleModelMapper.toEntity(m)),
 				current_page: props.page,
 				per_page: props.per_page,
 				total: count,
@@ -132,12 +132,12 @@ export namespace GroupSequelize {
 		}
 	}
 
-	export class GroupModelMapper {
-		static toEntity(model: GroupModel): Group {
+	export class RoleModelMapper {
+		static toEntity(model: RoleModel): Role {
 			const { id, ...otherData } = model.toJSON();
 
 			try {
-				return new Group(otherData, new UniqueEntityId(id));
+				return new Role(otherData, new UniqueEntityId(id));
 			} catch (e) {
 				if (e instanceof EntityValidationError) {
 					throw new LoadEntityError(e.error);

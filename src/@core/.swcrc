@@ -8,7 +8,8 @@
       "paths": {
         "#seedwork/*": ["./@seedwork/*"],
         "#pet/*": ["./pet/*"],
-        "#access/*": ["./access/*"]
+        "#access/*": ["./access/*"],
+        "#user/*": ["./user/*"]
       }
     }
   }

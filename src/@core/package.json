@@ -21,7 +21,10 @@
 		"./pet/infra": "./dist/pet/infra/index.js",
 		"./access/application": "./dist/access/application/index.js",
 		"./access/domain": "./dist/access/domain/index.js",
-		"./access/infra": "./dist/access/infra/index.js"
+		"./access/infra": "./dist/access/infra/index.js",
+		"./user/application": "./dist/user/application/index.js",
+		"./user/domain": "./dist/user/domain/index.js",
+		"./user/infra": "./dist/user/infra/index.js"
 	},
 	"typesVersions": {
 		">=4.0": {
@@ -42,6 +45,24 @@
 			],
 			"pet/infra": [
 				"./dist/pet/infra/index.d.ts"
+			],
+			"access/application": [
+				"./dist/access/application/index.d.ts"
+			],
+			"access/domain": [
+				"./dist/access/domain/index.d.ts"
+			],
+			"access/infra": [
+				"./dist/access/infra/index.d.ts"
+			],
+			"user/application": [
+				"./dist/user/application/index.d.ts"
+			],
+			"user/domain": [
+				"./dist/user/domain/index.d.ts"
+			],
+			"user/infra": [
+				"./dist/user/infra/index.d.ts"
 			]
 		}
 	},

@@ -13,6 +13,7 @@ describe('User Validator Tests', () => {
 			name: [
 				'name should not be empty',
 				'name must be a string',
+				'name must be longer than or equal to 3 characters',
 				'name must be shorter than or equal to 255 characters',
 			],
 		});
@@ -21,7 +22,19 @@ describe('User Validator Tests', () => {
 			validator,
 			data: { name: '' },
 		}).containsErrorMessages({
-			name: ['name should not be empty'],
+			name: [
+				'name should not be empty',
+				'name must be longer than or equal to 3 characters',
+			],
+		});
+
+		expect({
+			validator,
+			data: { name: 'ab' },
+		}).containsErrorMessages({
+			name: [
+				'name must be longer than or equal to 3 characters',
+			],
 		});
 
 		expect({

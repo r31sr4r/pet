@@ -1,6 +1,6 @@
 import { User, UserProperties } from '../user';
 import { omit } from 'lodash';
-import { UniqueEntityId } from '#seedwork/domain';
+import { UniqueEntityId, ValidationError } from '#seedwork/domain';
 
 describe('User Unit Tests', () => {
 	beforeEach(() => {
@@ -219,6 +219,19 @@ describe('User Unit Tests', () => {
 		});
 	});
 
+	it('should throw a ValidationError on trying to update password with invalid current password', () => {
+		let user = new User({
+			name: 'Paul Mcartney',
+			email: 'somemail@mail.com',
+			password: 'Somepass1',
+		});
+		expect(user.is_active).toBe(true);
+
+		expect(() => {
+			user.updatePassword('somepass2', 'Otherpass1');
+		}).toThrow(ValidationError);
+	});
+
     it('should update a user with a new password', () => {
         let user = new User({
             name: 'Paul Mcartney',
@@ -227,7 +240,7 @@ describe('User Unit Tests', () => {
         });
         expect(user.is_active).toBe(true);
 
-        user.updatePassword('Otherpass1');
+        user.updatePassword('Somepass1','Otherpass1' );
         expect(user.password).toBe('Otherpass1');
 
         expect(user).toMatchObject({

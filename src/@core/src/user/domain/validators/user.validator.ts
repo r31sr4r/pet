@@ -6,12 +6,14 @@ import {
 	IsOptional,
 	IsString,
 	MaxLength,
+	MinLength,
 } from 'class-validator';
 import ClassValidatorFields from '../../../@seedwork/domain/validators/class-validator-fields';
 import { UserProperties } from '../entities/user';
 
 export class UserRules {
 	@MaxLength(255)
+	@MinLength(3)
 	@IsString()
 	@IsNotEmpty()
 	name: string;

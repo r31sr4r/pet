@@ -1,6 +1,7 @@
 import {
 	EntityValidationError,
 	UniqueEntityId,
+	ValidationError,
 	ValidatorRules,
 } from '#seedwork/domain';
 import Entity from '#seedwork/domain/entity/entity';
@@ -24,9 +25,12 @@ export class User extends Entity<UserProperties> {
 		this.props.created_at = this.props.created_at ?? new Date();
 	}
 
-	updatePassword(password: string) {
-		User.validatePassword(password);
-		this.password = password;
+	updatePassword(currentPassword: string, changedPassword: string) {
+		if (this.password !== currentPassword) {
+			throw new ValidationError(`Current password is not valid`);
+		}
+		User.validatePassword(changedPassword);
+		this.password = changedPassword;
 	}
 
 	update(name: string, email: string) {

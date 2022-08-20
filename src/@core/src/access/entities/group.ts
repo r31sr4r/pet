@@ -1,25 +1,25 @@
 import { EntityValidationError, UniqueEntityId, ValidatorRules } from "#seedwork/domain";
 import Entity from "#seedwork/domain/entity/entity";
-import RoleValidatorFactory from "../validators/role.validator";
+import GroupValidatorFactory from "../validators/group.validator";
 
 
-export type RoleProperties = {
+export type GroupProperties = {
 	name: string;
 	description: string;	
 	is_active?: boolean;
 	created_at?: Date;
 };
 
-export class Role extends Entity<RoleProperties> {
-    constructor(public readonly props: RoleProperties, id?: UniqueEntityId) {
-        Role.validate(props);
+export class Group extends Entity<GroupProperties> {
+    constructor(public readonly props: GroupProperties, id?: UniqueEntityId) {
+        Group.validate(props);
         super(props, id);
         this.is_active = this.props.is_active;
-		this.props.created_at = this.props.created_at ?? new Date();
+        this.props.created_at = this.props.created_at ?? new Date();
     }
 
     update(name: string, description: string) {
-        Role.validate({ name, description });
+        Group.validate({ name, description });
         this.name = name;
         this.description = description;
     }
@@ -34,8 +34,8 @@ export class Role extends Entity<RoleProperties> {
         this.is_active = false;
     }
 
-    static validate(props: RoleProperties): void {
-        const validator = RoleValidatorFactory.create();
+    static validate(props: GroupProperties): void {
+        const validator = GroupValidatorFactory.create();
         const isValid = validator.validate(props);
         if (!isValid) {
             throw new EntityValidationError(validator.errors);

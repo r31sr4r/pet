@@ -495,6 +495,8 @@ describe('UserRepository Integration Tests', () => {
 		});
 	});
 
+	describe('update method', () => {
+
 	it('should throw error on update when user not found', async () => {
 		const user = new User({
 			name: 'some name',
@@ -503,6 +505,30 @@ describe('UserRepository Integration Tests', () => {
 		});
 		await expect(repository.update(user)).rejects.toThrow(
 			new NotFoundError(`Entity not found using ID ${user.id}`)
+		);
+	});
+
+	it('should throw an error if email is already registered', async () => {
+		const user = new User({
+			name: 'some name',
+			email: 'emailuser1@mail.com',
+			password: 'Some password1',
+		});
+
+		await repository.insert(user);
+
+		const user2 = new User({
+			name: 'other name',
+			email: 'somemail2@mail.com',
+			password: 'Some password2',
+		});
+
+		await repository.insert(user2);
+
+		user2.email = 'emailuser1@mail.com';
+
+		await expect(repository.update(user2)).rejects.toThrow(
+			new ValidationError(`Entity already exists using email ${user2.email}`)
 		);
 	});
 
@@ -526,6 +552,8 @@ describe('UserRepository Integration Tests', () => {
 
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
 	});
+
+});
 
 	it('should throw error on delete when user not found', async () => {
 		await expect(repository.delete('fake ID')).rejects.toThrow(

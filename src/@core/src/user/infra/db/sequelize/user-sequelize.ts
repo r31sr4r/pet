@@ -94,10 +94,19 @@ export namespace UserSequelize {
 		}
 
 		async update(entity: User): Promise<void> {
-			await this._get(entity.id);
-			await this.userModel.update(entity.toJSON(), {
-				where: { id: entity.id },
-			});
+			try {
+				await this._get(entity.id);
+				await this.userModel.update(entity.toJSON(), {
+					where: { id: entity.id },
+				});			
+			} catch (error) {
+				if (error.name === 'SequelizeUniqueConstraintError') {
+					throw new ValidationError(
+						`Entity already exists using email ${entity.email}`
+					);					
+				}
+				throw error;				
+			}
 		}
 
 		async updatePassword(id: string | UniqueEntityId, password: string): Promise<void> {

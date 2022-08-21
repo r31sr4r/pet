@@ -89,6 +89,13 @@ export namespace UserSequelize {
 			});
 		}
 
+		async updatePassword(id: string | UniqueEntityId, password: string): Promise<void> {
+			const _id = `${id}`;
+			const model = await this._get(_id);
+			model.password = password;
+			await model.save();
+		}
+
 		async delete(id: string | UniqueEntityId): Promise<void> {
 			const _id = `${id}`;
 			await this._get(_id);
@@ -137,7 +144,7 @@ export namespace UserSequelize {
 			const { id, ...otherData } = model.toJSON();
 
 			try {
-				return new User(otherData, new UniqueEntityId(id));
+				return new User(otherData, new UniqueEntityId(id), true);
 			} catch (e) {
 				if (e instanceof EntityValidationError) {
 					throw new LoadEntityError(e.error);

@@ -6,6 +6,7 @@ import {
 } from '#seedwork/domain';
 import Entity from '#seedwork/domain/entity/entity';
 import { Crypt } from '#seedwork/infra/utils/crypt/crypt';
+import { omit } from 'lodash';
 import PasswordValidatorFactory from '../validators/password.validator';
 import UserValidatorFactory from '../validators/user.validator';
 
@@ -18,18 +19,24 @@ export type UserProperties = {
 };
 
 export class User extends Entity<UserProperties> {
-	constructor(public readonly props: UserProperties, id?: UniqueEntityId) {
+	constructor(
+		public readonly props: UserProperties,
+		id?: UniqueEntityId,
+		isMapping = false
+	) {
 		User.validate(props);
 		User.validatePassword(props.password);
 		super(props, id);
-		this.password = this.props.password;
+		if (!isMapping) {
+			this.password = this.props.password;
+		}
 		this.is_active = this.props.is_active;
 		this.props.created_at = this.props.created_at ?? new Date();
 	}
 
 	updatePassword(currentPassword: string, changedPassword: string) {
 		if (!Crypt.compareSync(currentPassword, this.password)) {
-			throw new ValidationError('Current password is not valid');		
+			throw new ValidationError('Current password is not valid');
 		}
 		User.validatePassword(changedPassword);
 		this.password = changedPassword;
@@ -87,7 +94,7 @@ export class User extends Entity<UserProperties> {
 		return this.props.password;
 	}
 
-	private set password(value) {		
+	private set password(value) {
 		this.props.password = Crypt.hashSync(value);
 	}
 
@@ -103,3 +110,4 @@ export class User extends Entity<UserProperties> {
 		return this.props.created_at;
 	}
 }
+

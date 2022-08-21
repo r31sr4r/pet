@@ -1,12 +1,12 @@
 import { User, UserRepository } from '#user/domain';
-import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
+import { NotFoundError, UniqueEntityId, ValidationError } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import _chance from 'chance';
 import { UserSequelize } from '../user-sequelize';
 
 const { UserModel, UserSequelizeRepository, UserModelMapper } = UserSequelize;
 
-describe('UserRepository Unit Tests', () => {
+describe('UserRepository Integration Tests', () => {
 	setupSequelize({ models: [UserModel] });
 	let chance: Chance.Chance;
 	let repository: UserSequelize.UserSequelizeRepository;
@@ -506,6 +506,7 @@ describe('UserRepository Unit Tests', () => {
 		await repository.update(user);
 		entityFound = await repository.findById(user.id);
 
+
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
 	});
 
@@ -538,4 +539,44 @@ describe('UserRepository Unit Tests', () => {
 
 		expect(entityFound).toBeNull();
 	});
+
+	it('should throw a ValidationError on trying to update password with invalid current password', async () => {
+		const user = new User({
+			name: 'some name',
+			email: 'somemail@mail.com',
+			password: 'Some password1',
+		});
+
+		await repository.insert(user);
+
+		expect(() => {
+			user.updatePassword('SomeInvalidCurrent', 'Otherpass1');
+		}).toThrow(ValidationError);
+
+	});
+
+
+	it('should update a user with a new password', async () => {
+		const user = new User({
+			name: 'some name',
+			email: 'somemail@mail.com',
+			password: 'Some password1',
+		});
+		await repository.insert(user);
+
+		user.updatePassword('Some password1', 'New password2');		
+		await repository.updatePassword(user.id, user.password);		
+		let entityFound = await repository.findById(user.id);
+
+		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
+
+		user.updatePassword('New password2', 'Some New password3');
+		await repository.updatePassword(user.id, user.password);
+		entityFound = await repository.findById(user.id);
+
+		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
+
+	});
+	
+
 });

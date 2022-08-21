@@ -6,7 +6,7 @@ import { omit } from 'lodash';
 
 const { UserModel, UserModelMapper } = UserSequelize;
 
-describe('UserMapper Unit Tests', () => {
+describe('UserMapper Integration Tests', () => {
 	setupSequelize({ models: [UserModel] });
 
 	it('should throw an error when entity is invalid', async () => {

@@ -4,7 +4,6 @@ import ClassValidatorFields from '../../../@seedwork/domain/validators/class-val
 export class PasswordRules {
 	@IsString()
 	@MinLength(6)
-	@MaxLength(32)
 	@Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
 		message:
 			'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',

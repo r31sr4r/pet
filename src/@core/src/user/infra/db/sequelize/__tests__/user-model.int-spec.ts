@@ -5,7 +5,7 @@ import { UserSequelize } from '../user-sequelize';
 
 const { UserModel } = UserSequelize;
 
-describe('UserModel Unit Tests', () => {
+describe('UserModel Integration Tests', () => {
 	setupSequelize({models: [UserModel]});
 
     test('mapping props to columns', async () => {

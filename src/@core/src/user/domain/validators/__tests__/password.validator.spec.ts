@@ -23,8 +23,7 @@ describe('Password Validator Tests', () => {
 			data: { password: '' },
 		}).containsErrorMessages({
 			password: [
-				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',
-				'password must be shorter than or equal to 32 characters',
+				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',				
 				'password must be longer than or equal to 6 characters',
 				'password must be a string',
 			],
@@ -35,8 +34,7 @@ describe('Password Validator Tests', () => {
 			data: { password: 'a'.repeat(5) },
 		}).containsErrorMessages({
 			password: [
-				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',
-				'password must be shorter than or equal to 32 characters',
+				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',				
 				'password must be longer than or equal to 6 characters',
 				'password must be a string',
 			],
@@ -47,8 +45,7 @@ describe('Password Validator Tests', () => {
 			data: { password: 'a'.repeat(33) },
 		}).containsErrorMessages({
 			password: [
-				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',
-				'password must be shorter than or equal to 32 characters',
+				'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',				
 				'password must be longer than or equal to 6 characters',
 				'password must be a string',
 			],

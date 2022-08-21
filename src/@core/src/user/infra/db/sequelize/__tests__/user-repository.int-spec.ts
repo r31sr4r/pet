@@ -1,5 +1,9 @@
 import { User, UserRepository } from '#user/domain';
-import { NotFoundError, UniqueEntityId, ValidationError } from '#seedwork/domain';
+import {
+	NotFoundError,
+	UniqueEntityId,
+	ValidationError,
+} from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import _chance from 'chance';
 import { UserSequelize } from '../user-sequelize';
@@ -31,7 +35,7 @@ describe('UserRepository Integration Tests', () => {
 
 		user = new User({
 			name: 'User 2',
-			email: 'somemail@mail.com',
+			email: 'somemail2@mail.com',
 			password: 'Some password1',
 			is_active: false,
 		});
@@ -42,7 +46,7 @@ describe('UserRepository Integration Tests', () => {
 
 		user = new User({
 			name: 'User 3',
-			email: 'somemail@mail.com',
+			email: 'somemail3@mail.com',
 			password: 'Some password1',
 		});
 
@@ -87,12 +91,12 @@ describe('UserRepository Integration Tests', () => {
 		});
 		const entity2 = new User({
 			name: 'Garfield',
-			email: 'somemail@mail.com',
+			email: 'somemail2@mail.com',
 			password: 'Some password1',
 		});
 		const entity3 = new User({
 			name: 'some name',
-			email: 'somemail@mail.com',
+			email: 'somemail3@mail.com',
 			password: 'Some password1',
 		});
 		await repository.insert(entity1);
@@ -169,7 +173,6 @@ describe('UserRepository Integration Tests', () => {
 
 		it('should apply paginate and filter', async () => {
 			const defaultProps = {
-				email: 'somemail@mail.com',
 				password: 'Some password1',
 				is_active: true,
 				created_at: new Date(),
@@ -179,17 +182,25 @@ describe('UserRepository Integration Tests', () => {
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'test',
+					email: chance.email(),
 					...defaultProps,
 				},
-				{ id: chance.guid({ version: 4 }), name: 'a', ...defaultProps },
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'aaa',
+					email: chance.email(),
+					...defaultProps,
+				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'TEST',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'TeSt',
+					email: chance.email(),
 					...defaultProps,
 				},
 			];
@@ -244,8 +255,7 @@ describe('UserRepository Integration Tests', () => {
 				'email',
 				'created_at',
 			]);
-			const defaultProps = {
-				email: 'somemail@mail.com',
+			const defaultProps = {				
 				password: 'Some password1',
 				is_active: true,
 				created_at: new Date(),
@@ -255,26 +265,31 @@ describe('UserRepository Integration Tests', () => {
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'bbb',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'aaa',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'ddd',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'eee',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'ccc',
+					email: chance.email(),
 					...defaultProps,
 				},
 			];
@@ -370,8 +385,7 @@ describe('UserRepository Integration Tests', () => {
 		});
 
 		it('should apply paginate, sort and filter', async () => {
-			const defaultProps = {
-				email: 'somemail@mail.com',
+			const defaultProps = {				
 				password: 'Some password1',
 				is_active: true,
 				created_at: new Date(),
@@ -381,27 +395,31 @@ describe('UserRepository Integration Tests', () => {
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some name',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'other name',
-					type: 'cat',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some other name',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'name',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some test',
+					email: chance.email(),
 					...defaultProps,
 				},
 			];
@@ -506,7 +524,6 @@ describe('UserRepository Integration Tests', () => {
 		await repository.update(user);
 		entityFound = await repository.findById(user.id);
 
-
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
 	});
 
@@ -552,9 +569,7 @@ describe('UserRepository Integration Tests', () => {
 		expect(() => {
 			user.updatePassword('SomeInvalidCurrent', 'Otherpass1');
 		}).toThrow(ValidationError);
-
 	});
-
 
 	it('should update a user with a new password', async () => {
 		const user = new User({
@@ -564,8 +579,8 @@ describe('UserRepository Integration Tests', () => {
 		});
 		await repository.insert(user);
 
-		user.updatePassword('Some password1', 'New password2');		
-		await repository.updatePassword(user.id, user.password);		
+		user.updatePassword('Some password1', 'New password2');
+		await repository.updatePassword(user.id, user.password);
 		let entityFound = await repository.findById(user.id);
 
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
@@ -575,8 +590,5 @@ describe('UserRepository Integration Tests', () => {
 		entityFound = await repository.findById(user.id);
 
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
-
 	});
-	
-
 });

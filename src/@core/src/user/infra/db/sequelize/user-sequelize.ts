@@ -12,6 +12,7 @@ import {
 	UniqueEntityId,
 	EntityValidationError,
 	LoadEntityError,
+	ValidationError,
 } from '#seedwork/domain/index';
 import { Op } from 'sequelize';
 
@@ -34,7 +35,7 @@ export namespace UserSequelize {
 		@Column({ allowNull: false, type: DataType.STRING(255) })
 		declare name: string;
 
-		@Column({ allowNull: false, type: DataType.STRING(255) })
+		@Column({ unique: true, allowNull: false, type: DataType.STRING(255) })
 		declare email: string;
 
 		@Column({ allowNull: false, type: DataType.STRING() })
@@ -68,7 +69,17 @@ export namespace UserSequelize {
 		sortableFields: string[] = ['name', 'email', 'created_at'];
 
 		async insert(entity: User): Promise<void> {
-			await this.userModel.create(entity.toJSON());
+			try {
+				await this.userModel.create(entity.toJSON());				
+			} catch (error) {
+				if (error.name === 'SequelizeUniqueConstraintError') {
+					throw new ValidationError(
+						`Entity already exists using email ${entity.email}`
+					);					
+				}
+				throw error;
+				
+			}
 		}
 
 		async findById(id: string | UniqueEntityId): Promise<User> {

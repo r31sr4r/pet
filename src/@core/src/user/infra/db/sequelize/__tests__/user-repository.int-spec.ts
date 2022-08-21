@@ -255,7 +255,7 @@ describe('UserRepository Integration Tests', () => {
 				'email',
 				'created_at',
 			]);
-			const defaultProps = {				
+			const defaultProps = {
 				password: 'Some password1',
 				is_active: true,
 				created_at: new Date(),
@@ -385,7 +385,7 @@ describe('UserRepository Integration Tests', () => {
 		});
 
 		it('should apply paginate, sort and filter', async () => {
-			const defaultProps = {				
+			const defaultProps = {
 				password: 'Some password1',
 				is_active: true,
 				created_at: new Date(),
@@ -590,5 +590,25 @@ describe('UserRepository Integration Tests', () => {
 		entityFound = await repository.findById(user.id);
 
 		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
+	});
+
+	it('should throw an error if email is already registered', async () => {
+		const user = new User({
+			name: 'some name',
+			email: 'somemail@mail.com',
+			password: 'Some password1',
+		});
+
+		await repository.insert(user);
+
+		const user2 = new User({
+			name: 'other name',
+			email: 'somemail@mail.com',
+			password: 'Some password2',
+		});
+
+		await expect(repository.insert(user2)).rejects.toThrow(
+			new ValidationError(`Entity already exists using email ${user2.email}`)
+		);
 	});
 });

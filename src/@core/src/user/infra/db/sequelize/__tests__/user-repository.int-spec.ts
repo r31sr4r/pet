@@ -525,7 +525,7 @@ describe('UserRepository Integration Tests', () => {
 
 		await repository.insert(user2);
 
-		user2.email = 'emailuser1@mail.com';
+		user2['email'] = 'emailuser1@mail.com';
 
 		await expect(repository.update(user2)).rejects.toThrow(
 			new ValidationError(`Entity already exists using email ${user2.email}`)
@@ -597,27 +597,6 @@ describe('UserRepository Integration Tests', () => {
 		expect(() => {
 			user.updatePassword('SomeInvalidCurrent', 'Otherpass1');
 		}).toThrow(ValidationError);
-	});
-
-	it('should update a user with a new password', async () => {
-		const user = new User({
-			name: 'some name',
-			email: 'somemail@mail.com',
-			password: 'Some password1',
-		});
-		await repository.insert(user);
-
-		user.updatePassword('Some password1', 'New password2');
-		await repository.updatePassword(user.id, user.password);
-		let entityFound = await repository.findById(user.id);
-
-		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
-
-		user.updatePassword('New password2', 'Some New password3');
-		await repository.updatePassword(user.id, user.password);
-		entityFound = await repository.findById(user.id);
-
-		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
 	});
 
 	it('should throw an error if email is already registered', async () => {

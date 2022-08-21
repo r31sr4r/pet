@@ -109,13 +109,6 @@ export namespace UserSequelize {
 			}
 		}
 
-		async updatePassword(id: string | UniqueEntityId, password: string): Promise<void> {
-			const _id = `${id}`;
-			const model = await this._get(_id);
-			model.password = password;
-			await model.save();
-		}
-
 		async delete(id: string | UniqueEntityId): Promise<void> {
 			const _id = `${id}`;
 			await this._get(_id);

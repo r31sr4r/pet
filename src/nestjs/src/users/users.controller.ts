@@ -39,8 +39,10 @@ export class UsersController {
     private listUseCase: ListUsersUseCase.UseCase;
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto) {
-        return this.createUseCase.execute(createUserDto);
+    async create(@Body() createUserDto: CreateUserDto) {
+        let user = await this.createUseCase.execute(createUserDto);
+        delete user.password;
+        return user;
     }
 
     @Put(':id')

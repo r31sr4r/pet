@@ -5,9 +5,9 @@ import {
     ListPetsUseCase,
     UpdatePetUseCase,
 } from 'pet-core/pet/application';
-import { CreatePetDto } from './dto/create-pet.dto';
-import { UpdatePetDto } from './dto/update-pet.dto';
-import { PetsController } from './pets.controller';
+import { CreatePetDto } from '../../dto/create-pet.dto';
+import { UpdatePetDto } from '../../dto/update-pet.dto';
+import { PetsController } from '../../pets.controller';
 
 describe('PetsController', () => {
     let controller: PetsController;

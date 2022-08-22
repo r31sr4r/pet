@@ -5,9 +5,9 @@ import {
     ListUsersUseCase,
     UpdateUserUseCase,
 } from 'pet-core/user/application';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersController } from './users.controller';
+import { CreateUserDto } from '../../dto/create-user.dto';
+import { UpdateUserDto } from '../../dto/update-user.dto';
+import { UsersController } from '../../users.controller';
 
 describe('UsersController', () => {
     let controller: UsersController;

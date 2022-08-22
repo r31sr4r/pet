@@ -1,12 +1,10 @@
 GET http://localhost:3000/pets
 
 ###
-
 GET http://localhost:3000/pets/12e3e004-6ca5-4312-ba39-b7e90bf7450b
 
 
 ###
-
 POST http://localhost:3000/pets
 Content-Type: application/json
 
@@ -16,7 +14,6 @@ Content-Type: application/json
 }
 
 ###
-
 PUT http://localhost:3000/pets/12e3e004-6ca5-4312-ba39-b7e90bf7450b
 Content-Type: application/json
 
@@ -28,6 +25,18 @@ Content-Type: application/json
 }
 
 ###
-
 DELETE http://localhost:3000/pets/779f1ed5-0047-42c2-86c1-21f795e7b05d
 Content-Type: application/json
+
+###
+GET http://localhost:3000/users
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Garfield Owner",
+    "email": "garfield@mail.com",
+    "password": "Pass123456"
+}

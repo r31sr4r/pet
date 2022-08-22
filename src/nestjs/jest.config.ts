@@ -19,6 +19,8 @@ export default {
       '<rootDir>/../../../node_modules/pet-core/dist/@seedwork/$1',
     '#pet/(.*)$':
       '<rootDir>/../../../node_modules/pet-core/dist/pet/$1',
+    '#user/(.*)$':
+    '<rootDir>/../../../node_modules/pet-core/dist/user/$1',      
   },
   setupFilesAfterEnv: [
 		'../../@core/src/@seedwork/domain/tests/jest.ts',

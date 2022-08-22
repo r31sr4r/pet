@@ -11,7 +11,10 @@
 		"#pet/*": "./dist/pet/*.js",
 		"#access/application": "./dist/access/application/index.js",
 		"#access/domain*": "./dist/access/domain/index.js",
-		"#access/*": "./dist/access/*.js"
+		"#access/*": "./dist/access/*.js",
+		"#user/application": "./dist/user/application/index.js",
+		"#user/domain*": "./dist/user/domain/index.js",
+		"#user/*": "./dist/user/*.js"
 	},
 	"exports": {
 		"./@seedwork/application": "./dist/@seedwork/application/index.js",

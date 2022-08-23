@@ -24,12 +24,12 @@ Content-Type: application/json
     "gender": "Female"
 }
 
-###
-DELETE http://localhost:3000/pets/779f1ed5-0047-42c2-86c1-21f795e7b05d
-Content-Type: application/json
 
 ###
 GET http://localhost:3000/users
+
+###
+GET http://localhost:3000/pets/12e3e004-6ca5-4312-ba39-b7e90bf7450b
 
 ###
 POST http://localhost:3000/users
@@ -37,6 +37,10 @@ Content-Type: application/json
 
 {
     "name": "Paul Mcartney",
-    "email": "paul2@mail.com",
+    "email": "paul5@mail.com",
     "password": "Pass123456"
 }
+
+###
+DELETE http://localhost:3000/pets/779f1ed5-0047-42c2-86c1-21f795e7b05d
+Content-Type: application/json

@@ -8,6 +8,7 @@ import {
 import { CreateUserDto } from '../../dto/create-user.dto';
 import { UpdateUserDto } from '../../dto/update-user.dto';
 import { UsersController } from '../../users.controller';
+import { UserPresenter } from '../../presenter/user.presenter';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -17,32 +18,33 @@ describe('UsersController', () => {
     });
 
     it('should create a user', async () => {
-        const expectedOutput: CreateUserUseCase.Output = {
+        const output: CreateUserUseCase.Output = {
             id: '3edaaad1-d538-4843-a6ef-9ebdaa69f10b',
             name: 'Paul McCartney',
             email: 'paul@mail.com',
             password: 'Pass123456',
-            is_active: true,            
+            is_active: true,
             created_at: new Date(),
         };
 
         const mockCreateUseCase = {
-            execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
+            execute: jest.fn().mockReturnValue(Promise.resolve(output)),
         };
 
         //@ts-expect-error
         controller['createUseCase'] = mockCreateUseCase;
 
         const input: CreateUserDto = {
-          name: 'Paul McCartney',
-          email: 'paul@mail.com',
-          password: 'Pass123456',
-          is_active: true
+            name: 'Paul McCartney',
+            email: 'paul@mail.com',
+            password: 'Pass123456',
+            is_active: true,
         };
 
-        const output = await controller.create(input);
+        const presenter = await controller.create(input);
         expect(mockCreateUseCase.execute).toHaveBeenCalledWith(input);
-        expect(expectedOutput).toStrictEqual(output);
+        expect(presenter).toBeInstanceOf(UserPresenter);
+        expect(presenter).toStrictEqual(new UserPresenter(output));
     });
 
     it('shoult update a user', async () => {
@@ -63,9 +65,9 @@ describe('UsersController', () => {
         controller['updateUseCase'] = mockUpdateUseCase;
 
         const input: UpdateUserDto = {
-          name: 'Paul McCartney',
-          email: 'paul@mail.com',
-          password: 'Pass123456',
+            name: 'Paul McCartney',
+            email: 'paul@mail.com',
+            password: 'Pass123456',
             is_active: true,
         };
 

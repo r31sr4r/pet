@@ -10,67 +10,67 @@ import { UserInMemoryRepository, UserSequelize } from 'pet-core/user/infra';
 import { getModelToken } from '@nestjs/sequelize'
 
 
-export namespace PET_PROVIDERS {
+export namespace USER_PROVIDERS {
     export namespace REPOSITORIES {
-        export const PET_IN_MEMORY_REPOSITORY = {
+        export const USER_IN_MEMORY_REPOSITORY = {
             provide: 'UserInMemoryRepository',
             useClass: UserInMemoryRepository,
         };
 
-        export const PET_SEQUELIZE_REPOSITORY = {
+        export const USER_SEQUELIZE_REPOSITORY = {
             provide: 'UserSequelizeRepository',
-            useFactory: (categoryModel: typeof UserSequelize.UserModel) => {
-                return new UserSequelize.UserSequelizeRepository(categoryModel);
+            useFactory: (userModel: typeof UserSequelize.UserModel) => {
+                return new UserSequelize.UserSequelizeRepository(userModel);
 
             },
             inject: [getModelToken(UserSequelize.UserModel)],
         };
 
-        export const PET_REPOSITORY = {
+        export const USER_REPOSITORY = {
             provide: 'UserRepository',
             useExisting: 'UserSequelizeRepository',
         };
     }
 
     export namespace USE_CASES {
-        export const CREATE_PET = {
+        export const CREATE_USER = {
             provide: CreateUserUseCase.UseCase,
-            useFactory: (categoryRepo: UserRepository.Repository) => {
-                return new CreateUserUseCase.UseCase(categoryRepo);
+            useFactory: (userRepo: UserRepository.Repository) => {
+                return new CreateUserUseCase.UseCase(userRepo);
             },
-            inject: [REPOSITORIES.PET_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
 
-        export const UPDATE_PET = {
+        export const UPDATE_USER = {
             provide: UpdateUserUseCase.UseCase,
-            useFactory: (categoryRepo: UserRepository.Repository) => {
-                return new UpdateUserUseCase.UseCase(categoryRepo);
+            useFactory: (userRepo: UserRepository.Repository) => {
+                return new UpdateUserUseCase.UseCase(userRepo);
             },
-            inject: [REPOSITORIES.PET_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
 
-        export const GET_PET = {
+        export const GET_USER = {
             provide: GetUserUseCase.UseCase,
-            useFactory: (categoryRepo: UserRepository.Repository) => {
-                return new GetUserUseCase.UseCase(categoryRepo);
+            useFactory: (userRepo: UserRepository.Repository) => {
+                return new GetUserUseCase.UseCase(userRepo);
             },
-            inject: [REPOSITORIES.PET_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
 
         export const LIST_CATEGORIES = {
             provide: ListUsersUseCase.UseCase,
-            useFactory: (categoryRepo: UserRepository.Repository) => {
-                return new ListUsersUseCase.UseCase(categoryRepo);
+            useFactory: (userRepo: UserRepository.Repository) => {
+                return new ListUsersUseCase.UseCase(userRepo);
             },
-            inject: [REPOSITORIES.PET_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
 
-        export const DELETE_PET = {
+        export const DELETE_USER = {
             provide: DeleteUserUseCase.UseCase,
-            useFactory: (categoryRepo: UserRepository.Repository) => {
-                return new DeleteUserUseCase.UseCase(categoryRepo);
+            useFactory: (userRepo: UserRepository.Repository) => {
+                return new DeleteUserUseCase.UseCase(userRepo);
             },
-            inject: [REPOSITORIES.PET_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
     }
 }

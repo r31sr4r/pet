@@ -6,7 +6,6 @@ import {
 } from '#seedwork/domain';
 import Entity from '#seedwork/domain/entity/entity';
 import { Crypt } from '#seedwork/infra/utils/crypt/crypt';
-import { omit } from 'lodash';
 import PasswordValidatorFactory from '../validators/password.validator';
 import UserValidatorFactory from '../validators/user.validator';
 

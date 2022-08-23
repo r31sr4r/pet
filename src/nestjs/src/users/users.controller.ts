@@ -20,6 +20,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserPresenter } from './presenter/user.presenter';
 
 @Controller('users')
 export class UsersController {
@@ -40,9 +41,8 @@ export class UsersController {
 
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
-        let user = await this.createUseCase.execute(createUserDto);
-        delete user.password;
-        return user;
+        const output = await this.createUseCase.execute(createUserDto);
+        return new UserPresenter(output);
     }
 
     @Put(':id')

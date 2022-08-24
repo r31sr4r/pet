@@ -20,6 +20,8 @@ import {
 import { CreatePetDto } from './dto/create-pet.dto';
 import { SearchPetDto } from './dto/search-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
+import { PetPresenter } from './presenter/pet.presenter';
+
 
 @Controller('pets')
 export class PetsController {
@@ -39,8 +41,9 @@ export class PetsController {
     private listUseCase: ListPetsUseCase.UseCase;
 
     @Post()
-    create(@Body() createPetDto: CreatePetDto) {
-        return this.createUseCase.execute(createPetDto);
+    async create(@Body() createPetDto: CreatePetDto) {        
+        const output = await this.createUseCase.execute(createPetDto);
+        return new PetPresenter(output);        
     }
 
     @Put(':id')

@@ -8,6 +8,8 @@ import {
 import { CreatePetDto } from '../../dto/create-pet.dto';
 import { UpdatePetDto } from '../../dto/update-pet.dto';
 import { PetsController } from '../../pets.controller';
+import { PetPresenter } from '../../presenter/pet.presenter';
+
 
 describe('PetsController', () => {
     let controller: PetsController;
@@ -17,7 +19,7 @@ describe('PetsController', () => {
     });
 
     it('should create a pet', async () => {
-        const expectedOutput: CreatePetUseCase.Output = {
+        const output: CreatePetUseCase.Output = {
             id: '3edaaad1-d538-4843-a6ef-9ebdaa69f10b',
             name: 'Fluffy',
             type: 'cat',
@@ -29,7 +31,7 @@ describe('PetsController', () => {
         };
 
         const mockCreateUseCase = {
-            execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
+            execute: jest.fn().mockReturnValue(Promise.resolve(output)),
         };
 
         //@ts-expect-error
@@ -43,9 +45,10 @@ describe('PetsController', () => {
             birth_date: new Date('2021-04-01'),
         };
 
-        const output = await controller.create(input);
+        const presenter = await controller.create(input);
         expect(mockCreateUseCase.execute).toHaveBeenCalledWith(input);
-        expect(expectedOutput).toStrictEqual(output);
+        expect(presenter).toBeInstanceOf(PetPresenter);
+        expect(presenter).toStrictEqual(new PetPresenter(output));
     });
 
     it('shoult update a pet', async () => {

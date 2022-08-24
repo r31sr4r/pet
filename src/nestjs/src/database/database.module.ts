@@ -3,12 +3,16 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CONFIG_SCHEMA_TYPE } from 'src/config/config.module';
+import { UserSequelize } from 'pet-core/user/infra';
 
 @Module({
     imports: [
         SequelizeModule.forRootAsync({
             useFactory: async (config: ConfigService<CONFIG_SCHEMA_TYPE>) => {
-                const models = [PetSequelize.PetModel];
+                const models = [
+                    PetSequelize.PetModel,
+                    UserSequelize.UserModel
+                ];
 
                 if (config.get('DB_VENDOR') === 'sqlite') {
                     return {

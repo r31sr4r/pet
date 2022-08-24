@@ -14,8 +14,6 @@ describe('UserPresenter Unit Tests', () => {
                 created_at,
             });
 
-            console.log(presenter);
-
             expect(presenter.id).toBe('c1ae4284-b7d0-4f4f-b038-f3926a55cdfb');
             expect(presenter.name).toBe('User 1');
             expect(presenter.email).toBe('user1@gmail.com');

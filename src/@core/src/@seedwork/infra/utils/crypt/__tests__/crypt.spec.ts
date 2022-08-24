@@ -10,7 +10,6 @@ describe('Crypt Unit Tests', () => {
 	it('should be able to hash a password in Async', async () => {
 		const password = 'password';
 		const hash = await Crypt.hash(password);
-		console.log(hash);
 		expect(hash).toBeDefined();
 	});
 

@@ -172,8 +172,6 @@ describe('UpdateUserUseCase Integration Tests', () => {
 			password: 'Pass123456',
 		});
 
-		console.log(entity);
-
 		const output = await useCase.executeUpdatePassword({
 			id: entity.id,
 			name: 'Tony Stark',
@@ -181,8 +179,6 @@ describe('UpdateUserUseCase Integration Tests', () => {
 			old_password: 'Pass123456',
 			password: 'Tony123456',
 		});
-
-		console.log(output);
 	});
 
 	it('should throw an error when trying to update a user with a wrong password', async () => {

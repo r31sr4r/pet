@@ -13,11 +13,9 @@ import {
 import { UserRepository } from 'pet-core/user/domain';
 import { USER_PROVIDERS } from '../../users.providers';
 
-
 describe('UsersController Integration Tests', () => {
     let controller: UsersController;
     let repository: UserRepository.Repository;
-
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -57,7 +55,7 @@ describe('UsersController Integration Tests', () => {
                 },
                 expectedPresenter: {
                     name: 'John Doe',
-                    email: 'john2@mail.com',                    
+                    email: 'john2@mail.com',
                     is_active: true,
                 },
             },
@@ -83,7 +81,7 @@ describe('UsersController Integration Tests', () => {
             //         description: 'Movie category',
             //         is_active: false,
             //     },
-            // }            
+            // }
         ];
 
         test.each(arrange)(

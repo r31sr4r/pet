@@ -1,3 +1,4 @@
+import { CustomerSequelize } from '#customer/infra';
 import { Pet } from '#pet/domain';
 import { LoadEntityError, UniqueEntityId } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
@@ -7,7 +8,7 @@ const { PetModel, PetModelMapper} = PetSequelize;
 
 
 describe('PetMapper Unit Tests', () => {
-	setupSequelize({models: [PetModel]});
+	setupSequelize({models: [PetModel, CustomerSequelize.CustomerModel]});
 
 	it('should throw an error when entity is invalid', async () => {
 		const model = PetModel.build({
@@ -54,6 +55,7 @@ describe('PetMapper Unit Tests', () => {
 			type: 'dog',
 			is_active: true,
 			created_at,
+			customer_id: 'b36eda4c-3e0b-4f05-8e35-fa96c73ef5d8',
 		});
         
 		const entity = PetModelMapper.toEntity(model);
@@ -65,6 +67,7 @@ describe('PetMapper Unit Tests', () => {
 					type: 'dog',
 					is_active: true,
 					created_at,
+					customer_id: 'b36eda4c-3e0b-4f05-8e35-fa96c73ef5d8',
 				},
 				new UniqueEntityId('02b090cf-5658-4073-b242-9bf64915b3ad')
 			).toJSON()

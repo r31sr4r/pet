@@ -11,6 +11,7 @@ export class UseCase implements DefaultUseCase<Input, Output> {
 		entity.update(
 			input.name,
 			input.type,
+			input.customer_id,
 			input.breed,
 			input.gender,
 			input.birth_date
@@ -37,6 +38,7 @@ export type Input = {
 	gender?: string;
 	birth_date?: Date;
 	is_active?: boolean;
+	customer_id: string;
 };
 
 export type Output = PetOutput;

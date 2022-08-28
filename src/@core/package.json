@@ -14,7 +14,10 @@
 		"#access/*": "./dist/access/*.js",
 		"#user/application": "./dist/user/application/index.js",
 		"#user/domain*": "./dist/user/domain/index.js",
-		"#user/*": "./dist/user/*.js"
+		"#user/*": "./dist/user/*.js",
+		"#customer/application": "./dist/customer/application/index.js",
+		"#customer/domain*": "./dist/customer/domain/index.js",
+		"#customer/*": "./dist/customer/*.js"
 	},
 	"exports": {
 		"./@seedwork/application": "./dist/@seedwork/application/index.js",
@@ -27,7 +30,10 @@
 		"./access/infra": "./dist/access/infra/index.js",
 		"./user/application": "./dist/user/application/index.js",
 		"./user/domain": "./dist/user/domain/index.js",
-		"./user/infra": "./dist/user/infra/index.js"
+		"./user/infra": "./dist/user/infra/index.js",
+		"./customer/application": "./dist/customer/application/index.js",
+		"./customer/domain": "./dist/customer/domain/index.js",
+		"./customer/infra": "./dist/customer/infra/index.js"
 	},
 	"typesVersions": {
 		">=4.0": {
@@ -66,6 +72,15 @@
 			],
 			"user/infra": [
 				"./dist/user/infra/index.d.ts"
+			],
+			"customer/application": [
+				"./dist/customer/application/index.d.ts"
+			],
+			"customer/domain": [
+				"./dist/customer/domain/index.d.ts"
+			],
+			"customer/infra": [
+				"./dist/customer/infra/index.d.ts"
 			]
 		}
 	},

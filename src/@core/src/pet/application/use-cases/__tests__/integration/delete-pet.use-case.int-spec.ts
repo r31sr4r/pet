@@ -2,13 +2,14 @@ import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.erro
 import { DeletePetUseCase } from '../../delete-pet.use-case';
 import { PetSequelize } from '#pet/infra/db/sequelize/pet-sequelize';
 import { setupSequelize } from '#seedwork/infra';
+import { CustomerSequelize } from '#customer/infra';
 
 const { PetSequelizeRepository, PetModel } = PetSequelize;
 describe('DeletePetUseCase Integragion Tests', () => {
 	let repository: PetSequelize.PetSequelizeRepository;
 	let useCase: DeletePetUseCase.UseCase;
 
-    setupSequelize({ models: [PetModel] });
+    setupSequelize({ models: [PetModel, CustomerSequelize.CustomerModel] });
 
 	beforeEach(() => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -23,8 +24,8 @@ describe('DeletePetUseCase Integragion Tests', () => {
 		);
 	});
 
-	it('should delete a pet', async () => {
-		const model = await PetModel.factory().create();
+	it('should delete a pet', async () => {		
+		const model = await (await PetModel.factory()).create();
 
 		await useCase.execute({ id: model.id });
         const foundModel = await PetModel.findByPk(model.id);

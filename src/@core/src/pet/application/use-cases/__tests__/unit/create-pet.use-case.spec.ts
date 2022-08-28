@@ -16,6 +16,7 @@ describe('CreatePetUseCase Unit Tests', () => {
 			name: 'Test',
 			type: 'Dog',
 			breed: 'Test',
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe'
 		});
 
 		expect(spyInsert).toHaveBeenCalledTimes(1);
@@ -26,6 +27,7 @@ describe('CreatePetUseCase Unit Tests', () => {
 			breed: 'Test',
 			gender: null,
 			is_active: true,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			birth_date: null,
 			created_at: repository.items[0].created_at,
 		});
@@ -35,6 +37,7 @@ describe('CreatePetUseCase Unit Tests', () => {
 			type: 'Cat',
 			gender: 'Male',
 			is_active: false,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			birth_date: new Date('2021-04-06'),
 		});
 
@@ -46,6 +49,7 @@ describe('CreatePetUseCase Unit Tests', () => {
 			breed: null,
 			gender: 'Male',
 			is_active: false,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			birth_date: new Date('2021-04-06'),
 			created_at: repository.items[1].created_at,
 		});
@@ -82,6 +86,7 @@ describe('CreatePetUseCase Unit Tests', () => {
 		await expect(useCase.execute({ 
 			name: 'Test',
 			type: null as any,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe'
 		})).rejects.toMatchObject({
 			error: {
 				type: [

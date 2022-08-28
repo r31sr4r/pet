@@ -1,14 +1,14 @@
+import { CustomerSequelize } from '#customer/infra';
 import { Pet, PetRepository } from '#pet/domain';
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import _chance from 'chance';
 import { PetSequelize } from '../pet-sequelize';
 
-const { PetModel, PetSequelizeRepository, PetModelMapper} = PetSequelize;
-
+const { PetModel, PetSequelizeRepository, PetModelMapper } = PetSequelize;
 
 describe('PetRepository Unit Tests', () => {
-	setupSequelize({ models: [PetModel] });
+	setupSequelize({ models: [PetModel, CustomerSequelize.CustomerModel] });
 	let chance: Chance.Chance;
 	let repository: PetSequelize.PetSequelizeRepository;
 
@@ -21,9 +21,12 @@ describe('PetRepository Unit Tests', () => {
 	});
 
 	it('should insert a pet', async () => {
+		const customer =
+			await CustomerSequelize.CustomerModel.factory().create();
 		let pet = new Pet({
 			name: 'Pet 1',
 			type: 'dog',
+			customer_id: customer.id,
 		});
 		await repository.insert(pet);
 		let model = await PetModel.findByPk(pet.id);
@@ -33,6 +36,7 @@ describe('PetRepository Unit Tests', () => {
 			name: 'Pet 2',
 			type: 'cat',
 			is_active: false,
+			customer_id: customer.id,
 		});
 
 		await repository.insert(pet);
@@ -45,6 +49,7 @@ describe('PetRepository Unit Tests', () => {
 			breed: 'labrador',
 			gender: 'Male',
 			birth_date: new Date('2021-04-06'),
+			customer_id: customer.id,
 		});
 
 		await repository.insert(pet);
@@ -66,7 +71,13 @@ describe('PetRepository Unit Tests', () => {
 	});
 
 	it('should find an entity by Id', async () => {
-		const entity = new Pet({ name: 'some name', type: 'dog' });
+		const customer =
+			await CustomerSequelize.CustomerModel.factory().create();
+		const entity = new Pet({
+			name: 'some name',
+			type: 'dog',
+			customer_id: customer.id,
+		});
 		await repository.insert(entity);
 
 		let entityFound = await repository.findById(entity.id);
@@ -77,9 +88,10 @@ describe('PetRepository Unit Tests', () => {
 	});
 
 	it('should find all entities', async () => {
-		const entity1 = new Pet({ name: 'Toto', type: 'dog' });
-		const entity2 = new Pet({ name: 'Garfield', type: 'cat' });
-		const entity3 = new Pet({ name: 'some name', type: 'dog' });
+		const customer = await CustomerSequelize.CustomerModel.factory().create();
+		const entity1 = new Pet({ name: 'Toto', type: 'dog', customer_id: customer.id });
+		const entity2 = new Pet({ name: 'Garfield', type: 'cat', customer_id: customer.id });
+		const entity3 = new Pet({ name: 'some name', type: 'dog', customer_id: customer.id });
 		await repository.insert(entity1);
 		await repository.insert(entity2);
 		await repository.insert(entity3);
@@ -93,7 +105,9 @@ describe('PetRepository Unit Tests', () => {
 
 	describe('search method tests', () => {
 		it('should apply only paginate when other params are not provided', async () => {
-			await PetModel.factory()
+			const customer = await CustomerSequelize.CustomerModel.factory().create();
+			const factory = await PetModel.factory();
+			await factory
 				.count(16)
 				.bulkCreate(() => ({
 					id: chance.guid({ version: 4 }),
@@ -104,6 +118,7 @@ describe('PetRepository Unit Tests', () => {
 					birth_date: null,
 					is_active: chance.bool(),
 					created_at: chance.date(),
+					customer_id: customer.id,
 				}));
 
 			const spyToEntity = jest.spyOn(PetModelMapper, 'toEntity');
@@ -132,7 +147,8 @@ describe('PetRepository Unit Tests', () => {
 		});
 
 		it('should order by name ASC when search params are not provided', async () => {
-			await PetModel.factory()
+			const customer = await CustomerSequelize.CustomerModel.factory().create();			
+			await (await PetModel.factory())
 				.count(16)
 				.bulkCreate((index) => ({
 					id: chance.guid({ version: 4 }),
@@ -143,6 +159,7 @@ describe('PetRepository Unit Tests', () => {
 					birth_date: null,
 					is_active: chance.bool(),
 					created_at: chance.date(),
+					customer_id: customer.id,
 				}));
 
 			const searchOutput = await repository.search(
@@ -157,6 +174,7 @@ describe('PetRepository Unit Tests', () => {
 		});
 
 		it('should apply paginate and filter', async () => {
+			const customer = await CustomerSequelize.CustomerModel.factory().create();
 			const defaultProps = {
 				type: 'dog',
 				breed: null,
@@ -164,6 +182,7 @@ describe('PetRepository Unit Tests', () => {
 				birth_date: null,
 				is_active: true,
 				created_at: new Date(),
+				customer_id: customer.id,
 			};
 
 			const petsProp = [
@@ -230,6 +249,7 @@ describe('PetRepository Unit Tests', () => {
 		});
 
 		it('should apply paginate and sort', async () => {
+			const customer = await CustomerSequelize.CustomerModel.factory().create();
 			expect(repository.sortableFields).toStrictEqual([
 				'name',
 				'type',
@@ -241,6 +261,7 @@ describe('PetRepository Unit Tests', () => {
 				birth_date: null,
 				is_active: true,
 				created_at: new Date(),
+				customer_id: customer.id,
 			};
 
 			const petsProp = [
@@ -367,12 +388,14 @@ describe('PetRepository Unit Tests', () => {
 		});
 
 		it('should apply paginate, sort and filter', async () => {
+			const customer = await CustomerSequelize.CustomerModel.factory().create();
 			const defaultProps = {
 				breed: null,
 				gender: null,
 				birth_date: null,
 				is_active: true,
 				created_at: new Date(),
+				customer_id: customer.id,
 			};
 
 			const petsProp = [
@@ -480,17 +503,19 @@ describe('PetRepository Unit Tests', () => {
 	});
 
 	it('should throw error on update when pet not found', async () => {
-		const pet = new Pet({ name: 'some name', type: 'dog' });
+		const customer = await CustomerSequelize.CustomerModel.factory().create();
+		const pet = new Pet({ name: 'some name', type: 'dog', customer_id: customer.id });
 		await expect(repository.update(pet)).rejects.toThrow(
 			new NotFoundError(`Entity not found using ID ${pet.id}`)
 		);
 	});
 
 	it('should update a pet', async () => {
-		const pet = new Pet({ name: 'some name', type: 'dog' });
+		const customer = await CustomerSequelize.CustomerModel.factory().create();
+		const pet = new Pet({ name: 'some name', type: 'dog', customer_id: customer.id });
 		await repository.insert(pet);
 
-		pet.update('some name updated', pet.type);
+		pet.update('some name updated', pet.type, pet.customer_id);
 		await repository.update(pet);
 		let entityFound = await repository.findById(pet.id);
 
@@ -514,13 +539,12 @@ describe('PetRepository Unit Tests', () => {
 	});
 
 	it('should delete a pet', async () => {
-		const pet = new Pet({ name: 'some name', type: 'dog' });
+		const customer = await CustomerSequelize.CustomerModel.factory().create();
+		const pet = new Pet({ name: 'some name', type: 'dog', customer_id: customer.id });
 		await repository.insert(pet);
 
 		await repository.delete(pet.id);
-		let entityFound = await PetModel.findByPk(
-			pet.id
-		);
+		let entityFound = await PetModel.findByPk(pet.id);
 
 		expect(entityFound).toBeNull();
 	});

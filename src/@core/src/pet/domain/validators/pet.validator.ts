@@ -4,6 +4,7 @@ import {
 	IsNotEmpty,
 	IsOptional,
 	IsString,
+	IsUUID,
 	MaxLength,
 } from 'class-validator';
 import ClassValidatorFields from '../../../@seedwork/domain/validators/class-validator-fields';
@@ -39,6 +40,10 @@ export class PetRules {
 	@IsOptional()
 	created_at: Date;
 
+	@IsUUID('4')
+	@IsNotEmpty()
+	customer_id: string;
+
 	constructor({
 		name,
 		type,
@@ -47,6 +52,7 @@ export class PetRules {
 		is_active,
         birth_date,
 		created_at,
+		customer_id,
 	}: PetProperties) {
 		Object.assign(this, {
 			name,
@@ -56,6 +62,7 @@ export class PetRules {
 			is_active,
             birth_date,
 			created_at,
+			customer_id,
 		});
 	}
 }

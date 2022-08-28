@@ -2,6 +2,7 @@ import { ListPetsUseCase } from '../../list-pets.use-case';
 import { setupSequelize } from '#seedwork/infra';
 import { PetSequelize } from '#pet/infra/db/sequelize/pet-sequelize';
 import _chance from 'chance';
+import { CustomerSequelize } from '#customer/infra';
 
 const chance = _chance();
 
@@ -12,7 +13,7 @@ describe('ListPetsUseCase Integration Tests', () => {
 	let repository: PetSequelize.PetSequelizeRepository;
 	let useCase: ListPetsUseCase.UseCase;
 
-	setupSequelize({ models: [PetModel] });
+	setupSequelize({ models: [PetModel, CustomerSequelize.CustomerModel] });
 
 	beforeEach(() => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -20,7 +21,8 @@ describe('ListPetsUseCase Integration Tests', () => {
 	});
 
 	it('should return output with 15 pets ordered by name when input is empty', async () => {
-		const models = await PetModel.factory()
+		const customer = await CustomerSequelize.CustomerModel.factory().create();
+		const models = await (await PetModel.factory())
 			.count(15)
 			.bulkCreate((index: number) => {
 				return {
@@ -31,6 +33,7 @@ describe('ListPetsUseCase Integration Tests', () => {
 					gender: 'female',
 					birth_date: null,
 					is_active: true,
+					customer_id: customer.id,
 					created_at: new Date(new Date().getTime() + index),
 				};
 			});
@@ -49,8 +52,8 @@ describe('ListPetsUseCase Integration Tests', () => {
 		});
 	});
 
-	it('should return output using paginate, sort and filter', async () => {
-		const models = PetModel.factory().count(5).bulkMake();
+	it('should return output using paginate, sort and filter', async () => {		
+		const models = (await PetModel.factory()).count(5).bulkMake();
 
 		models[0].name = 'a';
 		models[1].name = 'AAA';

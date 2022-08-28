@@ -8,6 +8,7 @@
       "#pet/*": ["./pet/*"],
       "#access/*": ["./access/*"],
       "#user/*": ["./user/*"],
+      "#customer/*": ["./customer/*"],
     },
     "outDir": "./dist",
   },

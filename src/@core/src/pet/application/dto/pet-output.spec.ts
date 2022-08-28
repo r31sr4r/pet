@@ -12,6 +12,7 @@ describe('PetOutput Unit Tests', () => {
                 gender: 'Female',
                 birth_date: new Date('2022-04-02'),
                 is_active: true,
+                customer_id: '7f4e7cd3-88f0-466b-ad21-5e7b34c5ab02',
                 created_at
             });
 
@@ -27,6 +28,7 @@ describe('PetOutput Unit Tests', () => {
                 gender: 'Female',
                 birth_date: pet.birth_date,
                 is_active: true,
+                customer_id: '7f4e7cd3-88f0-466b-ad21-5e7b34c5ab02',
                 created_at
             });
         });

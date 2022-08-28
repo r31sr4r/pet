@@ -1,3 +1,4 @@
+import { CustomerSequelize } from '#customer/infra';
 import { PetSequelize } from '#pet/infra/db/sequelize/pet-sequelize';
 import { setupSequelize } from '#seedwork/infra';
 import { CreatePetUseCase } from '../../create-pet.use-case';
@@ -8,7 +9,7 @@ describe('CreatePetUseCase Integrations Tests', () => {
 	let useCase: CreatePetUseCase.UseCase;
 	let repository: PetSequelize.PetSequelizeRepository;
 
-	setupSequelize({ models: [PetModel] });
+	setupSequelize({ models: [PetModel, CustomerSequelize.CustomerModel] });
 
 	beforeEach(() => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -16,10 +17,13 @@ describe('CreatePetUseCase Integrations Tests', () => {
 	});
 
 	it('should create a new pet', async () => {
+		const customer =
+			await CustomerSequelize.CustomerModel.factory().create();
 		let output = await useCase.execute({
 			name: 'Test',
 			type: 'Dog',
 			breed: 'Test',
+			customer_id: customer.id,
 		});
 		let pet = await repository.findById(output.id);
 
@@ -30,6 +34,7 @@ describe('CreatePetUseCase Integrations Tests', () => {
 			breed: 'Test',
 			gender: null,
 			is_active: true,
+			customer_id: pet.props.customer_id,
 			birth_date: null,
 			created_at: pet.props.created_at,
 		});
@@ -40,6 +45,7 @@ describe('CreatePetUseCase Integrations Tests', () => {
 			gender: 'Male',
 			is_active: false,
 			birth_date: new Date('2021-04-06'),
+			customer_id: customer.id,
 		});
 
 		pet = await repository.findById(output.id);
@@ -52,33 +58,36 @@ describe('CreatePetUseCase Integrations Tests', () => {
 			gender: 'Male',
 			is_active: false,
 			birth_date: new Date('2021-04-06'),
+			customer_id: pet.props.customer_id,
 			created_at: pet.props.created_at,
 		});
 	});
 
-	describe('test with test.each', () => {
+	it('test with forEach', async () => {
+		const customer =
+			await CustomerSequelize.CustomerModel.factory().create();
 		const arrange = [
 			{
-				inputProps: { name: 'Test Pet', type: 'Dog', breed: 'Test' },
+				inputProps: {
+					name: 'Test Pet',
+					type: 'Dog',
+					breed: 'Test',
+					customer_id: customer.id,
+				},
 				outputProps: {
 					name: 'Test Pet',
 					type: 'Dog',
 					breed: 'Test',
 					is_active: true,
+					customer_id: customer.id,
 				},
 			},
 		];
-		test.each(arrange)(
-			'input $inputProps, output $outputProps',
-			async ({ inputProps, outputProps }) => {
-				let output = await useCase.execute(inputProps);
-				let pet = await repository.findById(output.id);
-				expect(output.id).toBe(pet.id);
-				expect(output.created_at).toStrictEqual(
-					pet.props.created_at
-				);
-				expect(output).toMatchObject(outputProps);
-			}
-		);
+
+		arrange.forEach(async ({ inputProps, outputProps }) => {
+			let output = await useCase.execute(inputProps);
+			expect(output).toMatchObject(outputProps);
+		});
+
 	});
 });

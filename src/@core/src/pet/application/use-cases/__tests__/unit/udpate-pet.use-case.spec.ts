@@ -1,5 +1,5 @@
 import PetInMemoryRepository from '../../../../infra/db/in-memory/pet-in-memory.repository';
-import {UpdatePetUseCase} from '../../update-pet.use-case';
+import { UpdatePetUseCase } from '../../update-pet.use-case';
 import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.error';
 import { Pet } from '../../../../domain/entities/pet';
 
@@ -14,7 +14,12 @@ describe('UpdatePetUseCase Unit Tests', () => {
 
 	it('should throw an error when pet not found', async () => {
 		await expect(
-			useCase.execute({ id: 'fake id', name: 'some name', type: 'fish' })
+			useCase.execute({
+				id: 'fake id',
+				name: 'some name',
+				type: 'fish',
+				customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
+			})
 		).rejects.toThrow(
 			new NotFoundError('Entity not found using ID fake id')
 		);
@@ -29,6 +34,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 				breed?: string | null;
 				gender?: string | null;
 				is_active?: boolean | null;
+				customer_id: string;
 				birth_date?: Date | null;
 			};
 			expected: {
@@ -38,6 +44,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 				breed: string;
 				gender?: string;
 				is_active: boolean;
+				customer_id: string;
 				birth_date?: Date;
 				created_at?: Date;
 			};
@@ -47,6 +54,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 		const entity = new Pet({
 			name: 'Toto',
 			type: 'Dog',
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 		});
 		repository.items = [entity];
 
@@ -57,14 +65,16 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					name: 'Titi',
 					type: 'Dog',
 					breed: 'Labrador',
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				},
 				expected: {
 					id: entity.id,
 					name: 'Titi',
 					type: 'Dog',
 					breed: 'Labrador',
-                    gender: null,
+					gender: null,
 					is_active: true,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -74,14 +84,16 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					id: entity.id,
 					name: 'Garfield',
 					type: 'Cat',
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				},
 				expected: {
 					id: entity.id,
 					name: 'Garfield',
 					type: 'Cat',
 					breed: null,
-                    gender: null,                    
+					gender: null,
 					is_active: true,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -92,6 +104,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					name: 'Beta',
 					type: 'Fish',
 					is_active: false,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: new Date('2020-01-01'),
 				},
 				expected: {
@@ -99,8 +112,9 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					name: 'Beta',
 					type: 'Fish',
 					breed: null,
-                    gender: null,     
+					gender: null,
 					is_active: false,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: new Date('2020-01-01'),
 					created_at: entity.created_at,
 				},
@@ -110,14 +124,16 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					id: entity.id,
 					name: 'Taco',
 					type: 'Dog',
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				},
 				expected: {
 					id: entity.id,
 					name: 'Taco',
 					type: 'Dog',
 					breed: null,
-                    gender: null,
+					gender: null,
 					is_active: false,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -127,29 +143,30 @@ describe('UpdatePetUseCase Unit Tests', () => {
 					id: entity.id,
 					name: 'Taco',
 					type: 'Dog',
-                    breed: 'Labrador',
-                    gender: 'Male',
-                    is_active: true
-                    
+					breed: 'Labrador',
+					gender: 'Male',
+					is_active: true,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				},
 				expected: {
 					id: entity.id,
 					name: 'Taco',
 					type: 'Dog',
 					breed: 'Labrador',
-                    gender: 'Male',
+					gender: 'Male',
 					is_active: true,
+					customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 					birth_date: null,
 					created_at: entity.created_at,
 				},
-			},            
-        
+			},
 		];
 
 		let output = await useCase.execute({
 			id: entity.id,
 			name: 'Toto',
 			type: 'Dog',
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 		});
 		expect(output).toStrictEqual({
 			id: entity.id,
@@ -158,6 +175,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 			breed: null,
 			gender: null,
 			is_active: true,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			birth_date: null,
 			created_at: entity.created_at,
 		});
@@ -171,6 +189,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 				breed: item.input.breed,
 				gender: item.input.gender,
 				is_active: item.input.is_active,
+				customer_id: item.input.customer_id,
 				birth_date: item.input.birth_date,
 			});
 			expect(output).toStrictEqual({
@@ -180,6 +199,7 @@ describe('UpdatePetUseCase Unit Tests', () => {
 				breed: item.expected.breed,
 				gender: item.expected.gender,
 				is_active: item.expected.is_active,
+				customer_id: item.expected.customer_id,
 				birth_date: item.expected.birth_date,
 				created_at: item.expected.created_at,
 			});

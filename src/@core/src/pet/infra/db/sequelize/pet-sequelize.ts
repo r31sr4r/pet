@@ -4,6 +4,8 @@ import {
 	PrimaryKey,
 	Table,
 	Model,
+	BelongsTo,
+	ForeignKey,
 } from 'sequelize-typescript';
 import { SequelizeModelFactory } from '#seedwork/infra/sequelize/index';
 import { Pet, PetRepository } from '#pet/domain/index';
@@ -14,6 +16,7 @@ import {
 	LoadEntityError,
 } from '#seedwork/domain/index';
 import { Op } from 'sequelize';
+import { CustomerSequelize } from '#customer/infra';
 
 export namespace PetSequelize {
 	type PetModelProps = {
@@ -24,7 +27,8 @@ export namespace PetSequelize {
 		gender: string;
 		birth_date: Date;
 		is_active: boolean;
-		created_at: Date;
+		created_at: Date;	
+		customer_id: string;	
 	};
 
 	@Table({ tableName: 'pets', timestamps: false })
@@ -54,8 +58,17 @@ export namespace PetSequelize {
 		@Column({ allowNull: false, type: DataType.DATE })
 		declare created_at: Date;
 
-		static factory() {
+		@ForeignKey(() => CustomerSequelize.CustomerModel)
+		@Column({ allowNull: false, type: DataType.UUID })
+		declare customer_id: string;
+
+		@BelongsTo(() => CustomerSequelize.CustomerModel)
+		declare customer: CustomerSequelize.CustomerModel;
+
+		static async factory() {
 			const chance: Chance.Chance = require('chance')();
+			const customer = await CustomerSequelize.CustomerModel.factory().create();
+			
 			return new SequelizeModelFactory<PetModel, PetModelProps>(
 				PetModel,
 				() => ({
@@ -67,6 +80,7 @@ export namespace PetSequelize {
 					birth_date: chance.birthday(),
 					is_active: chance.bool(),
 					created_at: chance.date(),
+					customer_id: customer.id,
 				})
 			);
 		}

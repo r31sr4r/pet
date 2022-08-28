@@ -8,6 +8,7 @@ export type PetOutput = {
     gender: string | null;
     birth_date: Date | null;
 	is_active: boolean;
+	customer_id: string;
 	created_at: Date;
 };
 

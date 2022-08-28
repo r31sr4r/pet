@@ -4,7 +4,7 @@ import UniqueEntityId from '../../../@seedwork/domain/value-objects/unique-entit
 import PetValidatorFactory from '../validators/pet.validator';
 import { EntityValidationError } from '../../../@seedwork/domain/errors/validation-error';
 
-export type PetProperties = {
+export type PetProperties = {	
 	name: string;
 	type: string;
 	breed?: string;
@@ -12,6 +12,7 @@ export type PetProperties = {
 	birth_date?: Date;
 	is_active?: boolean;
 	created_at?: Date;
+	customer_id: string;
 };
 
 export class Pet extends Entity<PetProperties> {
@@ -28,16 +29,17 @@ export class Pet extends Entity<PetProperties> {
 	update(
 		name: string,
 		type: string,
+		customer_id: string,
 		breed?: string,
 		gender?: string,
 		birth_date?: Date
 	) {
-		Pet.validate({ name, type, breed, gender, birth_date });
+		Pet.validate({ name, type, breed, gender, birth_date, customer_id });
 		this.name = name;
 		this.type = type;
 		this.breed = breed;
 		this.gender = gender;
-		this.birth_date = birth_date;
+		this.birth_date = birth_date;		
 	}
 
 	// static validate(props: Omit<PetProperties, 'created_at'>): void {
@@ -117,5 +119,9 @@ export class Pet extends Entity<PetProperties> {
 
 	get created_at(): Date {
 		return this.props.created_at;
+	}
+
+	get customer_id(): string {
+		return this.props.customer_id;
 	}
 }

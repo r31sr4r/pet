@@ -24,6 +24,7 @@ describe('DeletePetUseCase Unit Tests', () => {
             new Pet({
                 name: 'Test Pet',
                 type: 'Dog',                
+                customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
             }),
         ];
         repository.items = items;

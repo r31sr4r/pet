@@ -24,6 +24,7 @@ describe('GetPetUseCase Unit Tests', () => {
 			new Pet({
 				name: 'Toto',
                 type: 'Dog',
+				customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			}),
 		];
 		repository.items = items;
@@ -38,6 +39,7 @@ describe('GetPetUseCase Unit Tests', () => {
 			gender: null,
 			is_active: true,
 			birth_date: null,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			created_at: repository.items[0].created_at,
 		});
 	});

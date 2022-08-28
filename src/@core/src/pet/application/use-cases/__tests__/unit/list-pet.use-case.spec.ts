@@ -32,7 +32,7 @@ describe('ListPetsUseCase Unit Tests', () => {
 			per_page: 2,
 		});
 
-		const entity = new Pet({ name: 'Toto', type: 'dog' });
+		const entity = new Pet({ name: 'Toto', type: 'dog', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' });
 		result = new PetRepository.SearchResult({
 			items: [entity],
 			total: 1,
@@ -59,10 +59,12 @@ describe('ListPetsUseCase Unit Tests', () => {
 			name: 'Toto',
             type: 'dog',
 			created_at,
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 		});
 		const entity2 = new Pet({
 			name: 'Garfield',
             type: 'cat',
+			customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 			created_at: new Date(created_at.getTime() + 100),
 		});
 
@@ -81,15 +83,17 @@ describe('ListPetsUseCase Unit Tests', () => {
 
 	it('should return output with three pets ordered by name when input is empty', async () => {
 		const items = [
-			new Pet({ name: 'Toto', type: 'dog' }),
+			new Pet({ name: 'Toto', type: 'dog', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
 			new Pet({
 				name: 'Garfield',
                 type: 'cat',
+				customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				created_at: new Date(new Date().getTime() + 100),
 			}),
 			new Pet({
 				name: 'Auren',
                 type: 'cat',
+				customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe',
 				created_at: new Date(new Date().getTime() + 200),
 			}),
 		];
@@ -107,11 +111,11 @@ describe('ListPetsUseCase Unit Tests', () => {
 
 	it('should return output using paginate, sort and filter', async () => {
 		const items = [
-			new Pet({ name: 'a', type: 'dog' }),
-			new Pet({ name: 'AAA', type: 'bird' }),
-			new Pet({ name: 'AaA',  type: 'cat' }),
-			new Pet({ name: 'b', type: 'fish' }),
-			new Pet({ name: 'c', type: 'cat' }),
+			new Pet({ name: 'a', type: 'dog', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
+			new Pet({ name: 'AAA', type: 'bird', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
+			new Pet({ name: 'AaA',  type: 'cat', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
+			new Pet({ name: 'b', type: 'fish', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
+			new Pet({ name: 'c', type: 'cat', customer_id: 'f7e4835f-311e-47f2-aa44-908c89649ebe' }),
 		];
 		repository.items = items;
 

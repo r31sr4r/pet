@@ -1,9 +1,9 @@
 import { UpdatePetUseCase } from '../../update-pet.use-case';
 import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.error';
-import { Pet } from '../../../../domain/entities/pet';
 import { setupSequelize } from '#seedwork/infra';
 import { PetSequelize } from '#pet/infra/db/sequelize/pet-sequelize';
 import _chance from 'chance';
+import { CustomerSequelize } from '#customer/infra';
 
 const chance = _chance();
 
@@ -13,7 +13,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 	let useCase: UpdatePetUseCase.UseCase;
 	let repository: PetSequelize.PetSequelizeRepository;
 
-	setupSequelize({ models: [PetModel] });
+	setupSequelize({ models: [PetModel, CustomerSequelize.CustomerModel] });
 
 	beforeEach(() => {
 		repository = new PetSequelizeRepository(PetModel);
@@ -22,7 +22,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 
 	it('should throw an error when pet not found', async () => {
 		await expect(
-			useCase.execute({ id: 'fake id', name: 'some name', type: 'fish' })
+			useCase.execute({ id: 'fake id', name: 'some name', type: 'fish', customer_id: 'fake customer id' })
 		).rejects.toThrow(
 			new NotFoundError('Entity not found using ID fake id')
 		);
@@ -37,6 +37,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 				breed?: string | null;
 				gender?: string | null;
 				is_active?: boolean | null;
+				customer_id: string;
 				birth_date?: Date | null;
 			};
 			expected: {
@@ -46,17 +47,19 @@ describe('UpdatePetUseCase Integration Tests', () => {
 				breed: string;
 				gender?: string;
 				is_active: boolean;
+				customer_id: string;
 				birth_date?: Date;
 				created_at?: Date;
 			};
 		};
 
-		const entity = await PetModel.factory().create();
+		const entity = await (await PetModel.factory()).create();
 
 		let output = await useCase.execute({
 			id: entity.id,
 			name: 'Toto',
 			type: 'Dog',
+			customer_id: entity.customer_id,
 		});
 		expect(output).toStrictEqual({
 			id: entity.id,
@@ -65,6 +68,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 			breed: null,
 			gender: null,
 			is_active: entity.is_active,
+			customer_id: entity.customer_id,
 			birth_date: null,
 			created_at: entity.created_at,
 		});
@@ -77,6 +81,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					type: 'Dog',
 					breed: 'Labrador',
 					is_active: true,
+					customer_id: entity.customer_id
 				},
 				expected: {
 					id: entity.id,
@@ -87,6 +92,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					is_active: true,
 					birth_date: null,
 					created_at: entity.created_at,
+					customer_id: entity.customer_id
 				},
 			},
 			{
@@ -95,6 +101,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					name: 'Garfield',
 					type: 'Cat',
 					is_active: true,
+					customer_id: entity.customer_id
 				},
 				expected: {
 					id: entity.id,
@@ -103,6 +110,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					breed: null,
 					gender: null,
 					is_active: true,
+					customer_id: entity.customer_id,
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -113,6 +121,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					name: 'Beta',
 					type: 'Fish',
 					is_active: false,
+					customer_id: entity.customer_id,
 					birth_date: new Date('2020-01-01'),
 				},
 				expected: {
@@ -122,6 +131,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					breed: null,
 					gender: null,
 					is_active: false,
+					customer_id: entity.customer_id,
 					birth_date: new Date('2020-01-01'),
 					created_at: entity.created_at,
 				},
@@ -132,6 +142,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					name: 'Taco',
 					type: 'Dog',
 					is_active: true,
+					customer_id: entity.customer_id,
 				},
 				expected: {
 					id: entity.id,
@@ -140,6 +151,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					breed: null,
 					gender: null,
 					is_active: true,
+					customer_id: entity.customer_id,
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -152,6 +164,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					breed: 'Labrador',
 					gender: 'Male',
 					is_active: true,
+					customer_id: entity.customer_id,
 				},
 				expected: {
 					id: entity.id,
@@ -160,6 +173,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 					breed: 'Labrador',
 					gender: 'Male',
 					is_active: true,
+					customer_id: entity.customer_id,
 					birth_date: null,
 					created_at: entity.created_at,
 				},
@@ -176,6 +190,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 				breed: item.input.breed,
 				gender: item.input.gender,
 				is_active: item.input.is_active,
+				customer_id: item.input.customer_id,
 				birth_date: item.input.birth_date,
 			});
 			expect(output).toStrictEqual({
@@ -185,6 +200,7 @@ describe('UpdatePetUseCase Integration Tests', () => {
 				breed: item.expected.breed,
 				gender: item.expected.gender,
 				is_active: item.expected.is_active,
+				customer_id: item.expected.customer_id,
 				birth_date: item.expected.birth_date,
 				created_at: item.expected.created_at,
 			});

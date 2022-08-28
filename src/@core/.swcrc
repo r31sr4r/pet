@@ -9,7 +9,8 @@
         "#seedwork/*": ["./@seedwork/*"],
         "#pet/*": ["./pet/*"],
         "#access/*": ["./access/*"],
-        "#user/*": ["./user/*"]
+        "#user/*": ["./user/*"],
+        "#customer/*": ["./customer/*"]
       }
     }
   }

@@ -92,8 +92,8 @@ export namespace CustomerSequelize {
 
 	export class CustomerSequelizeRepository implements CustomerRepository.Repository {
 		constructor(private customerModel: typeof CustomerModel) {}
-
-		sortableFields: string[] = ['name', 'type', 'breed'];
+	
+		sortableFields: string[] = ['name', 'email', 'birth_date'];
 
 		async insert(entity: Customer): Promise<void> {
 			await this.customerModel.create(entity.toJSON());

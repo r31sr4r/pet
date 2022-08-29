@@ -7,7 +7,7 @@ export class CustomerInMemoryRepository
 	extends InMemorySearchableRepository<Customer>
 	implements CustomerRepository.Repository
 {
-	sortableFields: string[] = ['name', 'type', 'breed']
+	sortableFields: string[] = ['name', 'email', 'birth_date'];
 
 	protected async applyFilter(
 		items: Customer[],

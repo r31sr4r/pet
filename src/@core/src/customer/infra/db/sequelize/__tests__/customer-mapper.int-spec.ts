@@ -97,10 +97,8 @@ describe('CustomerMapper Unit Tests', () => {
 			pets: [pet1],
 			created_at,
 		});
-        
+       
 		const entity = CustomerModelMapper.toEntity(model);
-
-		console.log(entity.toJSON());
 
 		expect(entity.toJSON()).toStrictEqual(
 			new Customer(

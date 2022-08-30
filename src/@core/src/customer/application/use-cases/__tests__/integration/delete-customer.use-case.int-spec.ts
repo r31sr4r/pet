@@ -2,13 +2,14 @@ import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.erro
 import { DeleteCustomerUseCase } from '../../delete-customer.use-case';
 import { CustomerSequelize } from '#customer/infra/db/sequelize/customer-sequelize';
 import { setupSequelize } from '#seedwork/infra';
+import { PetSequelize } from '#pet/infra';
 
 const { CustomerSequelizeRepository, CustomerModel } = CustomerSequelize;
 describe('DeleteCustomerUseCase Integragion Tests', () => {
 	let repository: CustomerSequelize.CustomerSequelizeRepository;
 	let useCase: DeleteCustomerUseCase.UseCase;
 
-    setupSequelize({ models: [CustomerModel] });
+    setupSequelize({ models: [CustomerModel, PetSequelize.PetModel] });
 
 	beforeEach(() => {
 		repository = new CustomerSequelizeRepository(CustomerModel);

@@ -23,7 +23,7 @@ describe('DeleteCustomerUseCase Unit Tests', () => {
         let items = [
             new Customer({
                 name: 'Test Customer',
-                type: 'Dog',                
+                email: 'test@mail.com'               
             }),
         ];
         repository.items = items;

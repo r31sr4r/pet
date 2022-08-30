@@ -32,7 +32,10 @@ describe('ListCustomersUseCase Unit Tests', () => {
 			per_page: 2,
 		});
 
-		const entity = new Customer({ name: 'Toto', type: 'dog' });
+		const entity = new Customer({
+			name: 'Customer 1',
+			email: 'customer1@mail.com',
+		});
 		result = new CustomerRepository.SearchResult({
 			items: [entity],
 			total: 1,
@@ -56,13 +59,13 @@ describe('ListCustomersUseCase Unit Tests', () => {
 	it('should return output with two customers ordered by name when input is empty', async () => {
 		const created_at = new Date();
 		const entity1 = new Customer({
-			name: 'Toto',
-            type: 'dog',
+			name: 'Customer 2',
+			email: 'customer2@mail.com',
 			created_at,
 		});
 		const entity2 = new Customer({
-			name: 'Garfield',
-            type: 'cat',
+			name: 'Customer 1',
+			email: 'customer1@mail.com',
 			created_at: new Date(created_at.getTime() + 100),
 		});
 
@@ -81,15 +84,15 @@ describe('ListCustomersUseCase Unit Tests', () => {
 
 	it('should return output with three customers ordered by name when input is empty', async () => {
 		const items = [
-			new Customer({ name: 'Toto', type: 'dog' }),
+			new Customer({ name: 'Customer 3', email: 'customer3@mail.com' }),
 			new Customer({
-				name: 'Garfield',
-                type: 'cat',
+				name: 'Customer 2',
+				email: 'customer2@mail.com',
 				created_at: new Date(new Date().getTime() + 100),
 			}),
 			new Customer({
-				name: 'Auren',
-                type: 'cat',
+				name: 'Customer 1',
+				email: 'customer1@mail.com',
 				created_at: new Date(new Date().getTime() + 200),
 			}),
 		];
@@ -107,11 +110,11 @@ describe('ListCustomersUseCase Unit Tests', () => {
 
 	it('should return output using paginate, sort and filter', async () => {
 		const items = [
-			new Customer({ name: 'a', type: 'dog' }),
-			new Customer({ name: 'AAA', type: 'bird' }),
-			new Customer({ name: 'AaA',  type: 'cat' }),
-			new Customer({ name: 'b', type: 'fish' }),
-			new Customer({ name: 'c', type: 'cat' }),
+			new Customer({ name: 'aaa', email: 'aa@mail.com' }),
+			new Customer({ name: 'AAA', email: 'aaA@mail.com' }),
+			new Customer({ name: 'AaA', email: 'aAAa@mail.com' }),
+			new Customer({ name: 'bbb', email: 'bbb@mail.com' }),
+			new Customer({ name: 'ccc', email: 'ccc@mail.com' }),
 		];
 		repository.items = items;
 

@@ -2,6 +2,7 @@ import { ListCustomersUseCase } from '../../list-customers.use-case';
 import { setupSequelize } from '#seedwork/infra';
 import { CustomerSequelize } from '#customer/infra/db/sequelize/customer-sequelize';
 import _chance from 'chance';
+import { PetSequelize } from '#pet/infra';
 
 const chance = _chance();
 
@@ -12,7 +13,7 @@ describe('ListCustomersUseCase Integration Tests', () => {
 	let repository: CustomerSequelize.CustomerSequelizeRepository;
 	let useCase: ListCustomersUseCase.UseCase;
 
-	setupSequelize({ models: [CustomerModel] });
+	setupSequelize({ models: [CustomerModel, PetSequelize.PetModel] });
 
 	beforeEach(() => {
 		repository = new CustomerSequelizeRepository(CustomerModel);
@@ -26,12 +27,15 @@ describe('ListCustomersUseCase Integration Tests', () => {
 				return {
 					id: chance.guid({ version: 4 }),
 					name: `name ${('0000' + (15 - index)).slice(-4)} `,
-					type: 'dog',
-					breed: 'breed',
+					email: chance.email(),
+					cellphone: null,
+					cpf: null,					
 					gender: 'female',
 					birth_date: null,
 					is_active: true,
+					pets: [],
 					created_at: new Date(new Date().getTime() + index),
+					updated_at: null
 				};
 			});
 
@@ -52,11 +56,11 @@ describe('ListCustomersUseCase Integration Tests', () => {
 	it('should return output using paginate, sort and filter', async () => {
 		const models = CustomerModel.factory().count(5).bulkMake();
 
-		models[0].name = 'a';
+		models[0].name = 'aaa';
 		models[1].name = 'AAA';
 		models[2].name = 'AaA';
-		models[3].name = 'b';
-		models[4].name = 'c';
+		models[3].name = 'bbb';
+		models[4].name = 'ccc';
 
 		CustomerModel.bulkCreate(models.map((i) => i.toJSON()));
 

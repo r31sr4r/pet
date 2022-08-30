@@ -1,14 +1,15 @@
 import { Customer, CustomerRepository } from '#customer/domain';
+import { PetSequelize } from '#pet/infra';
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { setupSequelize } from '#seedwork/infra/testing/helpers/db';
 import _chance from 'chance';
 import { CustomerSequelize } from '../customer-sequelize';
 
-const { CustomerModel, CustomerSequelizeRepository, CustomerModelMapper} = CustomerSequelize;
-
+const { CustomerModel, CustomerSequelizeRepository, CustomerModelMapper } =
+	CustomerSequelize;
 
 describe('CustomerRepository Unit Tests', () => {
-	setupSequelize({ models: [CustomerModel] });
+	setupSequelize({ models: [CustomerModel, PetSequelize.PetModel] });
 	let chance: Chance.Chance;
 	let repository: CustomerSequelize.CustomerSequelizeRepository;
 
@@ -22,17 +23,17 @@ describe('CustomerRepository Unit Tests', () => {
 
 	it('should insert a customer', async () => {
 		let customer = new Customer({
-			name: 'Customer 1',
-			type: 'dog',
+			name: 'Eddie Iron Maiden',
+			email: 'eddie@mail.com',
 		});
 		await repository.insert(customer);
 		let model = await CustomerModel.findByPk(customer.id);
 		expect(model.toJSON()).toStrictEqual(customer.toJSON());
 
 		customer = new Customer({
-			name: 'Customer 2',
-			type: 'cat',
-			is_active: false,
+			name: 'Steve Harris',
+			email: 'steveharris@mail.com',
+			birth_date: new Date('1956-03-12'),
 		});
 
 		await repository.insert(customer);
@@ -40,11 +41,13 @@ describe('CustomerRepository Unit Tests', () => {
 		expect(model.toJSON()).toStrictEqual(customer.toJSON());
 
 		customer = new Customer({
-			name: 'Customer 3',
-			type: 'dog',
-			breed: 'labrador',
+			name: 'Paul DiAno',
+			email: 'pauldiano@mail.com',
+			cellphone: '+55 (11) 98888-8888',
+			cpf: '123.456.789-00',
+			birth_date: new Date('1958-05-17'),
 			gender: 'Male',
-			birth_date: new Date('2021-04-06'),
+			is_active: false,
 		});
 
 		await repository.insert(customer);
@@ -66,7 +69,10 @@ describe('CustomerRepository Unit Tests', () => {
 	});
 
 	it('should find an entity by Id', async () => {
-		const entity = new Customer({ name: 'some name', type: 'dog' });
+		const entity = new Customer({
+			name: 'some name',
+			email: 'somemail@mail.com',
+		});
 		await repository.insert(entity);
 
 		let entityFound = await repository.findById(entity.id);
@@ -77,9 +83,24 @@ describe('CustomerRepository Unit Tests', () => {
 	});
 
 	it('should find all entities', async () => {
-		const entity1 = new Customer({ name: 'Toto', type: 'dog' });
-		const entity2 = new Customer({ name: 'Garfield', type: 'cat' });
-		const entity3 = new Customer({ name: 'some name', type: 'dog' });
+		const entity1 = new Customer({
+			name: 'Eddie Iron Maiden',
+			email: 'eddie@mail.com',
+		});
+		const entity2 = new Customer({
+			name: 'Steve Harris',
+			email: 'steveharris@mail.com',
+			birth_date: new Date('1956-03-12'),
+		});
+		const entity3 = new Customer({
+			name: 'Paul DiAno',
+			email: 'pauldiano@mail.com',
+			cellphone: '+55 (11) 98888-8888',
+			cpf: '123.456.789-00',
+			birth_date: new Date('1958-05-17'),
+			gender: 'Male',
+			is_active: false,
+		});
 		await repository.insert(entity1);
 		await repository.insert(entity2);
 		await repository.insert(entity3);
@@ -97,13 +118,16 @@ describe('CustomerRepository Unit Tests', () => {
 				.count(16)
 				.bulkCreate(() => ({
 					id: chance.guid({ version: 4 }),
-					name: chance.word(),
-					type: chance.animal({ type: 'customer' }),
-					breed: null,
+					name: chance.name(),
+					email: chance.email(),
+					cellphone: null,
+					cpf: null,
 					gender: null,
 					birth_date: null,
 					is_active: chance.bool(),
+					pets: [],
 					created_at: chance.date(),
+					updated_at: null,
 				}));
 
 			const spyToEntity = jest.spyOn(CustomerModelMapper, 'toEntity');
@@ -112,7 +136,9 @@ describe('CustomerRepository Unit Tests', () => {
 				new CustomerRepository.SearchParams()
 			);
 
-			expect(searchOutput).toBeInstanceOf(CustomerRepository.SearchResult);
+			expect(searchOutput).toBeInstanceOf(
+				CustomerRepository.SearchResult
+			);
 			expect(spyToEntity).toHaveBeenCalledTimes(15);
 
 			expect(searchOutput.toJSON()).toMatchObject({
@@ -137,12 +163,15 @@ describe('CustomerRepository Unit Tests', () => {
 				.bulkCreate((index) => ({
 					id: chance.guid({ version: 4 }),
 					name: `name ${('0000' + (16 - index)).slice(-4)} `,
-					type: chance.animal({ type: 'customer' }),
-					breed: null,
+					email: chance.email(),
+					cellphone: null,
+					cpf: null,
 					gender: null,
 					birth_date: null,
 					is_active: chance.bool(),
+					pets: [],
 					created_at: chance.date(),
+					updated_at: null,
 				}));
 
 			const searchOutput = await repository.search(
@@ -158,29 +187,39 @@ describe('CustomerRepository Unit Tests', () => {
 
 		it('should apply paginate and filter', async () => {
 			const defaultProps = {
-				type: 'dog',
-				breed: null,
+				cellphone: null,
+				cpf: null,
 				gender: null,
 				birth_date: null,
 				is_active: true,
+				pets: [],
 				created_at: new Date(),
+				updated_at: null,
 			};
 
 			const customersProp = [
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'test',
+					email: chance.email(),
 					...defaultProps,
 				},
-				{ id: chance.guid({ version: 4 }), name: 'a', ...defaultProps },
+				{
+					id: chance.guid({ version: 4 }),
+					name: 'aaa',
+					email: chance.email(),
+					...defaultProps,
+				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'TEST',
+					email: chance.email(),
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'TeSt',
+					email: chance.email(),
 					...defaultProps,
 				},
 			];
@@ -232,46 +271,49 @@ describe('CustomerRepository Unit Tests', () => {
 		it('should apply paginate and sort', async () => {
 			expect(repository.sortableFields).toStrictEqual([
 				'name',
-				'type',
-				'breed',
+				'email',
+				'birth_date',
 			]);
 			const defaultProps = {
-				breed: null,
+				cellphone: null,
+				cpf: null,
 				gender: null,
 				birth_date: null,
 				is_active: true,
+				pets: [],
 				created_at: new Date(),
+				updated_at: null,
 			};
 
 			const customersProp = [
 				{
 					id: chance.guid({ version: 4 }),
-					name: 'b',
-					type: 'dog',
+					name: 'bbb',
+					email: 'bb@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
-					name: 'a',
-					type: 'cat',
+					name: 'aaa',
+					email: 'aa@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
-					name: 'd',
-					type: 'dog',
+					name: 'ddd',
+					email: 'dd@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
-					name: 'e',
-					type: 'cat',
+					name: 'eee',
+					email: 'ee@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
-					name: 'c',
-					type: 'dog',
+					name: 'ccc',
+					email: 'cc@mail.com',
 					...defaultProps,
 				},
 			];
@@ -368,42 +410,45 @@ describe('CustomerRepository Unit Tests', () => {
 
 		it('should apply paginate, sort and filter', async () => {
 			const defaultProps = {
-				breed: null,
+				cellphone: null,
+				cpf: null,
 				gender: null,
 				birth_date: null,
 				is_active: true,
+				pets: [],
 				created_at: new Date(),
+				updated_at: null,
 			};
 
 			const customersProp = [
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some name',
-					type: 'dog',
+					email: 'some@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'other name',
-					type: 'cat',
+					email: 'other@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some other name',
-					type: 'dog',
+					email: 'someother@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'name',
-					type: 'cat',
+					email: 'name@mail.com',
 					...defaultProps,
 				},
 				{
 					id: chance.guid({ version: 4 }),
 					name: 'some test',
-					type: 'dog',
+					email: 'test@mail.com',
 					...defaultProps,
 				},
 			];
@@ -480,17 +525,17 @@ describe('CustomerRepository Unit Tests', () => {
 	});
 
 	it('should throw error on update when customer not found', async () => {
-		const customer = new Customer({ name: 'some name', type: 'dog' });
+		const customer = new Customer({ name: 'some name', email: 'some@mail.com' });
 		await expect(repository.update(customer)).rejects.toThrow(
 			new NotFoundError(`Entity not found using ID ${customer.id}`)
 		);
 	});
 
 	it('should update a customer', async () => {
-		const customer = new Customer({ name: 'some name', type: 'dog' });
+		const customer = new Customer({ name: 'some name', email: 'some@mail.com' });
 		await repository.insert(customer);
 
-		customer.update('some name updated', customer.type);
+		customer.update('some name updated', customer.email);
 		await repository.update(customer);
 		let entityFound = await repository.findById(customer.id);
 
@@ -514,13 +559,11 @@ describe('CustomerRepository Unit Tests', () => {
 	});
 
 	it('should delete a customer', async () => {
-		const customer = new Customer({ name: 'some name', type: 'dog' });
+		const customer = new Customer({ name: 'some name', email: 'some@mail.com' });
 		await repository.insert(customer);
 
 		await repository.delete(customer.id);
-		let entityFound = await CustomerModel.findByPk(
-			customer.id
-		);
+		let entityFound = await CustomerModel.findByPk(customer.id);
 
 		expect(entityFound).toBeNull();
 	});

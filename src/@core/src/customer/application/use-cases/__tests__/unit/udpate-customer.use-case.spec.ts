@@ -14,7 +14,7 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 
 	it('should throw an error when customer not found', async () => {
 		await expect(
-			useCase.execute({ id: 'fake id', name: 'some name', type: 'fish' })
+			useCase.execute({ id: 'fake id', name: 'some name', email: 'somemail@mail.com' })
 		).rejects.toThrow(
 			new NotFoundError('Entity not found using ID fake id')
 		);
@@ -25,8 +25,9 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			input: {
 				id: string;
 				name: string;
-				type: string;
-				breed?: string | null;
+				email: string;
+				cellphone?: string | null;
+				cpf?: string | null;
 				gender?: string | null;
 				is_active?: boolean | null;
 				birth_date?: Date | null;
@@ -34,8 +35,9 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			expected: {
 				id: string;
 				name: string;
-				type: string;
-				breed: string;
+				email: string;
+				cellphone?: string;
+				cpf?: string;
 				gender?: string;
 				is_active: boolean;
 				birth_date?: Date;
@@ -45,8 +47,8 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 
 		const spyUpdate = jest.spyOn(repository, 'update');
 		const entity = new Customer({
-			name: 'Toto',
-			type: 'Dog',
+			name: 'Customer 1',
+			email: 'somemail@mail.com'
 		});
 		repository.items = [entity];
 
@@ -54,15 +56,16 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			{
 				input: {
 					id: entity.id,
-					name: 'Titi',
-					type: 'Dog',
-					breed: 'Labrador',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
 				},
 				expected: {
 					id: entity.id,
-					name: 'Titi',
-					type: 'Dog',
-					breed: 'Labrador',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: null,
                     gender: null,
 					is_active: true,
 					birth_date: null,
@@ -72,14 +75,17 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			{
 				input: {
 					id: entity.id,
-					name: 'Garfield',
-					type: 'Cat',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
 				},
 				expected: {
 					id: entity.id,
-					name: 'Garfield',
-					type: 'Cat',
-					breed: null,
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
                     gender: null,                    
 					is_active: true,
 					birth_date: null,
@@ -89,16 +95,19 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			{
 				input: {
 					id: entity.id,
-					name: 'Beta',
-					type: 'Fish',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
 					is_active: false,
 					birth_date: new Date('2020-01-01'),
 				},
 				expected: {
 					id: entity.id,
-					name: 'Beta',
-					type: 'Fish',
-					breed: null,
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
                     gender: null,     
 					is_active: false,
 					birth_date: new Date('2020-01-01'),
@@ -108,15 +117,19 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			{
 				input: {
 					id: entity.id,
-					name: 'Taco',
-					type: 'Dog',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
+					gender: 'Male'
 				},
 				expected: {
 					id: entity.id,
-					name: 'Taco',
-					type: 'Dog',
-					breed: null,
-                    gender: null,
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
+					gender: 'Male',
 					is_active: false,
 					birth_date: null,
 					created_at: entity.created_at,
@@ -125,18 +138,20 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			{
 				input: {
 					id: entity.id,
-					name: 'Taco',
-					type: 'Dog',
-                    breed: 'Labrador',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
                     gender: 'Male',
                     is_active: true
                     
 				},
 				expected: {
 					id: entity.id,
-					name: 'Taco',
-					type: 'Dog',
-					breed: 'Labrador',
+					name: 'Customer 1',
+					email: 'somemail2@mail.com',
+					cellphone: '99999999999',
+					cpf: '123.456.789-10',
                     gender: 'Male',
 					is_active: true,
 					birth_date: null,
@@ -148,18 +163,20 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 
 		let output = await useCase.execute({
 			id: entity.id,
-			name: 'Toto',
-			type: 'Dog',
+			name: 'Customer 1',
+			email: 'mail@mail.com',
 		});
 		expect(output).toStrictEqual({
 			id: entity.id,
-			name: 'Toto',
-			type: 'Dog',
-			breed: null,
+			name: 'Customer 1',
+			email: 'mail@mail.com',
+			cellphone: null,
+			cpf: null,			
 			gender: null,
 			is_active: true,
 			birth_date: null,
 			created_at: entity.created_at,
+			updated_at: entity.updated_at
 		});
 		expect(spyUpdate).toHaveBeenCalledTimes(1);
 
@@ -167,8 +184,9 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			output = await useCase.execute({
 				id: item.input.id,
 				name: item.input.name,
-				type: item.input.type,
-				breed: item.input.breed,
+				email: item.input.email,
+				cellphone: item.input.cellphone,
+				cpf: item.input.cpf,				
 				gender: item.input.gender,
 				is_active: item.input.is_active,
 				birth_date: item.input.birth_date,
@@ -176,12 +194,14 @@ describe('UpdateCustomerUseCase Unit Tests', () => {
 			expect(output).toStrictEqual({
 				id: entity.id,
 				name: item.expected.name,
-				type: item.expected.type,
-				breed: item.expected.breed,
+				email: item.expected.email,
+				cellphone: item.expected.cellphone,
+				cpf: item.expected.cpf,				
 				gender: item.expected.gender,
 				is_active: item.expected.is_active,
 				birth_date: item.expected.birth_date,
 				created_at: item.expected.created_at,
+				updated_at: entity.updated_at
 			});
 		}
 	});

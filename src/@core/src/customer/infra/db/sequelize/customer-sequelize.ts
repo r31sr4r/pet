@@ -84,7 +84,7 @@ export namespace CustomerSequelize {
 					is_active: chance.bool(),
 					pets: [],
 					created_at: chance.date(),
-					updated_at: chance.date(),
+					updated_at: null,
 				})
 			);
 		}

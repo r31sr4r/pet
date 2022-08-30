@@ -10,8 +10,9 @@ export class UseCase implements DefaultUseCase<Input, Output> {
 		const entity = await this.customerRepository.findById(input.id);
 		entity.update(
 			input.name,
-			input.type,
-			input.breed,
+			input.email,
+			input.cellphone,
+			input.cpf,
 			input.gender,
 			input.birth_date
 		);
@@ -32,8 +33,9 @@ export class UseCase implements DefaultUseCase<Input, Output> {
 export type Input = {
 	id: string;
 	name: string;
-	type: string;
-	breed?: string;
+	email: string;	
+	cellphone?: string;
+	cpf?: string;
 	gender?: string;
 	birth_date?: Date;
 	is_active?: boolean;

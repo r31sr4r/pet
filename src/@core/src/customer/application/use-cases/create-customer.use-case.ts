@@ -23,7 +23,6 @@ export namespace CreateCustomerUseCase {
 		gender?: string;
 		birth_date?: Date;
 		is_active?: boolean;
-		pets?: Pet[];
 	};
 
 	export type Output = CustomerOutput;

@@ -22,8 +22,8 @@ describe('GetCustomerUseCase Unit Tests', () => {
 		const spyFindById = jest.spyOn(repository, 'findById');
 		let items = [
 			new Customer({
-				name: 'Toto',
-                type: 'Dog',
+				name: 'Customer 1',
+                email: 'customer1@mail.com',
 			}),
 		];
 		repository.items = items;
@@ -32,13 +32,15 @@ describe('GetCustomerUseCase Unit Tests', () => {
 		expect(spyFindById).toHaveBeenCalledTimes(1);
 		expect(output).toStrictEqual({
 			id: repository.items[0].id,
-			name: 'Toto',
-			type: 'Dog',
-			breed: null,
+			name: 'Customer 1',
+			email: 'customer1@mail.com',
+			cellphone: null,
+			cpf: null,			
 			gender: null,
 			is_active: true,
 			birth_date: null,
 			created_at: repository.items[0].created_at,
+			updated_at: null
 		});
 	});
 

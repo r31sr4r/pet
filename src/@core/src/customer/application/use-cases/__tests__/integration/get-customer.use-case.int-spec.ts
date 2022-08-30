@@ -2,13 +2,14 @@ import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.erro
 import { GetCustomerUseCase } from '../../get-customer.use-case';
 import { CustomerSequelize } from '#customer/infra/db/sequelize/customer-sequelize';
 import { setupSequelize } from '#seedwork/infra';
+import { PetSequelize } from '#pet/infra';
 
 const { CustomerSequelizeRepository, CustomerModel } = CustomerSequelize;
 describe('DeleteCustomerUseCase Integragion Tests', () => {
 	let repository: CustomerSequelize.CustomerSequelizeRepository;
 	let useCase: GetCustomerUseCase.UseCase;
 
-    setupSequelize({ models: [CustomerModel] });
+    setupSequelize({ models: [CustomerModel, PetSequelize.PetModel] });
 
 	beforeEach(() => {
 		repository = new CustomerSequelizeRepository(CustomerModel);
@@ -32,12 +33,14 @@ describe('DeleteCustomerUseCase Integragion Tests', () => {
 		expect(foundModel).toStrictEqual({
 			id: model.id,
 			name: model.name,
-			type: model.type,
-			breed: model.breed,
+			email: model.email,
+			cellphone: model.cellphone,
+			cpf: model.cpf,
 			gender: model.gender,
 			birth_date: model.birth_date,
 			is_active: model.is_active,
 			created_at: model.created_at,
+			updated_at: model.updated_at,
 		});
 		
 	});

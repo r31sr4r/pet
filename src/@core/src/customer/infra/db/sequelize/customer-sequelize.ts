@@ -24,7 +24,7 @@ export namespace CustomerSequelize {
 		name: string;
 		email: string;
 		cellphone: string;
-		cpf: string;		
+		cpf: string;
 		gender: string;
 		birth_date: Date;
 		is_active: boolean;
@@ -67,7 +67,7 @@ export namespace CustomerSequelize {
 		declare created_at: Date;
 
 		@Column({ allowNull: true, type: DataType.DATE })
-		declare updated_at: Date | null;		
+		declare updated_at: Date | null;
 
 		static factory() {
 			const chance: Chance.Chance = require('chance')();
@@ -75,9 +75,9 @@ export namespace CustomerSequelize {
 				CustomerModel,
 				() => ({
 					id: chance.guid({ version: 4 }),
-					name: chance.name(),
-					email: chance.email(),
-					cellphone: chance.phone({ formatted: false, country: "br", mobile: true  }),
+					name: chance.name({ middle: true }),
+					email: chance.email({ domain: 'example.com' }),
+					cellphone: '88988887777',
 					cpf: chance.cpf(),
 					gender: chance.gender(),
 					birth_date: chance.birthday(),
@@ -90,9 +90,11 @@ export namespace CustomerSequelize {
 		}
 	}
 
-	export class CustomerSequelizeRepository implements CustomerRepository.Repository {
+	export class CustomerSequelizeRepository
+		implements CustomerRepository.Repository
+	{
 		constructor(private customerModel: typeof CustomerModel) {}
-	
+
 		sortableFields: string[] = ['name', 'email', 'birth_date'];
 
 		async insert(entity: Customer): Promise<void> {
@@ -136,8 +138,8 @@ export namespace CustomerSequelize {
 		): Promise<CustomerRepository.SearchResult> {
 			const offset = (props.page - 1) * props.per_page;
 			const limit = props.per_page;
-			const { rows: models, count } = await this.customerModel.findAndCountAll(
-				{
+			const { rows: models, count } =
+				await this.customerModel.findAndCountAll({
 					...(props.filter && {
 						where: { name: { [Op.like]: `%${props.filter}%` } },
 					}),
@@ -146,8 +148,7 @@ export namespace CustomerSequelize {
 						: { order: [['name', 'ASC']] }),
 					offset,
 					limit,
-				}
-			);
+				});
 			return new CustomerRepository.SearchResult({
 				items: models.map((m) => CustomerModelMapper.toEntity(m)),
 				current_page: props.page,

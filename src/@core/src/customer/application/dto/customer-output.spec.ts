@@ -39,6 +39,7 @@ describe('CustomerOutput Unit Tests', () => {
 			const pet1 = new Pet({
 				name: 'Pet 1',
 				type: 'Dog',
+				customer_id: customer.id,
                 created_at,
 			}, new UniqueEntityId(id_pet1));
 
@@ -46,6 +47,7 @@ describe('CustomerOutput Unit Tests', () => {
 			const pet2 = new Pet({
 				name: 'Pet 2',
 				type: 'Cat',
+				customer_id: customer.id,
                 created_at,
 			}, new UniqueEntityId(id_pet2));
 

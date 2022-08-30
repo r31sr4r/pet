@@ -33,21 +33,11 @@ describe('CreateCustomerUseCase Unit Tests', () => {
 			updated_at: null,
 		});
 
-		const pet1 = new Pet({
-			name: 'Pet 1',
-			type: 'Dog',
-		});
-
-		const pet2 = new Pet({
-			name: 'Pet 2',
-			type: 'Cat',
-		});
 		output = await useCase.execute({
 			name: 'John Doe',
 			email: 'somemail@mail.com',
 			gender: 'Male',
 			is_active: false,
-			pets: [pet1, pet2],
 			birth_date: new Date('2021-04-06'),
 		});
 
@@ -61,26 +51,6 @@ describe('CreateCustomerUseCase Unit Tests', () => {
 			gender: 'Male',
 			is_active: false,
 			birth_date: new Date('2021-04-06'),
-			pets: [
-				{
-					birth_date: null,
-					breed: null,
-					created_at: pet1.created_at,
-					gender: null,
-					is_active: true,
-					name: 'Pet 1',
-					type: 'Dog',
-				},
-				{
-					birth_date: null,
-					breed: null,
-					created_at: pet2.created_at,
-					gender: null,
-					is_active: true,
-					name: 'Pet 2',
-					type: 'Cat',
-				},
-			],
 			created_at: repository.items[1].created_at,
 			updated_at: null,
 		});

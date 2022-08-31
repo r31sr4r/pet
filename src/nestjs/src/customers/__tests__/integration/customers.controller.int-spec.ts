@@ -20,7 +20,12 @@ describe('CustomersController Integration Tests', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [ConfigModule.forRoot(), DatabaseModule, CustomersModule, PetsModule],
+            imports: [
+                ConfigModule.forRoot(),
+                DatabaseModule,
+                PetsModule,
+                CustomersModule,
+            ],
         }).compile();
 
         controller = module.get(CustomersController);
@@ -43,7 +48,9 @@ describe('CustomersController Integration Tests', () => {
         expect(controller['listUseCase']).toBeInstanceOf(
             ListCustomersUseCase.UseCase,
         );
-        expect(controller['getUseCase']).toBeInstanceOf(GetCustomerUseCase.UseCase);
+        expect(controller['getUseCase']).toBeInstanceOf(
+            GetCustomerUseCase.UseCase,
+        );
     });
 
     describe('should create a customer', () => {

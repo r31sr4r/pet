@@ -1,5 +1,5 @@
-import { instanceToPlain } from "class-transformer";
-import { PetPresenter } from "./pet.presenter";
+import { instanceToPlain } from 'class-transformer';
+import { PetPresenter } from './pet.presenter';
 
 describe('PetPresenter Unit Tests', () => {
     describe('constructor', () => {
@@ -14,6 +14,7 @@ describe('PetPresenter Unit Tests', () => {
                 gender: 'Male',
                 birth_date,
                 is_active: true,
+                customer_id: '356f1fd6-2b4f-4387-9799-422e065b1479',
                 created_at,
             });
 
@@ -21,9 +22,12 @@ describe('PetPresenter Unit Tests', () => {
             expect(presenter.name).toBe('Pet 1');
             expect(presenter.type).toBe('dog');
             expect(presenter.breed).toBe('breed 1');
-            expect(presenter.gender).toBe('Male');            
+            expect(presenter.gender).toBe('Male');
             expect(presenter.is_active).toBe(true);
             expect(presenter.birth_date).toBe(birth_date);
+            expect(presenter.customer_id).toBe(
+                '356f1fd6-2b4f-4387-9799-422e065b1479',
+            );
             expect(presenter.created_at).toStrictEqual(created_at);
         });
     });
@@ -39,6 +43,7 @@ describe('PetPresenter Unit Tests', () => {
             gender: 'Male',
             birth_date,
             is_active: true,
+            customer_id: '356f1fd6-2b4f-4387-9799-422e065b1479',
             created_at,
         });
 
@@ -51,6 +56,7 @@ describe('PetPresenter Unit Tests', () => {
             gender: 'Male',
             birth_date,
             is_active: true,
+            customer_id: '356f1fd6-2b4f-4387-9799-422e065b1479',
             created_at: created_at.toISOString(),
         });
     });

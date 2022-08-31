@@ -16,7 +16,7 @@ import {
 	LoadEntityError,
 } from '#seedwork/domain/index';
 import { Op } from 'sequelize';
-import { CustomerSequelize } from '#customer/infra';
+import { CustomerSequelize } from '#customer/infra/db/sequelize/customer-sequelize';
 
 export namespace PetSequelize {
 	type PetModelProps = {

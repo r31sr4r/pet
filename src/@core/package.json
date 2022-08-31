@@ -8,6 +8,7 @@
 		"#seedwork/*": "./dist/@seedwork/*.js",
 		"#pet/application": "./dist/pet/application/index.js",
 		"#pet/domain*": "./dist/pet/domain/index.js",
+		"#pet/infra": "./dist/pet/infra/index.js",
 		"#pet/*": "./dist/pet/*.js",
 		"#access/application": "./dist/access/application/index.js",
 		"#access/domain*": "./dist/access/domain/index.js",
@@ -17,6 +18,7 @@
 		"#user/*": "./dist/user/*.js",
 		"#customer/application": "./dist/customer/application/index.js",
 		"#customer/domain*": "./dist/customer/domain/index.js",
+		"#customer/infra*": "./dist/customer/infra/index.js",
 		"#customer/*": "./dist/customer/*.js"
 	},
 	"exports": {

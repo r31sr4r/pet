@@ -7,4 +7,5 @@ export class CreatePetDto implements CreatePetUseCase.Input {
     gender?: string;
     birth_date?: Date;
     is_active?: boolean;
+    customer_id: string;
 }

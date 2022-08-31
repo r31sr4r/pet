@@ -8,4 +8,5 @@ export class UpdatePetDto
 	gender?: string;
 	birth_date?: Date;
 	is_active?: boolean;
+	customer_id: string;
 }

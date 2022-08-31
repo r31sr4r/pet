@@ -12,6 +12,7 @@ import {
 } from 'pet-core/customer/application';
 import { CustomerRepository } from 'pet-core/customer/domain';
 import { CUSTOMER_PROVIDERS } from '../../customers.providers';
+import { PetsModule } from '../../../pets/pets.module';
 
 describe('CustomersController Integration Tests', () => {
     let controller: CustomersController;
@@ -19,7 +20,7 @@ describe('CustomersController Integration Tests', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            imports: [ConfigModule.forRoot(), DatabaseModule, CustomersModule],
+            imports: [ConfigModule.forRoot(), DatabaseModule, CustomersModule, PetsModule],
         }).compile();
 
         controller = module.get(CustomersController);

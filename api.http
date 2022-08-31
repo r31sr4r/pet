@@ -10,7 +10,8 @@ Content-Type: application/json
 
 {
     "name": "Garfield",
-    "type": "cat"
+    "type": "cat",
+    "customer_id": "adcc175d-cf77-4383-8ab8-46706edfc989"
 }
 
 ###
@@ -43,4 +44,23 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/pets/779f1ed5-0047-42c2-86c1-21f795e7b05d
+Content-Type: application/json
+
+###
+GET http://localhost:3000/customers
+
+###
+GET http://localhost:3000/customers/adcc175d-cf77-4383-8ab8-46706edfc989
+
+###
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+    "name": "Paul Mcartney",
+    "email": "paul5@mail.com"
+}
+
+###
+DELETE http://localhost:3000/customers/779f1ed5-0047-42c2-86c1-21f795e7b05d
 Content-Type: application/json

@@ -9,6 +9,7 @@ export class PetPresenter {
     gender: string | null;
     birth_date: Date | null;
     is_active: boolean;
+    customer_id: string;
     @Transform(({ value }) => value.toISOString(), { toPlainOnly: true })
     created_at: Date;
 
@@ -20,6 +21,7 @@ export class PetPresenter {
         this.gender = output.gender;
         this.birth_date = output.birth_date;
         this.is_active = output.is_active;
+        this.customer_id = output.customer_id;
         this.created_at = output.created_at;
     }
 }

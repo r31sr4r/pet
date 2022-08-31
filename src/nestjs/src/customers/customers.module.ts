@@ -3,13 +3,10 @@ import { CustomersController } from './customers.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CustomerSequelize } from 'pet-core/customer/infra';
 import { CUSTOMER_PROVIDERS } from './customers.providers';
-import { PetSequelize } from 'pet-core/pet/infra';
-
 
 @Module({
     imports: [SequelizeModule.forFeature([
-        CustomerSequelize.CustomerModel,
-        PetSequelize.PetModel
+        CustomerSequelize.CustomerModel
     ])],
     controllers: [CustomersController],
     providers: [

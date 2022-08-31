@@ -9,8 +9,7 @@ import { CustomerSequelize } from 'pet-core/customer/infra';
 @Module({
     imports: [
         SequelizeModule.forFeature([
-            PetSequelize.PetModel,
-            CustomerSequelize.CustomerModel
+            PetSequelize.PetModel
         ])
     ],
     controllers: [PetsController],

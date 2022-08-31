@@ -4,7 +4,6 @@ import { PetsController } from './pets.controller';
 import { PET_PROVIDERS } from './pets.providers';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { PetSequelize } from 'pet-core/pet/infra';
-import { CustomerSequelize } from 'pet-core/customer/infra';
 
 @Module({
     imports: [

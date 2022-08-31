@@ -15,6 +15,8 @@ export type UserProperties = {
 	password?: string;
 	is_active?: boolean;
 	created_at?: Date;
+	group?: string;
+	role?: string;
 };
 
 export class User extends Entity<UserProperties> {

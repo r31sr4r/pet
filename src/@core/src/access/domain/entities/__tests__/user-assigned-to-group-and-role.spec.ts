@@ -12,48 +12,34 @@ import { validate as uuidValidate } from 'uuid';
 
 describe('UserAssignedToGroupAndRole Unit Tests', () => {
 	it('constructor of UserAssignedToGroupAndRole', () => {
-		let user = new User({
-			name: 'Some name',
-			email: 'somemail@mail.com',
-			password: 'Some password',
-		});
-
-		let group = new Group({
-			name: 'Customers',
-			description: 'Some description',
-		});
-
-		let role = new Role({
-			name: 'Vets',
-			description: 'Some description',
-		});
-
 		let userAssignedToGroupAndRole = new UserAssignedToGroupAndRole({
-			user: user,
-			group: group,
-			role: role,
+			user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+			group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+			role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
 		});
+
+		expect(userAssignedToGroupAndRole.id).toBeDefined();
 
 		let props = omit(userAssignedToGroupAndRole.props, ['created_at']);
 
 		expect(props).toStrictEqual({
-			user: user,
-			group: group,
-			role: role,
+			user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+			group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+			role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
 		});
 
 		let created_at = new Date();
 		userAssignedToGroupAndRole = new UserAssignedToGroupAndRole({
-			user: user,
-			group: group,
-			role: role,
+			user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+			group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+			role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
 			created_at,
 		});
 
 		expect(userAssignedToGroupAndRole.props).toStrictEqual({
-			user: user,
-			group: group,
-			role: role,
+			user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+			group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+			role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
 			created_at,
 		});
 	});
@@ -65,40 +51,12 @@ describe('UserAssignedToGroupAndRole Unit Tests', () => {
 		};
 		const data: UserAssignedToGroupAndRoleData[] = [
 			{
-				props: {
-					user: new User({
-						name: 'Some name',
-						email: 'somemail@mail.com',
-						password: 'Some password',
-					}),
-					group: new Group({
-						name: 'Customers',
-						description: 'Some description',
-					}),
-					role: new Role({
-						name: 'Users',
-						description: 'Some description',
-					}),
-				},                
-			},
-            {
-                props: {
-                    user: new User({
-                        name: 'John Doe',
-                        email: 'john@mail.com',
-                        password: 'Some password',
-                    }),
-                    group: new Group({
-                        name: 'Vets',
-                        description: 'Some description',
-                    }),
-                    role: new Role({
-                        name: 'Admin',
-                        description: 'Some description',
-                    }),
-                },
-            },
-
+				props: {					
+						user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+						group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+						role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
+					}				             
+			}
 		];        
 
         data.forEach((item) => {
@@ -109,26 +67,11 @@ describe('UserAssignedToGroupAndRole Unit Tests', () => {
 	});
 
 	test('getter and setter of created_at prop', () => {
-        let user = new User({
-            name: 'Paul McCartney',
-            email: 'paul@mail.com',
-            password: 'Some password',
-        });
-
-        let group = new Group({
-            name: 'Customers',
-            description: 'Some description',
-        });
-
-        let role = new Role({
-            name: 'Users',
-            description: 'Some description',
-        });
 
         let userAssignedToGroupAndRole = new UserAssignedToGroupAndRole({
-            user,
-            group,
-            role,
+			user_id: 'be19223a-598d-489d-8753-7aceb7b3c1b2',
+			group_id: 'df359551-a92e-4d14-a593-d9d44ffd0de8',
+			role_id: '10f911ea-1fa8-4021-a364-b2b07e44ca3b',
             created_at: new Date(),
         });
 

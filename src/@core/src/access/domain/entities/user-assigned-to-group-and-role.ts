@@ -14,6 +14,7 @@ export class UserAssignedToGroupAndRole extends Entity<UserAssignedToGroupAndRol
 		public readonly props: UserAssignedToGroupAndRoleProperties,
 		id?: UniqueEntityId
 	) {
+        UserAssignedToGroupAndRole.validate(props);
 		super(props, id);
 		this.props.created_at = this.props.created_at ?? new Date();
 	}

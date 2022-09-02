@@ -6,9 +6,10 @@ export default class AssignUserToGroupAndRoleWhenUserIsCreatedHandler
 {
 	handle(event: UserCreatedEvent): void {
 		console.log(
-			`Assigning user to group and role when user is created: ${event.eventData.userId}. Group: ${event.eventData.groupId}. Role: ${event.eventData.roleId}`
+			`Assigning user to group and role when user is created: ${event.eventData.name}. Group: ${event.eventData.group_name}. Role: ${event.eventData.role_name}`
 		);
-		// const { userId, groupId, roleId } = event.eventData;
+		// const { user_id, group_id, role_id } = event.eventData;
+		// const repository = 
 		// const user = User.findOne({ _id: userId });
 		// const group = Group.findOne({ _id: groupId });
 		// const role = Role.findOne({ _id: roleId });

@@ -18,6 +18,7 @@ export default {
             '<rootDir>/../../../node_modules/pet-core/dist/@seedwork/$1',
         '#pet/(.*)$': '<rootDir>/../../../node_modules/pet-core/dist/pet/$1',
         '#user/(.*)$': '<rootDir>/../../../node_modules/pet-core/dist/user/$1',
+        '#access/(.*)$': '<rootDir>/../../../node_modules/pet-core/dist/access/$1',
         '#customer/(.*)$':
             '<rootDir>/../../../node_modules/pet-core/dist/customer/$1',
     },

@@ -5,4 +5,6 @@ export class CreateUserDto implements CreateUserUseCase.Input {
     email: string;
     password: string;    
     is_active?: boolean;
+    group: string;
+    role: string;
 }

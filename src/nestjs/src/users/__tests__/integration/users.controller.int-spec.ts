@@ -52,6 +52,8 @@ describe('UsersController Integration Tests', () => {
                     name: 'John Doe',
                     email: 'john2@mail.com',
                     password: 'Pass123456',
+                    group: 'admin',
+                    role: 'admin',
                 },
                 expectedPresenter: {
                     name: 'John Doe',

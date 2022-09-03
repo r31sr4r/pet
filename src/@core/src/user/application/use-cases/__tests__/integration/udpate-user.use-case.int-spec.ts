@@ -1,27 +1,38 @@
 import { UpdateUserUseCase } from '../../update-user.use-case';
 import NotFoundError from '../../../../../@seedwork/domain/errors/not-found.error';
-import { User } from '../../../../domain/entities/user';
 import { setupSequelize } from '#seedwork/infra';
 import { UserSequelize } from '#user/infra/db/sequelize/user-sequelize';
 import _chance from 'chance';
 import CreateUserUseCase from '../../create-user.use-case';
 import { ValidationError } from '#seedwork/domain/errors';
+import { Group, Role } from '#access/domain';
+import { GroupSequelize, RoleSequelize } from '#access/infra';
 
 const chance = _chance();
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
+const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
+const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
 
 describe('UpdateUserUseCase Integration Tests', () => {
 	let useCase: UpdateUserUseCase.UseCase;
 	let createUseCase: CreateUserUseCase.UseCase;
 	let repository: UserSequelize.UserSequelizeRepository;
+	let groupRepository: GroupSequelize.GroupSequelizeRepository;
+	let roleRepository: RoleSequelize.RoleSequelizeRepository;
 
-	setupSequelize({ models: [UserModel] });
+	setupSequelize({ models: [UserModel, GroupModel, RoleModel] });
 
 	beforeEach(() => {
 		repository = new UserSequelizeRepository(UserModel);
+		groupRepository = new GroupSequelizeRepository(GroupModel);
+		roleRepository = new RoleSequelizeRepository(RoleModel);
 		useCase = new UpdateUserUseCase.UseCase(repository);
-		createUseCase = new CreateUserUseCase.UseCase(repository);
+		createUseCase = new CreateUserUseCase.UseCase(
+			repository,
+			groupRepository,
+			roleRepository
+		);
 	});
 
 	it('should throw an error when user not found', async () => {
@@ -37,6 +48,7 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	});
 
 	it('should update a user', async () => {
+
 		type Arrange = {
 			input: {
 				id: string;
@@ -166,10 +178,26 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	});
 
 	it('should update a user with a new password', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		const entity = await createUseCase.execute({
 			name: 'Tony Stark',
 			email: 'tony@mail.com',
 			password: 'Pass123456',
+			group: group.name,
+			role: role.name,
 		});
 
 		const output = await useCase.executeUpdatePassword({
@@ -182,10 +210,26 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	});
 
 	it('should throw an error when trying to update a user with a wrong password', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		const entity = await createUseCase.execute({
 			name: 'Tony Stark',
 			email: 'somemail@mail.com',
 			password: 'Pass123456',
+			group: group.name,
+			role: role.name,
 		});
 
 		await expect(

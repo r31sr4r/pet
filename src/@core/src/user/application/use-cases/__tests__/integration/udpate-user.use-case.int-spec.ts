@@ -48,7 +48,6 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	});
 
 	it('should update a user', async () => {
-
 		type Arrange = {
 			input: {
 				id: string;
@@ -200,7 +199,7 @@ describe('UpdateUserUseCase Integration Tests', () => {
 			role: role.name,
 		});
 
-		const output = await useCase.executeUpdatePassword({
+		/*NOSONAR*/ const output = await useCase.executeUpdatePassword({
 			id: entity.id,
 			name: 'Tony Stark',
 			email: 'tony@mail.com',

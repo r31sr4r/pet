@@ -2,26 +2,86 @@ import { UserSequelize } from '#user/infra/db/sequelize/user-sequelize';
 import { setupSequelize } from '#seedwork/infra';
 import { CreateUserUseCase } from '../../create-user.use-case';
 import { ValidationError } from '#seedwork/domain';
+import { GroupSequelize, RoleSequelize } from '#access/infra';
+import { Group, Role } from '#access/domain';
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
+const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
+const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
 
 describe('CreateUserUseCase Integrations Tests', () => {
 	let useCase: CreateUserUseCase.UseCase;
 	let repository: UserSequelize.UserSequelizeRepository;
+	let groupRepository: GroupSequelize.GroupSequelizeRepository;
+	let roleRepository: RoleSequelize.RoleSequelizeRepository;
 
-	setupSequelize({ models: [UserModel] });
+	setupSequelize({ models: [UserModel, GroupModel, RoleModel] });
 
 	beforeEach(() => {
 		repository = new UserSequelizeRepository(UserModel);
-		useCase = new CreateUserUseCase.UseCase(repository);
+		groupRepository = new GroupSequelizeRepository(GroupModel);
+		roleRepository = new RoleSequelizeRepository(RoleModel);
+		useCase = new CreateUserUseCase.UseCase(
+			repository,
+			groupRepository,
+			roleRepository
+		);
 	});
 
+	it('should throw an error if group does not exist', async () => {
+		await expect(
+			useCase.execute({
+				name: 'Test User',
+				email: 'test@mail.com',
+				password: 'Somepass1',
+				group: 'some-group-name',
+				role: 'some-role-name',
+			})
+		).rejects.toThrowError('Group not found');
+	});
+
+	it('should throw an error if role does not exist', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		await expect(
+			useCase.execute({
+				name: 'Test User',
+				email: 'test@mail.com',
+				password: 'Somepass1',
+				group: group.name,
+				role: 'some-role-name',
+			})
+		).rejects.toThrowError('Role not found');
+	});	
+
 	it('should create a new user', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+		
 		let output = await useCase.execute({
 			name: 'Marky Ramone',
 			email: 'marky.ramone@mail.com',
 			password: 'Somepass1',
+			group: group.name,
+			role: role.name,
 		});
+
 		let user = await repository.findById(output.id);
 
 		expect(output).toStrictEqual({
@@ -29,7 +89,9 @@ describe('CreateUserUseCase Integrations Tests', () => {
 			name: 'Marky Ramone',
 			email: 'marky.ramone@mail.com',
 			password: user.props.password,
-			is_active: true,
+			is_active: true,			
+			group: group.name,
+			role: role.name,
 			created_at: user.props.created_at,
 		});
 
@@ -38,6 +100,8 @@ describe('CreateUserUseCase Integrations Tests', () => {
 			email: 'bell@mail.com',
 			password: 'Somepass2',
 			is_active: false,
+			group: group.name,
+			role: role.name,
 		});
 
 		user = await repository.findById(output.id);
@@ -48,51 +112,46 @@ describe('CreateUserUseCase Integrations Tests', () => {
 			email: 'bell@mail.com',
 			password: user.props.password,
 			is_active: false,
+			group: group.name,
+			role: role.name,
 			created_at: user.props.created_at,
 		});
 	});
 
-	describe('test with test.each', () => {
-		const arrange = [
-			{
-				inputProps: { name: 'Test User', 
-				email: 'somemail@mail.com',
-				password: 'Somepass1' },				
-				outputProps: {
-					name: 'Test User',
-					email: 'somemail@mail.com',
-					is_active: true,
-				},
-			},
-		];
-		test.each(arrange)(
-			'input $inputProps, output $outputProps',
-			async ({ inputProps, outputProps }) => {
-				let output = await useCase.execute(inputProps);
-				let user = await repository.findById(output.id);
-				expect(output.id).toBe(user.id);
-				expect(output.created_at).toStrictEqual(
-					user.props.created_at
-				);
-				expect(output).toMatchObject(outputProps);
-			}
-		);
-	});
-
 	it('should throw an error if email is already registered', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		await useCase.execute({
 			name: 'Marky Ramone',
 			email: 'mark.ramone@mail.com',
 			password: 'Somepass1',
+			group: group.name,
+			role: role.name,
 		});
 		await expect(
 			useCase.execute({
 				name: 'Marky not Ramone',
 				email: 'mark.ramone@mail.com',
 				password: 'Somepass2',
-			}),
+				group: group.name,
+				role: role.name,
+			})
 		).rejects.toThrowError(
-			new ValidationError(`Entity already exists using email mark.ramone@mail.com`)
+			new ValidationError(
+				`Entity already exists using email mark.ramone@mail.com`
+			)
 		);
 	});
 });

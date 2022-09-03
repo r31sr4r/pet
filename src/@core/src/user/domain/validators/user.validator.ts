@@ -28,6 +28,14 @@ export class UserRules {
 	@IsOptional()
 	is_active: boolean;
 
+	@IsString()
+	@IsOptional()
+	group: string;
+	
+	@IsString()
+	@IsOptional()
+	role: string;
+
 	@IsDate()
 	@IsOptional()
 	created_at: Date;
@@ -36,12 +44,16 @@ export class UserRules {
 		name,
 		email,
 		is_active,
+		group,
+		role,
 		created_at,
 	}: UserProperties) {
 		Object.assign(this, {
 			name,
 			email,
 			is_active,
+			group,
+			role,
 			created_at,
 		});
 	}

@@ -88,8 +88,6 @@ describe('UserAssignedToGroupAndRoleModel Unit Tests', () => {
 		const userAssignedToGroupAndRole =
 			await UserAssignedToGroupAndRoleModel.create(arrange);
 
-		console.log(userAssignedToGroupAndRole);
-
 		expect(userAssignedToGroupAndRole).toBeDefined();
 		expect(userAssignedToGroupAndRole.toJSON()).toStrictEqual(arrange);
 	});

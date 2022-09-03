@@ -95,6 +95,34 @@ describe('User Validator Tests', () => {
 		});
 	});
 
+	test('invalidation cases for group field', () => {
+		expect({
+			validator,
+			data: {
+				name: 'Some name',
+				email: 'email@mail.com',
+				group: '',
+			},
+		}).containsErrorMessages({
+			group: ['group should not be empty'],
+		});
+	});
+
+	test('invalidation cases for role field', () => {
+		expect({
+			validator,
+			data: {
+				name: 'Some name',
+				email: 'email@mail.com',
+				group: 'some-group',
+				role: '',
+			},
+		}).containsErrorMessages({
+			role: ['role should not be empty'],
+		});
+	});
+
+
 	test('invalidation cases for created_at field', () => {
 		expect({
 			validator,
@@ -114,17 +142,23 @@ describe('User Validator Tests', () => {
 				name: 'a'.repeat(100),
 				email: 'somemail@some.com',
 				password: 'Somepassword#',
+				group: 'some-group',
+				role: 'some-role',	
 			},
 			{
 				name: 'Elvis',
 				email: 'elvis@some.com',
 				password: 'Somepassword#',
+				group: 'some-group',
+				role: 'some-role',	
 			},
 			{
 				name: 'Elvis Presley',
 				email: 'elvis.presley@some.com',
 				password: 'Somepassword#',
 				is_active: false,
+				group: 'some-group',
+				role: 'some-role',	
 			},
 			{
 				name: 'John',
@@ -132,6 +166,8 @@ describe('User Validator Tests', () => {
 				password: 'Somepassword#',
 				is_active: true,
 				created_at: new Date(),
+				group: 'some-group',
+				role: 'some-role',	
 			},
 		];
 

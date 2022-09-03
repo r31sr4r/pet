@@ -1,21 +1,78 @@
+import { Group, Role } from '#access/domain';
+import { GroupInMemoryRepository, RoleInMemoryRepository } from '#access/infra';
 import UserInMemoryRepository from '../../../../infra/db/in-memory/user-in-memory.repository';
 import { CreateUserUseCase } from '../../create-user.use-case';
 
 describe('CreateUserUseCase Unit Tests', () => {
 	let useCase: CreateUserUseCase.UseCase;
 	let repository: UserInMemoryRepository;
+	let groupRepository: GroupInMemoryRepository;
+	let roleRepository: RoleInMemoryRepository;
 
 	beforeEach(() => {
 		repository = new UserInMemoryRepository();
-		useCase = new CreateUserUseCase.UseCase(repository);
+		groupRepository = new GroupInMemoryRepository();
+		roleRepository = new RoleInMemoryRepository();
+		useCase = new CreateUserUseCase.UseCase(
+			repository,
+			groupRepository,
+			roleRepository
+		);
+	});
+
+	it('should throw an error if group does not exist', async () => {
+		await expect(
+			useCase.execute({
+				name: 'Test User',
+				email: 'test@mail.com',
+				password: 'Somepass1',
+				group: 'some-group-name',
+				role: 'some-role-name',
+			})
+		).rejects.toThrowError('Group not found');
+	});
+
+	it('should throw an error if role does not exist', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		await expect(
+			useCase.execute({
+				name: 'Test User',
+				email: 'test@mail.com',
+				password: 'Somepass1',
+				group: group.name,
+				role: 'some-role-name',
+			})
+		).rejects.toThrowError('Role not found');
 	});
 
 	it('should create a new user', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		const spyInsert = jest.spyOn(repository, 'insert');
 		let output = await useCase.execute({
 			name: 'Marky Ramone',
 			email: 'marky.ramone@mail.com',
 			password: 'Somepass1',
+			group: group.name,
+			role: role.name,
 		});
 
 		expect(spyInsert).toHaveBeenCalledTimes(1);
@@ -25,6 +82,8 @@ describe('CreateUserUseCase Unit Tests', () => {
 			email: 'marky.ramone@mail.com',
 			password: repository.items[0].password,
 			is_active: true,
+			group: group.name,
+			role: role.name,
 			created_at: repository.items[0].created_at,
 		});
 
@@ -33,6 +92,8 @@ describe('CreateUserUseCase Unit Tests', () => {
 			email: 'bell@mail.com',
 			password: 'Somepass2',
 			is_active: false,
+			group: group.name,
+			role: role.name,
 		});
 
 		expect(spyInsert).toHaveBeenCalledTimes(2);
@@ -42,6 +103,8 @@ describe('CreateUserUseCase Unit Tests', () => {
 			email: 'bell@mail.com',
 			password: repository.items[1].password,
 			is_active: false,
+			group: group.name,
+			role: role.name,
 			created_at: repository.items[1].created_at,
 		});
 	});
@@ -64,8 +127,26 @@ describe('CreateUserUseCase Unit Tests', () => {
 			},
 		});
 
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		await expect(
-			useCase.execute({ name: '' } as any)
+			useCase.execute({
+				name: '',
+				group: group.name,
+				role: role.name,
+			} as any)
 		).rejects.toMatchObject({
 			error: {
 				name: [
@@ -77,11 +158,27 @@ describe('CreateUserUseCase Unit Tests', () => {
 	});
 
 	it('should throw an error if email is not provided', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		await expect(
 			useCase.execute({
 				name: 'Test',
 				email: null as any,
 				password: 'Somepass1',
+				group: group.name,
+				role: role.name,
 			})
 		).rejects.toMatchObject({
 			error: {
@@ -96,18 +193,34 @@ describe('CreateUserUseCase Unit Tests', () => {
 	});
 
 	it('should throw an error if password is not provided', async () => {
+		const group = new Group({
+			name: 'some-group-name',
+			description: 'some-group-description',
+		});
+
+		await groupRepository.insert(group);
+
+		const role = new Role({
+			name: 'some-role-name',
+			description: 'some-role-description',
+		});
+
+		await roleRepository.insert(role);
+
 		await expect(
 			useCase.execute({
 				name: 'Test',
 				email: 'somemail@mail.com',
 				password: null as any,
+				group: group.name,
+				role: role.name,
 			})
 		).rejects.toMatchObject({
 			error: {
 				password: [
-					'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',					
-					'password must be longer than or equal to 6 characters'					
-				],	
+					'Password too weak. Use at least one uppercase letter, one lowercase letter, one number or one special character',
+					'password must be longer than or equal to 6 characters',
+				],
 			},
 		});
 	});

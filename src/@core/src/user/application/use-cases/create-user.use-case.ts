@@ -1,4 +1,4 @@
-import { GroupRepository, RoleRepository } from '#access/domain';
+import { GroupRepository, RoleRepository } from '#access/domain/repository';
 import { NotFoundError } from '#seedwork/domain';
 import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import { User } from '../../domain/entities/user';
@@ -14,6 +14,9 @@ export namespace CreateUserUseCase {
 		) {}
 
 		async execute(input: Input): Promise<Output> {
+			console.log(this.userRepository);
+			console.log(this.groupRepository);
+			console.log(this.roleRepository);
 			if (input) {
 				const group = await this.groupRepository.search(
 					new GroupRepository.SearchParams({

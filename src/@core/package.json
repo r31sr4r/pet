@@ -16,6 +16,7 @@
 		"#access/*": "./dist/access/*.js",
 		"#user/application": "./dist/user/application/index.js",
 		"#user/domain*": "./dist/user/domain/index.js",
+		"#user/infra*": "./dist/user/infra/index.js",
 		"#user/*": "./dist/user/*.js",
 		"#customer/application": "./dist/customer/application/index.js",
 		"#customer/domain*": "./dist/customer/domain/index.js",

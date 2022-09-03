@@ -11,6 +11,8 @@ import {
 } from 'pet-core/user/application';
 import { UserInMemoryRepository, UserSequelize } from 'pet-core/user/infra';
 import { getModelToken } from '@nestjs/sequelize';
+import { GROUP_PROVIDERS } from 'src/groups/groups.providers';
+import { ROLE_PROVIDERS } from 'src/roles/roles.providers';
 
 export namespace USER_PROVIDERS {
     export namespace REPOSITORIES {
@@ -47,7 +49,11 @@ export namespace USER_PROVIDERS {
                     roleRepo,
                 );
             },
-            inject: [REPOSITORIES.USER_REPOSITORY.provide],
+            inject: [REPOSITORIES.USER_REPOSITORY.provide,
+                GROUP_PROVIDERS.REPOSITORIES.GROUP_REPOSITORY.provide,   
+                ROLE_PROVIDERS.REPOSITORIES.ROLE_REPOSITORY.provide,             
+            ],
+
         };
 
         export const UPDATE_USER = {

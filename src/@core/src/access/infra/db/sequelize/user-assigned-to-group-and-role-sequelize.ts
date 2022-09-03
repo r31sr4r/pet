@@ -15,7 +15,7 @@ import {
 	EntityValidationError,
 	LoadEntityError,
 } from '#seedwork/domain';
-import { UserSequelize } from '#user/infra';
+import { UserSequelize } from '#user/infra/db/sequelize/user-sequelize';
 import { GroupSequelize } from './group-sequelize';
 import { RoleSequelize } from './role-sequelize';
 import { Op } from 'sequelize';

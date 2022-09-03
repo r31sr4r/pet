@@ -39,7 +39,9 @@ Content-Type: application/json
 {
     "name": "Paul Mcartney",
     "email": "paul5@mail.com",
-    "password": "Pass123456"
+    "password": "Pass123456",
+    "group": "customer",
+    "role": "user"
 }
 
 ###

@@ -9,6 +9,7 @@ import { CreateUserDto } from '../../dto/create-user.dto';
 import { UpdateUserDto } from '../../dto/update-user.dto';
 import { UsersController } from '../../users.controller';
 import { UserPresenter } from '../../presenter/user.presenter';
+import { omit } from 'lodash';
 
 describe('UsersController', () => {
     let controller: UsersController;
@@ -39,6 +40,8 @@ describe('UsersController', () => {
             email: 'paul@mail.com',
             password: 'Pass123456',
             is_active: true,
+            group: 'customer',
+            role: 'user'
         };
 
         const presenter = await controller.create(input);
@@ -101,7 +104,7 @@ describe('UsersController', () => {
 
     it('should get a pet', async () => {
         const id = '3edaaad1-d538-4843-a6ef-9ebdaa69f10b';
-        const expectedOutput: GetUserUseCase.Output = {
+        const  expectedOutput: GetUserUseCase.Output = {
             id: id,
             name: 'Paul McCartney',
             email: 'paul@mail.com',
@@ -112,11 +115,14 @@ describe('UsersController', () => {
         const mockGetUseCase = {
             execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
         };
+        
+        const newOutput = omit(expectedOutput, ['password']);
+
         //@ts-expect-error
         controller['getUseCase'] = mockGetUseCase;
         const output = await controller.findOne(id);
         expect(mockGetUseCase.execute).toHaveBeenCalledWith({ id });
-        expect(expectedOutput).toStrictEqual(output);
+        expect(newOutput).toMatchObject(output);
     });
 
     it('should search users with filter', async () => {

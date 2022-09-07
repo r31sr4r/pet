@@ -6,13 +6,21 @@ import _chance from 'chance';
 import CreateUserUseCase from '../../create-user.use-case';
 import { ValidationError } from '#seedwork/domain/errors';
 import { Group, Role } from '#access/domain';
-import { GroupSequelize, RoleSequelize } from '#access/infra';
+import {
+	GroupSequelize,
+	RoleSequelize,
+	UserAssignedToGroupAndRoleSequelize,
+} from '#access/infra';
 
 const chance = _chance();
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
 const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
 const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
+const {
+	UserAssignedToGroupAndRoleSequelizeRepository,
+	UserAssignedToGroupAndRoleModel,
+} = UserAssignedToGroupAndRoleSequelize;
 
 describe('UpdateUserUseCase Integration Tests', () => {
 	let useCase: UpdateUserUseCase.UseCase;
@@ -20,18 +28,30 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	let repository: UserSequelize.UserSequelizeRepository;
 	let groupRepository: GroupSequelize.GroupSequelizeRepository;
 	let roleRepository: RoleSequelize.RoleSequelizeRepository;
+	let userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleSequelize.UserAssignedToGroupAndRoleSequelizeRepository;
 
-	setupSequelize({ models: [UserModel, GroupModel, RoleModel] });
+	setupSequelize({
+		models: [
+			UserModel,
+			GroupModel,
+			RoleModel,
+			UserAssignedToGroupAndRoleModel,
+		],
+	});
 
 	beforeEach(() => {
 		repository = new UserSequelizeRepository(UserModel);
 		groupRepository = new GroupSequelizeRepository(GroupModel);
 		roleRepository = new RoleSequelizeRepository(RoleModel);
 		useCase = new UpdateUserUseCase.UseCase(repository);
+		userAssignedToGroupAndRoleRepository = new UserAssignedToGroupAndRoleSequelizeRepository(
+			UserAssignedToGroupAndRoleModel
+		);
 		createUseCase = new CreateUserUseCase.UseCase(
 			repository,
 			groupRepository,
-			roleRepository
+			roleRepository,
+			userAssignedToGroupAndRoleRepository
 		);
 	});
 

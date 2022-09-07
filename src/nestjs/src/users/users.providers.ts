@@ -1,5 +1,5 @@
 import { UserRepository } from 'pet-core/user/domain';
-import { GroupRepository, RoleRepository } from 'pet-core/access/domain';
+import { GroupRepository, RoleRepository, UserAssignedToGroupAndRoleRepository } from 'pet-core/access/domain';
 import {
     CreateUserUseCase,
     DeleteUserUseCase,
@@ -11,6 +11,7 @@ import { UserInMemoryRepository, UserSequelize } from 'pet-core/user/infra';
 import { getModelToken } from '@nestjs/sequelize';
 import { GROUP_PROVIDERS } from '../groups/groups.providers';
 import { ROLE_PROVIDERS } from '../roles/roles.providers';
+import { USERS_GROUPS_ROLES_PROVIDERS } from '../users-groups-roles/users-groups-roles.providers';
 
 export namespace USER_PROVIDERS {
     export namespace REPOSITORIES {
@@ -40,16 +41,19 @@ export namespace USER_PROVIDERS {
                 userRepo: UserRepository.Repository,
                 groupRepo: GroupRepository.Repository,
                 roleRepo: RoleRepository.Repository,
+                usersGroupsRolesRepo: UserAssignedToGroupAndRoleRepository.Repository
             ) => {
                 return new CreateUserUseCase.UseCase(
                     userRepo,
                     groupRepo,
                     roleRepo,
+                    usersGroupsRolesRepo
                 );
             },
             inject: [REPOSITORIES.USER_REPOSITORY.provide,
                 GROUP_PROVIDERS.REPOSITORIES.GROUP_REPOSITORY.provide,   
-                ROLE_PROVIDERS.REPOSITORIES.ROLE_REPOSITORY.provide,             
+                ROLE_PROVIDERS.REPOSITORIES.ROLE_REPOSITORY.provide, 
+                USERS_GROUPS_ROLES_PROVIDERS.REPOSITORIES.USERS_GROUPS_ROLES_REPOSITORY.provide            
             ],
 
         };

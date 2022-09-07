@@ -1,4 +1,4 @@
-import { UserAssignedToGroupAndRole } from '#access/domain';
+import { UserAssignedToGroupAndRole } from '#access/domain/entities';
 import {
 	GroupRepository,
 	RoleRepository,

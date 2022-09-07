@@ -8,9 +8,10 @@ import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
 import { GroupsModule } from './groups/groups.module';
 import { RolesModule } from './roles/roles.module';
+import { UsersGroupsRolesModule } from './users-groups-roles/users-groups-roles.module';
 
 @Module({
-    imports: [ConfigModule.forRoot(), PetsModule, DatabaseModule, UsersModule, CustomersModule, GroupsModule, RolesModule],
+    imports: [ConfigModule.forRoot(), PetsModule, DatabaseModule, UsersModule, CustomersModule, GroupsModule, RolesModule, UsersGroupsRolesModule],
     controllers: [AppController],
     providers: [AppService],
 })

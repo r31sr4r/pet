@@ -1,7 +1,5 @@
 import { UserRepository } from 'pet-core/user/domain';
-import { GroupRepository } from 'pet-core/access/domain';
-import { RoleRepository } from 'pet-core/access/domain';
-
+import { GroupRepository, RoleRepository } from 'pet-core/access/domain';
 import {
     CreateUserUseCase,
     DeleteUserUseCase,
@@ -11,8 +9,8 @@ import {
 } from 'pet-core/user/application';
 import { UserInMemoryRepository, UserSequelize } from 'pet-core/user/infra';
 import { getModelToken } from '@nestjs/sequelize';
-import { GROUP_PROVIDERS } from 'src/groups/groups.providers';
-import { ROLE_PROVIDERS } from 'src/roles/roles.providers';
+import { GROUP_PROVIDERS } from '../groups/groups.providers';
+import { ROLE_PROVIDERS } from '../roles/roles.providers';
 
 export namespace USER_PROVIDERS {
     export namespace REPOSITORIES {

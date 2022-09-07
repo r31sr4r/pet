@@ -60,12 +60,19 @@ export class UsersController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.getUseCase.execute({ id });
+    async findOne(@Param('id') id: string) {
+        const output = await this.getUseCase.execute({ id });
+        return new UserPresenter(output);
     }
 
     @Get()
-    search(@Query() searchParams: SearchUserDto) {
-        return this.listUseCase.execute(searchParams);
+    async search(@Query() searchParams: SearchUserDto) {
+        let users = await this.listUseCase.execute(searchParams);
+        let usersItems = users.items.map((user) => {
+            return new UserPresenter(user);
+        });
+        users.items = usersItems;      
+
+        return users;
     }
 }

@@ -1,5 +1,5 @@
 import { Group, Role } from '#access/domain';
-import { GroupInMemoryRepository, RoleInMemoryRepository } from '#access/infra';
+import { GroupInMemoryRepository, RoleInMemoryRepository, UserAssignedToGroupAndRoleInMemoryRepository } from '#access/infra';
 import UserInMemoryRepository from '../../../../infra/db/in-memory/user-in-memory.repository';
 import { CreateUserUseCase } from '../../create-user.use-case';
 
@@ -8,15 +8,18 @@ describe('CreateUserUseCase Unit Tests', () => {
 	let repository: UserInMemoryRepository;
 	let groupRepository: GroupInMemoryRepository;
 	let roleRepository: RoleInMemoryRepository;
+	let userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleInMemoryRepository;
 
 	beforeEach(() => {
 		repository = new UserInMemoryRepository();
 		groupRepository = new GroupInMemoryRepository();
 		roleRepository = new RoleInMemoryRepository();
+		userAssignedToGroupAndRoleRepository = new UserAssignedToGroupAndRoleInMemoryRepository();
 		useCase = new CreateUserUseCase.UseCase(
 			repository,
 			groupRepository,
-			roleRepository
+			roleRepository,
+			userAssignedToGroupAndRoleRepository
 		);
 	});
 

@@ -2,29 +2,42 @@ import { UserSequelize } from '#user/infra/db/sequelize/user-sequelize';
 import { setupSequelize } from '#seedwork/infra';
 import { CreateUserUseCase } from '../../create-user.use-case';
 import { ValidationError } from '#seedwork/domain';
-import { GroupSequelize, RoleSequelize } from '#access/infra';
+import {
+	GroupSequelize,
+	RoleSequelize,
+	UserAssignedToGroupAndRoleSequelize,
+} from '#access/infra';
 import { Group, Role } from '#access/domain';
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
 const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
 const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
+const {
+	UserAssignedToGroupAndRoleSequelizeRepository,
+	UserAssignedToGroupAndRoleModel,
+} = UserAssignedToGroupAndRoleSequelize;
 
 describe('CreateUserUseCase Integrations Tests', () => {
 	let useCase: CreateUserUseCase.UseCase;
 	let repository: UserSequelize.UserSequelizeRepository;
 	let groupRepository: GroupSequelize.GroupSequelizeRepository;
 	let roleRepository: RoleSequelize.RoleSequelizeRepository;
+	let userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleSequelize.UserAssignedToGroupAndRoleSequelizeRepository;
 
-	setupSequelize({ models: [UserModel, GroupModel, RoleModel] });
+	setupSequelize({ models: [UserModel, GroupModel, RoleModel, UserAssignedToGroupAndRoleModel] });
 
 	beforeEach(() => {
 		repository = new UserSequelizeRepository(UserModel);
 		groupRepository = new GroupSequelizeRepository(GroupModel);
 		roleRepository = new RoleSequelizeRepository(RoleModel);
+		userAssignedToGroupAndRoleRepository = new UserAssignedToGroupAndRoleSequelizeRepository(
+			UserAssignedToGroupAndRoleModel
+		);
 		useCase = new CreateUserUseCase.UseCase(
 			repository,
 			groupRepository,
-			roleRepository
+			roleRepository,
+			userAssignedToGroupAndRoleRepository
 		);
 	});
 
@@ -57,7 +70,7 @@ describe('CreateUserUseCase Integrations Tests', () => {
 				role: 'some-role-name',
 			})
 		).rejects.toThrowError('Role not found');
-	});	
+	});
 
 	it('should create a new user', async () => {
 		const group = new Group({
@@ -73,7 +86,7 @@ describe('CreateUserUseCase Integrations Tests', () => {
 		});
 
 		await roleRepository.insert(role);
-		
+
 		let output = await useCase.execute({
 			name: 'Marky Ramone',
 			email: 'marky.ramone@mail.com',
@@ -89,7 +102,7 @@ describe('CreateUserUseCase Integrations Tests', () => {
 			name: 'Marky Ramone',
 			email: 'marky.ramone@mail.com',
 			password: user.props.password,
-			is_active: true,			
+			is_active: true,
 			group: group.name,
 			role: role.name,
 			created_at: user.props.created_at,

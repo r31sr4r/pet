@@ -1,4 +1,9 @@
-import { GroupRepository, RoleRepository } from '#access/domain/repository';
+import { UserAssignedToGroupAndRole } from '#access/domain';
+import {
+	GroupRepository,
+	RoleRepository,
+	UserAssignedToGroupAndRoleRepository,
+} from '#access/domain/repository';
 import { NotFoundError } from '#seedwork/domain';
 import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import { User } from '../../domain/entities/user';
@@ -10,10 +15,30 @@ export namespace CreateUserUseCase {
 		constructor(
 			private userRepository: UserRepository.Repository,
 			private groupRepository: GroupRepository.Repository,
-			private roleRepository: RoleRepository.Repository
+			private roleRepository: RoleRepository.Repository,
+			private userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleRepository.Repository
 		) {}
 
 		async execute(input: Input): Promise<Output> {
+			let group_id;
+			let role_id;
+
+			({ group_id, role_id } = await this.ValidateGroupAndRole(input, group_id, role_id));
+
+			const entity = new User(input);
+			await this.userRepository.insert(entity);
+			const userMapped = UserOutputMapper.toOutput(entity);
+
+			await this.AssignUserToGroupAndRole(
+				userMapped,
+				group_id,
+				role_id
+			);
+
+			return userMapped;
+		}
+
+		private async ValidateGroupAndRole(input: Input, group_id: any, role_id: any) {
 			if (input) {
 				const group = await this.groupRepository.search(
 					new GroupRepository.SearchParams({
@@ -23,6 +48,7 @@ export namespace CreateUserUseCase {
 				if (group.items.length === 0) {
 					throw new NotFoundError('Group not found');
 				}
+				group_id = group.items[0].id;
 
 				const role = await this.roleRepository.search(
 					new RoleRepository.SearchParams({
@@ -32,11 +58,25 @@ export namespace CreateUserUseCase {
 				if (role.items.length === 0) {
 					throw new NotFoundError('Role not found');
 				}
+				role_id = role.items[0].id;
 			}
+			return { group_id, role_id };
+		}
 
-			const entity = new User(input);
-			await this.userRepository.insert(entity);
-			return UserOutputMapper.toOutput(entity);
+		private async AssignUserToGroupAndRole(
+			userMapped: UserOutput,
+			group_id: string,
+			role_id: string
+		) {
+			const userAssignedToGroupAndRole = new UserAssignedToGroupAndRole({
+				user_id: userMapped.id,
+				group_id: group_id,
+				role_id: role_id,
+			});
+
+			await this.userAssignedToGroupAndRoleRepository.insert(
+				userAssignedToGroupAndRole
+			);
 		}
 	}
 

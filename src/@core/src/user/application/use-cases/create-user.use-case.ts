@@ -14,9 +14,6 @@ export namespace CreateUserUseCase {
 		) {}
 
 		async execute(input: Input): Promise<Output> {
-			console.log(this.userRepository);
-			console.log(this.groupRepository);
-			console.log(this.roleRepository);
 			if (input) {
 				const group = await this.groupRepository.search(
 					new GroupRepository.SearchParams({

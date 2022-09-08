@@ -4,7 +4,8 @@ import {
 	RoleRepository,
 	UserAssignedToGroupAndRoleRepository,
 } from '#access/domain/repository';
-import { NotFoundError } from '#seedwork/domain';
+import { Customer, CustomerRepository } from '#customer/domain';
+import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import { User } from '../../domain/entities/user';
 import UserRepository from '../../domain/repository/user.repository';
@@ -16,29 +17,48 @@ export namespace CreateUserUseCase {
 			private userRepository: UserRepository.Repository,
 			private groupRepository: GroupRepository.Repository,
 			private roleRepository: RoleRepository.Repository,
-			private userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleRepository.Repository
+			private userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleRepository.Repository,
+			private customerRepository: CustomerRepository.Repository
 		) {}
 
 		async execute(input: Input): Promise<Output> {
 			let group_id;
 			let role_id;
 
-			({ group_id, role_id } = await this.ValidateGroupAndRole(input, group_id, role_id));
+			({ group_id, role_id } = await this.ValidateGroupAndRole(
+				input,
+				group_id,
+				role_id
+			));
 
 			const entity = new User(input);
 			await this.userRepository.insert(entity);
 			const userMapped = UserOutputMapper.toOutput(entity);
 
-			await this.AssignUserToGroupAndRole(
-				userMapped,
-				group_id,
-				role_id
-			);
+			await this.AssignUserToGroupAndRole(userMapped, group_id, role_id);
+
+			this.InsertDataByGroup(input, userMapped);
 
 			return userMapped;
 		}
 
-		private async ValidateGroupAndRole(input: Input, group_id: any, role_id: any) {
+		private InsertDataByGroup(input: Input, userMapped: UserOutput) {
+			if (input.group === 'customer') {
+				const customer = new Customer({					
+					name: input.name,					
+					email: input.email,					
+				}, new UniqueEntityId(userMapped.id));
+				this.customerRepository.insert(customer);
+			} else if (input.group === 'vet') {
+				// Insert data to vet table
+			}
+		}
+
+		private async ValidateGroupAndRole(
+			input: Input,
+			group_id: any,
+			role_id: any
+		) {
 			if (input) {
 				const group = await this.groupRepository.search(
 					new GroupRepository.SearchParams({

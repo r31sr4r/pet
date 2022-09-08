@@ -8,10 +8,14 @@ import {
 	UserAssignedToGroupAndRoleSequelize,
 } from '#access/infra';
 import { Group, Role } from '#access/domain';
+import { CustomerSequelize } from '#customer/infra';
+import { PetSequelize } from '#pet/infra';
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
 const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
 const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
+const { CustomerSequelizeRepository, CustomerModel } = CustomerSequelize;
+const { PetModel } = PetSequelize;
 const {
 	UserAssignedToGroupAndRoleSequelizeRepository,
 	UserAssignedToGroupAndRoleModel,
@@ -23,21 +27,34 @@ describe('CreateUserUseCase Integrations Tests', () => {
 	let groupRepository: GroupSequelize.GroupSequelizeRepository;
 	let roleRepository: RoleSequelize.RoleSequelizeRepository;
 	let userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleSequelize.UserAssignedToGroupAndRoleSequelizeRepository;
+	let customerRepository: CustomerSequelize.CustomerSequelizeRepository;
 
-	setupSequelize({ models: [UserModel, GroupModel, RoleModel, UserAssignedToGroupAndRoleModel] });
+	setupSequelize({
+		models: [
+			UserModel,
+			GroupModel,
+			RoleModel,
+			UserAssignedToGroupAndRoleModel,
+			CustomerModel,
+			PetModel,
+		],
+	});
 
 	beforeEach(() => {
 		repository = new UserSequelizeRepository(UserModel);
 		groupRepository = new GroupSequelizeRepository(GroupModel);
 		roleRepository = new RoleSequelizeRepository(RoleModel);
-		userAssignedToGroupAndRoleRepository = new UserAssignedToGroupAndRoleSequelizeRepository(
-			UserAssignedToGroupAndRoleModel
-		);
+		userAssignedToGroupAndRoleRepository =
+			new UserAssignedToGroupAndRoleSequelizeRepository(
+				UserAssignedToGroupAndRoleModel
+			);
+		customerRepository = new CustomerSequelizeRepository(CustomerModel);
 		useCase = new CreateUserUseCase.UseCase(
 			repository,
 			groupRepository,
 			roleRepository,
-			userAssignedToGroupAndRoleRepository
+			userAssignedToGroupAndRoleRepository,
+			customerRepository
 		);
 	});
 
@@ -74,7 +91,7 @@ describe('CreateUserUseCase Integrations Tests', () => {
 
 	it('should create a new user', async () => {
 		const group = new Group({
-			name: 'some-group-name',
+			name: 'customer',
 			description: 'some-group-description',
 		});
 

@@ -44,7 +44,7 @@ export namespace CreateUserUseCase {
 		}
 
 		private InsertDataByGroup(input: Input, userMapped: UserOutput) {
-			if (input.group === 'customer') {
+			if (input.group.toLowerCase() === 'customer') {
 				const customer = new Customer(
 					{
 						name: input.name,

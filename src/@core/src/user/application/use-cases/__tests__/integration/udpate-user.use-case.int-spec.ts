@@ -12,6 +12,7 @@ import {
 	UserAssignedToGroupAndRoleSequelize,
 } from '#access/infra';
 import { CustomerSequelize } from '#customer/infra';
+import { PetSequelize } from '#pet/infra';
 
 const chance = _chance();
 
@@ -23,6 +24,7 @@ const {
 	UserAssignedToGroupAndRoleSequelizeRepository,
 	UserAssignedToGroupAndRoleModel,
 } = UserAssignedToGroupAndRoleSequelize;
+const { PetModel } = PetSequelize;
 
 describe('UpdateUserUseCase Integration Tests', () => {
 	let useCase: UpdateUserUseCase.UseCase;
@@ -39,7 +41,8 @@ describe('UpdateUserUseCase Integration Tests', () => {
 			GroupModel,
 			RoleModel,
 			UserAssignedToGroupAndRoleModel,
-			CustomerModel
+			CustomerModel,
+			PetModel		
 		],
 	});
 

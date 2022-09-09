@@ -55,14 +55,14 @@ describe('Customer Unit Tests', () => {
 			name: 'Jean-Paul Sartre',
 			email: 'jeanps@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 		});
 		props = omit(customer.props, ['created_at', 'updated_at']);
 		expect(props).toStrictEqual({
 			name: 'Jean-Paul Sartre',
 			email: 'jeanps@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 			gender: null,
 			birth_date: null,
 			is_active: true,
@@ -72,7 +72,7 @@ describe('Customer Unit Tests', () => {
 			name: 'Jean-Paul Sartre',
 			email: 'jeanps@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 			gender: 'Male',
 		});
 		props = omit(customer.props, ['created_at', 'updated_at']);
@@ -80,7 +80,7 @@ describe('Customer Unit Tests', () => {
 			name: 'Jean-Paul Sartre',
 			email: 'jeanps@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 			gender: 'Male',
 			birth_date: null,
 			is_active: true,
@@ -146,7 +146,7 @@ describe('Customer Unit Tests', () => {
 			name: 'Jean-Paul Sartre',
 			email: 'jeanp@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 			birth_date,
 			created_at,
 			pets: [pet1, pet2],
@@ -157,7 +157,7 @@ describe('Customer Unit Tests', () => {
 			name: 'Jean-Paul Sartre',
 			email: 'jeanp@mail.com',
 			cellphone: '(11) 99999-9999',
-			cpf: '123.456.789-00',
+			cpf: '12345678900',
 			gender: null,
 			birth_date,
 			is_active: true,
@@ -248,15 +248,15 @@ describe('Customer Unit Tests', () => {
 		});
 		expect(customer.cpf).toBeNull();
 
-		customer['cpf'] = '123.456.789-00';
-		expect(customer.cpf).toBe('123.456.789-00');
+		customer['cpf'] = '12345678900';
+		expect(customer.cpf).toBe('12345678900');
 
 		customer = new Customer({
 			name: 'Joey Ramone',
 			email: 'joeyr@mail.com',
-			cpf: '123.456.789-99',
+			cpf: '12345678999',
 		});
-		expect(customer.cpf).toBe('123.456.789-99');
+		expect(customer.cpf).toBe('12345678999');
 
 		customer['cpf'] = undefined;
 		expect(customer.cpf).toBeNull();

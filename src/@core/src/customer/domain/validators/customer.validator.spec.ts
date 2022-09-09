@@ -99,7 +99,7 @@ describe('Customer Validator Tests', () => {
 				cpf: '',
 			},
 		}).containsErrorMessages({
-			cpf: ['Incorrect format for cpf. Expected: xxx.xxx.xxx-xx'],
+			cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
 		});
 
 		expect({
@@ -111,8 +111,20 @@ describe('Customer Validator Tests', () => {
 				cpf: '999.999.999.',
 			},
 		}).containsErrorMessages({
-			cpf: ['Incorrect format for cpf. Expected: xxx.xxx.xxx-xx'],
+			cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
 		});
+
+		expect({
+			validator,
+			data: {
+				name: 'Some name',
+				email: 'mail@mail.com',
+				cellphone: '+55 (11) 98985-6561',
+				cpf: '999.999.999-99',
+			},
+		}).containsErrorMessages({
+			cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
+		});		
 	});
 
 	test('invalidation cases for gender field', () => {
@@ -180,20 +192,20 @@ describe('Customer Validator Tests', () => {
 				name: 'a'.repeat(100),
 				email: 'somemail@some.com',
 				cellphone: '(11) 98985-6561',
-				cpf: '999.999.999-99',
+				cpf: '99999999999',
 				gender: 'Female',				
 			},
 			{
 				name: 'Elvis',
 				email: 'elvis@some.com',
 				cellphone: '+55 (11) 98985-6561',
-				cpf: '999.999.999-99',
+				cpf: '99999999999',
 			},
 			{
 				name: 'Elvis Presley',
 				email: 'elvis.presley@some.com',
 				cellphone: '+55 (11) 98985-6561',
-				cpf: '999.999.999-99',
+				cpf: '99999999999',
 				is_active: false,
 			},
 			{

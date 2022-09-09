@@ -78,7 +78,7 @@ export namespace CustomerSequelize {
 					name: chance.name({ middle: true }),
 					email: chance.email({ domain: 'example.com' }),
 					cellphone: '88988887777',
-					cpf: chance.cpf(),
+					cpf: chance.cpf().replace(/\D/g, ''),
 					gender: chance.gender(),
 					birth_date: chance.birthday(),
 					is_active: chance.bool(),

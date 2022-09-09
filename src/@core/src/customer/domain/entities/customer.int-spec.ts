@@ -107,7 +107,7 @@ describe('Customer Integration Tests', () => {
 						cpf: '145678901',
 					})
 			).containsErrorMessages({
-				cpf: ['Incorrect format for cpf. Expected: xxx.xxx.xxx-xx'],
+				cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
 			});
 
 			expect(
@@ -118,7 +118,7 @@ describe('Customer Integration Tests', () => {
 						cpf: 'mycpf',
 					})
 			).containsErrorMessages({
-				cpf: ['Incorrect format for cpf. Expected: xxx.xxx.xxx-xx'],
+				cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
 			});
 		});
 
@@ -173,20 +173,20 @@ describe('Customer Integration Tests', () => {
 				name: 'John Doe',
 				email: 'somemail@mail.com',
 				cellphone: '+55 (11) 99999-9999',
-				cpf: '123.456.789-10',
+				cpf: '12345678910',
 			});
 			/* NOSONAR */ new Customer({
 				name: 'John Doe',
 				email: 'somemail@mail.com',
 				cellphone: '+55 (11) 99999-9999',
-				cpf: '123.456.789-10',
+				cpf: '12345678910',
 				gender: 'Male',
 			});
 			/* NOSONAR */ new Customer({
 				name: 'John Doe',
 				email: 'somemail@mail.com',
 				cellphone: '+55 (11) 99999-9999',
-				cpf: '123.456.789-10',
+				cpf: '12345678910',
 				gender: 'Male',
 				birth_date: new Date('2020-04-03'),
 				is_active: false,
@@ -195,7 +195,7 @@ describe('Customer Integration Tests', () => {
 				name: 'John Doe',
 				email: 'somemail@mail.com',
 				cellphone: '+55 (11) 99999-9999',
-				cpf: '123.456.789-10',
+				cpf: '12345678910',
 				gender: 'Male',
 				birth_date: new Date('2020-04-03'),
 			});
@@ -308,7 +308,7 @@ describe('Customer Integration Tests', () => {
 					5 as any
 				)
 			).containsErrorMessages({
-				cpf: ['Incorrect format for cpf. Expected: xxx.xxx.xxx-xx'],
+				cpf: ['Incorrect format for cpf. Expected: xxxxxxxxxxx'],
 			});
 		});
 
@@ -323,7 +323,7 @@ describe('Customer Integration Tests', () => {
 					'John Doe',
 					'somemail@mail.com',
 					'+55 11 98745-7878',
-					'123.456.789-00',
+					'12345678910',
 					5 as any
 				)
 			).containsErrorMessages({
@@ -342,7 +342,7 @@ describe('Customer Integration Tests', () => {
 					'John Doe',
 					'somemail@mail.com',
 					'+55 11 98745-7878',
-					'123.456.789-00',
+					'12345678910',
 					'Male',
 					'2021-04-02' as any
 				)
@@ -368,20 +368,20 @@ describe('Customer Integration Tests', () => {
 				'Joey',
 				'somemail2@mail.com',
 				'+55 (11) 99999-9999',
-				'123.456.789-00'
+				'12345678910'
 			);
 			customer.update(
 				'Sara Doe',
 				'somemail2@mail.com',
 				'+55 (11) 99999-9999',
-				'123.456.789-00',
+				'12345678910',
 				'Female'
 			);		
 			customer.update(
 				'Sara Doe',
 				'somemail2@mail.com',
 				'+55 (11) 99999-9999',
-				'123.456.789-00',
+				'12345678910',
 				'Female',
 				new Date('2021-04-02')
 			);					
@@ -389,7 +389,7 @@ describe('Customer Integration Tests', () => {
 				'Sara Doe',
 				'somemail2@mail.com',
 				'+55 (11) 99999-9999',
-				'123.456.789-00',
+				'12345678910',
 				'Female',
 				new Date('2021-04-02'),
 			);		

@@ -30,9 +30,9 @@ export class CustomerRules {
 	@IsOptional()	
 	cellphone: string;
 
-	@Matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, {
+	@Matches(/^\d{11}$/, {
 		message:
-			'Incorrect format for cpf. Expected: xxx.xxx.xxx-xx',
+			'Incorrect format for cpf. Expected: xxxxxxxxxxx',
 	})
 	@IsOptional()
 	cpf: string;

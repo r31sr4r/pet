@@ -11,7 +11,7 @@ describe('CustomerPresenter Unit Tests', () => {
                 name: 'Customer 1',
                 email: 'user1@gmail.com',
                 cellphone: '+55 (11) 99999-9999',
-                cpf: '123.456.789-00',
+                cpf: '12345678900',
                 gender: 'Male',
                 birth_date,
                 is_active: true,
@@ -24,7 +24,7 @@ describe('CustomerPresenter Unit Tests', () => {
             expect(presenter.name).toBe('Customer 1');
             expect(presenter.email).toBe('user1@gmail.com');
             expect(presenter.cellphone).toBe('+55 (11) 99999-9999');
-            expect(presenter.cpf).toBe('123.456.789-00');
+            expect(presenter.cpf).toBe('12345678900');
             expect(presenter.gender).toBe('Male');
             expect(presenter.birth_date).toBe(birth_date);
             expect(presenter.is_active).toBe(true);
@@ -41,7 +41,7 @@ describe('CustomerPresenter Unit Tests', () => {
             name: 'Customer 1',
             email: 'user1@gmail.com',
             cellphone: '+55 (11) 99999-9999',
-            cpf: '123.456.789-00',
+            cpf: '12345678900',
             gender: 'Female',
             birth_date,
             is_active: true,
@@ -57,7 +57,7 @@ describe('CustomerPresenter Unit Tests', () => {
             name: 'Customer 1',
             email: 'user1@gmail.com',
             cellphone: '+55 (11) 99999-9999',
-            cpf: '123.456.789-00',
+            cpf: '12345678900',
             gender: 'Female',
             birth_date: birth_date.toISOString(),            
             is_active: true,

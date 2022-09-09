@@ -11,12 +11,14 @@ import {
 	RoleSequelize,
 	UserAssignedToGroupAndRoleSequelize,
 } from '#access/infra';
+import { CustomerSequelize } from '#customer/infra';
 
 const chance = _chance();
 
 const { UserSequelizeRepository, UserModel } = UserSequelize;
 const { GroupSequelizeRepository, GroupModel } = GroupSequelize;
 const { RoleSequelizeRepository, RoleModel } = RoleSequelize;
+const { CustomerSequelizeRepository, CustomerModel } = CustomerSequelize;
 const {
 	UserAssignedToGroupAndRoleSequelizeRepository,
 	UserAssignedToGroupAndRoleModel,
@@ -29,6 +31,7 @@ describe('UpdateUserUseCase Integration Tests', () => {
 	let groupRepository: GroupSequelize.GroupSequelizeRepository;
 	let roleRepository: RoleSequelize.RoleSequelizeRepository;
 	let userAssignedToGroupAndRoleRepository: UserAssignedToGroupAndRoleSequelize.UserAssignedToGroupAndRoleSequelizeRepository;
+	let customerRepository: CustomerSequelize.CustomerSequelizeRepository;
 
 	setupSequelize({
 		models: [
@@ -36,6 +39,7 @@ describe('UpdateUserUseCase Integration Tests', () => {
 			GroupModel,
 			RoleModel,
 			UserAssignedToGroupAndRoleModel,
+			CustomerModel
 		],
 	});
 
@@ -47,11 +51,13 @@ describe('UpdateUserUseCase Integration Tests', () => {
 		userAssignedToGroupAndRoleRepository = new UserAssignedToGroupAndRoleSequelizeRepository(
 			UserAssignedToGroupAndRoleModel
 		);
+		customerRepository = new CustomerSequelizeRepository(CustomerModel);
 		createUseCase = new CreateUserUseCase.UseCase(
 			repository,
 			groupRepository,
 			roleRepository,
-			userAssignedToGroupAndRoleRepository
+			userAssignedToGroupAndRoleRepository,
+			customerRepository
 		);
 	});
 

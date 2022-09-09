@@ -7,6 +7,8 @@ import { USER_PROVIDERS } from '../users/users.providers';
 import { UserSequelize } from 'pet-core/user/infra';
 import { GROUP_PROVIDERS } from '../groups/groups.providers';
 import { ROLE_PROVIDERS } from '../roles/roles.providers';
+import { CUSTOMER_PROVIDERS } from '../customers/customers.providers';
+import { CustomerSequelize } from 'pet-core/customer/infra';
 
 @Module({
     imports: [
@@ -14,7 +16,8 @@ import { ROLE_PROVIDERS } from '../roles/roles.providers';
             UserAssignedToGroupAndRoleSequelize.UserAssignedToGroupAndRoleModel,
             UserSequelize.UserModel,    
             GroupSequelize.GroupModel,
-            RoleSequelize.RoleModel  
+            RoleSequelize.RoleModel,
+            CustomerSequelize.CustomerModel
         ]),
     ],
     controllers: [UsersGroupsRolesController],
@@ -26,7 +29,9 @@ import { ROLE_PROVIDERS } from '../roles/roles.providers';
         ...Object.values(GROUP_PROVIDERS.REPOSITORIES),
         ...Object.values(GROUP_PROVIDERS.USE_CASES),
         ...Object.values(ROLE_PROVIDERS.REPOSITORIES),
-        ...Object.values(ROLE_PROVIDERS.USE_CASES)
+        ...Object.values(ROLE_PROVIDERS.USE_CASES),
+        ...Object.values(CUSTOMER_PROVIDERS.REPOSITORIES),
+        ...Object.values(CUSTOMER_PROVIDERS.USE_CASES) 
     ],
 })
 export class UsersGroupsRolesModule {}

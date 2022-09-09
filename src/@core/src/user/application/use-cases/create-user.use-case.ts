@@ -4,7 +4,8 @@ import {
 	RoleRepository,
 	UserAssignedToGroupAndRoleRepository,
 } from '#access/domain/repository';
-import { Customer, CustomerRepository } from '#customer/domain';
+import { Customer } from '#customer/domain/entities';
+import { CustomerRepository } from '#customer/domain/repository';
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import { User } from '../../domain/entities/user';
@@ -44,10 +45,13 @@ export namespace CreateUserUseCase {
 
 		private InsertDataByGroup(input: Input, userMapped: UserOutput) {
 			if (input.group === 'customer') {
-				const customer = new Customer({					
-					name: input.name,					
-					email: input.email,					
-				}, new UniqueEntityId(userMapped.id));
+				const customer = new Customer(
+					{
+						name: input.name,
+						email: input.email,
+					},
+					new UniqueEntityId(userMapped.id)
+				);
 				this.customerRepository.insert(customer);
 			} else if (input.group === 'vet') {
 				// Insert data to vet table

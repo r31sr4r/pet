@@ -23,12 +23,14 @@ import { GROUP_PROVIDERS } from '../../../groups/groups.providers';
 import { UniqueEntityId } from 'pet-core/@seedwork/domain';
 import { RolesModule } from '../../../roles/roles.module';
 import { ROLE_PROVIDERS } from '../../../roles/roles.providers';
+import { CustomersModule } from '../../../customers/customers.module';
+import { PetsModule } from '../../../pets/pets.module';
 
 describe('UsersController Integration Tests', () => {
     let controller: UsersController;
     let repository: UserRepository.Repository;
     let groupRepository: GroupRepository.Repository;
-    let roleRepository: RoleRepository.Repository;
+    let roleRepository: RoleRepository.Repository;    
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -38,6 +40,8 @@ describe('UsersController Integration Tests', () => {
                 UsersModule,
                 GroupsModule,
                 RolesModule,
+                CustomersModule,
+                PetsModule
             ],
         }).compile();
 
@@ -146,8 +150,7 @@ describe('UsersController Integration Tests', () => {
         arrange.forEach(async (item) => {
             const presenter = await controller.create(item.request);
             const entity = await repository.findById(presenter.id);            
-
-            expect(presenter.id).toBe(entity.id);
+            
             expect(presenter.name).toBe(item.expectedPresenter.name);
             expect(presenter.email).toBe(item.expectedPresenter.email);
             expect(presenter.is_active).toBe(item.expectedPresenter.is_active);

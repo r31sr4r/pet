@@ -6,9 +6,11 @@ import {
     ListCustomersUseCase,
     UpdateCustomerUseCase,
 } from 'pet-core/customer/application';
-import { CustomerInMemoryRepository, CustomerSequelize } from 'pet-core/customer/infra';
-import { getModelToken } from '@nestjs/sequelize'
-
+import {
+    CustomerInMemoryRepository,
+    CustomerSequelize,
+} from 'pet-core/customer/infra';
+import { getModelToken } from '@nestjs/sequelize';
 
 export namespace CUSTOMER_PROVIDERS {
     export namespace REPOSITORIES {
@@ -19,9 +21,12 @@ export namespace CUSTOMER_PROVIDERS {
 
         export const CUSTOMER_SEQUELIZE_REPOSITORY = {
             provide: 'CustomerSequelizeRepository',
-            useFactory: (customerModel: typeof CustomerSequelize.CustomerModel) => {
-                return new CustomerSequelize.CustomerSequelizeRepository(customerModel);
-
+            useFactory: (
+                customerModel: typeof CustomerSequelize.CustomerModel,
+            ) => {
+                return new CustomerSequelize.CustomerSequelizeRepository(
+                    customerModel,
+                );
             },
             inject: [getModelToken(CustomerSequelize.CustomerModel)],
         };

@@ -13,9 +13,18 @@ import { ROLE_PROVIDERS } from '../roles/roles.providers';
 import { CUSTOMER_PROVIDERS } from '../customers/customers.providers';
 import { USERS_GROUPS_ROLES_PROVIDERS } from '../users-groups-roles/users-groups-roles.providers';
 import { CustomerSequelize } from 'pet-core/customer/infra';
+import { PassportModule } from '@nestjs/passport'
+import { JwtModule } from '@nestjs/jwt'
+import { UsersService } from './users.service';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
     imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        JwtModule.register({
+            secret: 'secretKey987123',
+            signOptions: { expiresIn: 3600 },
+        }),
         SequelizeModule.forFeature([
             UserSequelize.UserModel,
             GroupSequelize.GroupModel,
@@ -36,6 +45,11 @@ import { CustomerSequelize } from 'pet-core/customer/infra';
         ...Object.values(ROLE_PROVIDERS.USE_CASES),
         ...Object.values(USERS_GROUPS_ROLES_PROVIDERS.REPOSITORIES),
         ...Object.values(USERS_GROUPS_ROLES_PROVIDERS.USE_CASES),
+        UsersService,
+        JwtStrategy,
     ],
+    exports: [
+        JwtStrategy, PassportModule
+    ]
 })
 export class UsersModule {}

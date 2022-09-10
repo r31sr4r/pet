@@ -16,13 +16,16 @@ import {
   Put,
   HttpCode,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { SearchCustomerDto } from './dto/search-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerPresenter } from './presenter/customer.presenter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('customers')
+@UseGuards(AuthGuard())
 export class CustomersController {
   @Inject(CreateCustomerUseCase.UseCase)
   private createUseCase: CreateCustomerUseCase.UseCase;

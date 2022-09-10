@@ -16,14 +16,16 @@ import {
     Put,
     HttpCode,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { SearchPetDto } from './dto/search-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetPresenter } from './presenter/pet.presenter';
-
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('pets')
+@UseGuards(AuthGuard())
 export class PetsController {
     @Inject(CreatePetUseCase.UseCase)
     private createUseCase: CreatePetUseCase.UseCase;

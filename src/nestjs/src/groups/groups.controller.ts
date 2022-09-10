@@ -16,13 +16,16 @@ import {
   Put,
   HttpCode,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { SearchGroupDto } from './dto/search-group.dto';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { GroupPresenter } from './presenter/group.presenter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('groups')
+@UseGuards(AuthGuard())
 export class GroupsController {
   @Inject(CreateGroupUseCase.UseCase)
   private createUseCase: CreateGroupUseCase.UseCase;

@@ -9,6 +9,7 @@ import { GROUP_PROVIDERS } from '../groups/groups.providers';
 import { ROLE_PROVIDERS } from '../roles/roles.providers';
 import { CUSTOMER_PROVIDERS } from '../customers/customers.providers';
 import { CustomerSequelize } from 'pet-core/customer/infra';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { CustomerSequelize } from 'pet-core/customer/infra';
             RoleSequelize.RoleModel,
             CustomerSequelize.CustomerModel
         ]),
+        UsersModule,
     ],
     controllers: [UsersGroupsRolesController],
     providers: [

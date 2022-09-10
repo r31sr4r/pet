@@ -14,12 +14,15 @@ import {
     Inject,    
     HttpCode,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { SearchUsersGroupsRoleDto } from './dto/search-users-groups-role.dto';
 import { CreateUsersGroupsRoleDto } from './dto/create-users-groups-role.dto';
 import { UsersGroupsRolesPresenter } from './presenter/users-groups-roles.presenter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users-groups-roles')
+@UseGuards(AuthGuard())
 export class UsersGroupsRolesController {
     @Inject(CreateUserAssignedToGroupAndRoleUseCase.UseCase)
     private createUseCase: CreateUserAssignedToGroupAndRoleUseCase.UseCase;

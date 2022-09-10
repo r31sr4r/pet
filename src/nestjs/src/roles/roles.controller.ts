@@ -16,13 +16,16 @@ import {
     Put,
     HttpCode,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { SearchRoleDto } from './dto/search-role.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolePresenter } from './presenter/role.presenter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('roles')
+@UseGuards(AuthGuard())
 export class RolesController {
     @Inject(CreateRoleUseCase.UseCase)
     private createUseCase: CreateRoleUseCase.UseCase;

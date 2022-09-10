@@ -11,7 +11,16 @@ import { RolesModule } from './roles/roles.module';
 import { UsersGroupsRolesModule } from './users-groups-roles/users-groups-roles.module';
 
 @Module({
-    imports: [ConfigModule.forRoot(), PetsModule, DatabaseModule, UsersModule, CustomersModule, GroupsModule, RolesModule, UsersGroupsRolesModule],
+    imports: [
+        ConfigModule.forRoot(),
+        PetsModule,
+        DatabaseModule,
+        UsersModule,
+        CustomersModule,
+        GroupsModule,
+        RolesModule,
+        UsersGroupsRolesModule,
+    ],
     controllers: [AppController],
     providers: [AppService],
 })

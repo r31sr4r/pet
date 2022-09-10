@@ -9,10 +9,9 @@ describe('UserService', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [UsersService, JwtService, UsersModule],
-        }).compile();        
+        }).compile();
 
         service = module.get<UsersService>(UsersService);
-
     });
 
     it('should be defined', () => {
@@ -20,7 +19,15 @@ describe('UserService', () => {
     });
 
     it('should return a valid token', async () => {
-        const user = { id: 1, username: 'test' };
+        const user = {
+            email: 'somemail@mail.com',
+            profile: [
+                {
+                    group: 'customer',
+                    role: 'user',
+                },
+            ],
+        };
         const token = await service.signIn(user);
         expect(token).toBeDefined();
         expect(token.accessToken).toBeDefined();

@@ -4,6 +4,7 @@ import {
     GetUserUseCase,
     ListUsersUseCase,
     UpdateUserUseCase,
+    AuthUserUseCase,
 } from 'pet-core/user/application';
 import {
     Controller,
@@ -40,6 +41,9 @@ export class UsersController {
     @Inject(ListUsersUseCase.UseCase)
     private listUseCase: ListUsersUseCase.UseCase;
 
+    @Inject(AuthUserUseCase.UseCase)
+    private authUserUseCase: AuthUserUseCase.UseCase;
+
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
         const output = await this.createUseCase.execute(createUserDto);
@@ -72,15 +76,20 @@ export class UsersController {
         let usersItems = users.items.map((user) => {
             return new UserPresenter(user);
         });
-        users.items = usersItems;      
+        users.items = usersItems;
 
         return users;
     }
 
     @Post('/signin')
-    signIn(
-        @Body() authCredentialsDto: AuthCredentialsDto,
-    ): Promise<{ accessToken: string }> {
-        return this.authService.signIn(authCredentialsDto);
-    }    
+    async signIn(@Body() authCredentialsDto: AuthCredentialsDto) {
+        return this.authUserUseCase.execute(authCredentialsDto);
+    }
+
+    // @Post('/signin')
+    // signIn(
+    //     @Body() authCredentialsDto: AuthCredentialsDto,
+    // ): Promise<{ accessToken: string }> {
+    //     return this.authService.signIn(authCredentialsDto);
+    // }
 }

@@ -1,8 +1,7 @@
 import { UnauthorizedError } from '#seedwork/domain';
-import { Crypt } from '#seedwork/infra';
+import { Crypt } from '#seedwork/infra/utils/crypt/index';
 import { default as DefaultUseCase } from '../../../@seedwork/application/use-case';
 import UserRepository from '../../domain/repository/user.repository';
-import { UserOutput, UserOutputMapper } from '../dto/user-output';
 import {
 	GroupRepository,
 	RoleRepository,

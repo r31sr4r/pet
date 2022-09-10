@@ -1,5 +1,6 @@
 // created from 'create-ts-index'
 
+export * from './auth-user.use-case';
 export * from './create-user.use-case';
 export * from './delete-user.use-case';
 export * from './get-user.use-case';

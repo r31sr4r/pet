@@ -9,7 +9,8 @@ import {
     DeleteUserUseCase,
     GetUserUseCase,
     ListUsersUseCase,
-    UpdateUserUseCase,
+    UpdateUserUseCase, 
+    AuthUserUseCase       
 } from 'pet-core/user/application';
 import { UserInMemoryRepository, UserSequelize } from 'pet-core/user/infra';
 import { getModelToken } from '@nestjs/sequelize';
@@ -99,5 +100,30 @@ export namespace USER_PROVIDERS {
             },
             inject: [REPOSITORIES.USER_REPOSITORY.provide],
         };
+
+        export const AUTH_USER = {
+            provide: AuthUserUseCase.UseCase,
+            useFactory: (
+                userRepo: UserRepository.Repository,
+                groupRepo: GroupRepository.Repository,
+                roleRepo: RoleRepository.Repository,
+                usersGroupsRolesRepo: UserAssignedToGroupAndRoleRepository.Repository,                
+            ) => {
+                return new AuthUserUseCase.UseCase(
+                    userRepo,
+                    groupRepo,
+                    roleRepo,
+                    usersGroupsRolesRepo,                    
+                );
+            },
+            inject: [
+                REPOSITORIES.USER_REPOSITORY.provide,
+                GROUP_PROVIDERS.REPOSITORIES.GROUP_REPOSITORY.provide,
+                ROLE_PROVIDERS.REPOSITORIES.ROLE_REPOSITORY.provide,
+                USERS_GROUPS_ROLES_PROVIDERS.REPOSITORIES
+                    .USERS_GROUPS_ROLES_REPOSITORY.provide,                                
+            ],
+        };
+
     }
 }

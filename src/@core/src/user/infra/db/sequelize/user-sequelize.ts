@@ -68,6 +68,17 @@ export namespace UserSequelize {
 
 		sortableFields: string[] = ['name', 'email', 'created_at'];
 
+		async findByEmail(name: string): Promise<User> {
+			const model = await this.userModel.findOne({
+				where: { email: name },
+				rejectOnEmpty: new NotFoundError(
+					`Entity not found using email ${name}`
+				),
+			});
+			return UserModelMapper.toEntity(model);
+		}
+
+
 		async insert(entity: User): Promise<void> {
 			try {
 				await this.userModel.create(entity.toJSON());				

@@ -496,64 +496,64 @@ describe('UserRepository Integration Tests', () => {
 	});
 
 	describe('update method', () => {
-
-	it('should throw error on update when user not found', async () => {
-		const user = new User({
-			name: 'some name',
-			email: 'somemail@mail.com',
-			password: 'Some password1',
+		it('should throw error on update when user not found', async () => {
+			const user = new User({
+				name: 'some name',
+				email: 'somemail@mail.com',
+				password: 'Some password1',
+			});
+			await expect(repository.update(user)).rejects.toThrow(
+				new NotFoundError(`Entity not found using ID ${user.id}`)
+			);
 		});
-		await expect(repository.update(user)).rejects.toThrow(
-			new NotFoundError(`Entity not found using ID ${user.id}`)
-		);
+
+		it('should throw an error if email is already registered', async () => {
+			const user = new User({
+				name: 'some name',
+				email: 'emailuser1@mail.com',
+				password: 'Some password1',
+			});
+
+			await repository.insert(user);
+
+			const user2 = new User({
+				name: 'other name',
+				email: 'somemail2@mail.com',
+				password: 'Some password2',
+			});
+
+			await repository.insert(user2);
+
+			user2['email'] = 'emailuser1@mail.com';
+
+			await expect(repository.update(user2)).rejects.toThrow(
+				new ValidationError(
+					`Entity already exists using email ${user2.email}`
+				)
+			);
+		});
+
+		it('should update a user', async () => {
+			const user = new User({
+				name: 'some name',
+				email: 'somemail@mail.com',
+				password: 'Some password1',
+			});
+			await repository.insert(user);
+
+			user.update('some name updated', user.email);
+			await repository.update(user);
+			let entityFound = await repository.findById(user.id);
+
+			expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
+
+			user.update('some name updated', 'user.email@gmail.com');
+			await repository.update(user);
+			entityFound = await repository.findById(user.id);
+
+			expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
+		});
 	});
-
-	it('should throw an error if email is already registered', async () => {
-		const user = new User({
-			name: 'some name',
-			email: 'emailuser1@mail.com',
-			password: 'Some password1',
-		});
-
-		await repository.insert(user);
-
-		const user2 = new User({
-			name: 'other name',
-			email: 'somemail2@mail.com',
-			password: 'Some password2',
-		});
-
-		await repository.insert(user2);
-
-		user2['email'] = 'emailuser1@mail.com';
-
-		await expect(repository.update(user2)).rejects.toThrow(
-			new ValidationError(`Entity already exists using email ${user2.email}`)
-		);
-	});
-
-	it('should update a user', async () => {
-		const user = new User({
-			name: 'some name',
-			email: 'somemail@mail.com',
-			password: 'Some password1',
-		});
-		await repository.insert(user);
-
-		user.update('some name updated', user.email);
-		await repository.update(user);
-		let entityFound = await repository.findById(user.id);
-
-		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
-
-		user.update('some name updated', 'user.email@gmail.com');
-		await repository.update(user);
-		entityFound = await repository.findById(user.id);
-
-		expect(entityFound.toJSON()).toStrictEqual(user.toJSON());
-	});
-
-});
 
 	it('should throw error on delete when user not found', async () => {
 		await expect(repository.delete('fake ID')).rejects.toThrow(
@@ -615,7 +615,32 @@ describe('UserRepository Integration Tests', () => {
 		});
 
 		await expect(repository.insert(user2)).rejects.toThrow(
-			new ValidationError(`Entity already exists using email ${user2.email}`)
+			new ValidationError(
+				`Entity already exists using email ${user2.email}`
+			)
 		);
+	});
+
+	describe('findByEmail Method', () => {
+		it('should throw an error when email has not been found', async () => {
+			await expect(repository.findByEmail('fake email')).rejects.toThrow(
+				new NotFoundError('Entity not found using email fake email')
+			);
+		});
+
+		it('should return a user when email has been found', async () => {
+			const user = new User({
+				name: 'some name',
+				email: 'somemail@mail.com',
+				password: 'Some password1',
+			});
+
+			await repository.insert(user);
+			const userFound = await repository.findByEmail(user.email);
+
+			expect(userFound.toJSON()).toStrictEqual(user.toJSON());
+			expect(userFound).toBeInstanceOf(User);
+			expect(user.email).toBe(userFound.email);
+		});
 	});
 });

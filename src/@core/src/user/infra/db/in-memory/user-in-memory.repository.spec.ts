@@ -102,6 +102,45 @@ describe('UserInMemoryRepository Unit Tests', () => {
 
     });
 
+
+
+    it('should throw a error a NotFoundError when email was not found', async () => {
+        const items = [
+            new User({ name: 'Paul Mcartney', email: 'paulm@mail.com', password: 'Paulm1' }),
+            new User({ name: 'John Lennon', email: 'john@mail.com', password: 'John123' }),
+            new User({ name: 'Ringo Starr', email: 'rigon@mail.com', password: 'Ring0st4r' }),
+        ];
+
+        const emailToFind = 'paulmcartney@mail.com';
+        
+        items.forEach((item) => {
+            repository.insert(item);
+        });
+
+		await expect(repository.findByEmail(emailToFind)).rejects.toThrowError(
+			`Entity not found using email ${emailToFind}`
+		);        
+    });
+
+    it('should find a email', async () => {
+        const items = [
+            new User({ name: 'Paul Mcartney', email: 'paulm@mail.com', password: 'Paulm1' }),
+            new User({ name: 'John Lennon', email: 'john@mail.com', password: 'John123' }),
+            new User({ name: 'Ringo Starr', email: 'rigon@mail.com', password: 'Ring0st4r' }),
+        ];
+        
+        items.forEach((item) => {
+            repository.insert(item);
+        });
+
+        
+        const user = await repository.findByEmail('paulm@mail.com');
+
+        expect(user).toStrictEqual(items[0]);
+        
+    });
+    
+
     
 
 

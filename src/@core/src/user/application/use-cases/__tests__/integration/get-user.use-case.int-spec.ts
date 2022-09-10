@@ -23,7 +23,7 @@ describe('DeleteUserUseCase Integragion Tests', () => {
 		);
 	});
 
-	it('should delete a user', async () => {
+	it('should return a user', async () => {
 		const model = await UserModel.factory().create();
 
 		const foundModel = await useCase.execute({ id: model.id });

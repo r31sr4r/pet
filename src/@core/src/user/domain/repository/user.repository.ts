@@ -18,7 +18,9 @@ export namespace UserRepository {
 			Filter,
 			SearchParams,
 			SearchResult
-		> {}
+		> {
+			findByEmail(email: string): Promise<User | null>; 
+		}
 }
 
 export default UserRepository;

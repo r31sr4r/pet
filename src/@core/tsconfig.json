@@ -1,18 +1,16 @@
 {
-  "extends": "../../tsconfig.base.json",
+	"extends": "../../tsconfig.base.json",
 
-  "compilerOptions": {                          
-    "baseUrl": "./src",                                  
-    "paths": {
-      "#seedwork/*": ["./@seedwork/*"],
-      "#pet/*": ["./pet/*"],
-      "#access/*": ["./access/*"],
-      "#user/*": ["./user/*"],
-      "#customer/*": ["./customer/*"],
-    },
-    "outDir": "./dist",
-  },
-  "include": [
-    "./src"
-  ],
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"paths": {
+			"#seedwork/*": ["./@seedwork/*"],
+			"#pet/*": ["./pet/*"],
+			"#access/*": ["./access/*"],
+			"#user/*": ["./user/*"],
+			"#customer/*": ["./customer/*"]
+		},
+		"outDir": "./dist"
+	},
+	"include": ["./src"]
 }

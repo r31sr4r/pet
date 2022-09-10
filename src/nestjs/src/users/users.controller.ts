@@ -21,6 +21,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserPresenter } from './presenter/user.presenter';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Controller('users')
 export class UsersController {
@@ -75,4 +76,11 @@ export class UsersController {
 
         return users;
     }
+
+    @Post('/signin')
+    signIn(
+        @Body() authCredentialsDto: AuthCredentialsDto,
+    ): Promise<{ accessToken: string }> {
+        return this.authService.signIn(authCredentialsDto);
+    }    
 }

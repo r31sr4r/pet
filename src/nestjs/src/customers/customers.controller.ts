@@ -23,8 +23,11 @@ import { SearchCustomerDto } from './dto/search-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerPresenter } from './presenter/customer.presenter';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('customers')
+@ApiTags('Customers')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class CustomersController {
   @Inject(CreateCustomerUseCase.UseCase)

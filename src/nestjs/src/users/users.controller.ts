@@ -30,8 +30,10 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { UsersService } from './users.service';
 import { JwtPayload } from './dto/jwt-payload.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
@@ -60,6 +62,7 @@ export class UsersController {
     }
 
     @Put(':id')
+    @ApiBearerAuth()
     @UseGuards(AuthGuard())
     update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
         return this.updateUseCase.execute({
@@ -70,12 +73,14 @@ export class UsersController {
 
     @HttpCode(204)
     @Delete(':id')
+    @ApiBearerAuth()
     @UseGuards(AuthGuard())
     remove(@Param('id') id: string) {
         return this.deleteUseCase.execute({ id });
     }
 
     @Get(':id')
+    @ApiBearerAuth()
     @UseGuards(AuthGuard())
     async findOne(@Param('id') id: string) {
         const output = await this.getUseCase.execute({ id });
@@ -83,6 +88,7 @@ export class UsersController {
     }
 
     @Get()
+    @ApiBearerAuth()
     @UseGuards(AuthGuard())
     async search(@Query() searchParams: SearchUserDto) {
         let users = await this.listUseCase.execute(searchParams);

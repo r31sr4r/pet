@@ -29,6 +29,7 @@
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/sequelize": "^9.0.0",
+    "@nestjs/swagger": "^6.1.2",
     "@types/passport-jwt": "^3.0.6",
     "class-transformer": "^0.5.1",
     "joi": "^17.6.0",

@@ -23,8 +23,11 @@ import { SearchPetDto } from './dto/search-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetPresenter } from './presenter/pet.presenter';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @Controller('pets')
+@ApiTags('Pets')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class PetsController {
     @Inject(CreatePetUseCase.UseCase)
@@ -43,6 +46,7 @@ export class PetsController {
     private listUseCase: ListPetsUseCase.UseCase;
 
     @Post()
+    @ApiOperation({ summary: 'Create a new pet', description: 'Create a new pet' })    
     async create(@Body() createPetDto: CreatePetDto) {        
         const output = await this.createUseCase.execute(createPetDto);
         return new PetPresenter(output);        
@@ -68,6 +72,7 @@ export class PetsController {
     }
 
     @Get()
+    @ApiOperation({ summary: 'View all pets', description: 'Get all pets or filter by name' })
     search(@Query() searchParams: SearchPetDto) {
         return this.listUseCase.execute(searchParams);
     }

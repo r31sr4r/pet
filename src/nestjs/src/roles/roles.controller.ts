@@ -23,8 +23,11 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RolePresenter } from './presenter/role.presenter';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('roles')
+@ApiTags('Roles')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class RolesController {
     @Inject(CreateRoleUseCase.UseCase)

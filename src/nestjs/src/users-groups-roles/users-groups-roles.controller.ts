@@ -20,8 +20,11 @@ import { SearchUsersGroupsRoleDto } from './dto/search-users-groups-role.dto';
 import { CreateUsersGroupsRoleDto } from './dto/create-users-groups-role.dto';
 import { UsersGroupsRolesPresenter } from './presenter/users-groups-roles.presenter';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users-groups-roles')
+@ApiTags('Users x Groups x Roles')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class UsersGroupsRolesController {
     @Inject(CreateUserAssignedToGroupAndRoleUseCase.UseCase)
